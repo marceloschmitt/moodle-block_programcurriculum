@@ -29,6 +29,7 @@ $string['addcurriculum'] = 'Add curriculum';
 $string['editcurriculum'] = 'Edit curriculum';
 $string['curriculumname'] = 'Curriculum name';
 $string['curriculumcode'] = 'Curriculum code';
+$string['duplicatecurriculumcode'] = 'This curriculum code is already in use.';
 $string['curriculumdescription'] = 'Description';
 $string['disciplines'] = 'Disciplines';
 $string['nodisciplines'] = 'No disciplines found.';

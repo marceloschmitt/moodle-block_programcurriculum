@@ -40,4 +40,24 @@ class curriculum_form extends \moodleform {
 
         $this->add_action_buttons(true, get_string('savechanges'));
     }
+
+    public function validation($data, $files): array {
+        global $DB;
+
+        $errors = parent::validation($data, $files);
+
+        if (!empty($data['externalcode'])) {
+            $existing = $DB->get_record(
+                'block_programcurriculum_curriculum',
+                ['externalcode' => $data['externalcode']],
+                'id',
+                IGNORE_MULTIPLE
+            );
+            if ($existing && (int)$existing->id !== (int)($data['id'] ?? 0)) {
+                $errors['externalcode'] = get_string('duplicatecurriculumcode', 'block_programcurriculum');
+            }
+        }
+
+        return $errors;
+    }
 }
