@@ -24,6 +24,11 @@ require_capability('block/programcurriculum:manage', $context);
 $curriculumid = required_param('curriculumid', PARAM_INT);
 $id = optional_param('id', 0, PARAM_INT);
 
+$PAGE->set_context($context);
+$PAGE->set_url('/blocks/programcurriculum/discipline.php', ['curriculumid' => $curriculumid, 'id' => $id]);
+$PAGE->set_title(get_string('disciplines', 'block_programcurriculum'));
+$PAGE->set_heading($curriculum->name ?? get_string('disciplines', 'block_programcurriculum'));
+
 $curriculumrepo = new \block_programcurriculum\curriculum_repository();
 $curriculum = $curriculumrepo->get($curriculumid);
 if (!$curriculum) {
@@ -66,10 +71,6 @@ foreach ($disciplinesrepo->get_by_curriculum($curriculumid) as $item) {
     ];
 }
 
-$PAGE->set_context($context);
-$PAGE->set_url('/blocks/programcurriculum/discipline.php', ['curriculumid' => $curriculumid, 'id' => $id]);
-$PAGE->set_title(get_string('disciplines', 'block_programcurriculum'));
-$PAGE->set_heading($curriculum->name);
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('block_programcurriculum/discipline', [
