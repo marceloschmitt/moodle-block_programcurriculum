@@ -1,0 +1,45 @@
+<div class="programcurriculum-progress">
+    {{#hascurricula}}
+        <form method="get">
+            <input type="hidden" name="courseid" value="{{courseid}}">
+            <input type="hidden" name="userid" value="{{userid}}">
+            <label for="curriculumid">{{#str}}choosecurriculum, block_programcurriculum{{/str}}</label>
+            <select name="curriculumid" id="curriculumid" onchange="this.form.submit()">
+                {{#curricula}}
+                    <option value="{{id}}" {{#selected}}selected{{/selected}}>{{name}}</option>
+                {{/curricula}}
+            </select>
+        </form>
+
+        {{#progress}}
+            <div class="mt-3">
+                <strong>{{#str}}progresspercent, block_programcurriculum{{/str}}:</strong> {{percent}}%
+                ({{completed}}/{{total}})
+            </div>
+
+            <table class="generaltable mt-3">
+                <thead>
+                    <tr>
+                        <th>{{#str}}mappedcourse, block_programcurriculum{{/str}}</th>
+                        <th>{{#str}}completionstatus, block_programcurriculum{{/str}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#details}}
+                        <tr>
+                            <td>{{coursename}}</td>
+                            <td>
+                                {{#completed}}{{#str}}completed, block_programcurriculum{{/str}}{{/completed}}
+                                {{^completed}}{{#str}}notcompleted, block_programcurriculum{{/str}}{{/completed}}
+                            </td>
+                        </tr>
+                    {{/details}}
+                </tbody>
+            </table>
+        {{/progress}}
+    {{/hascurricula}}
+
+    {{^hascurricula}}
+        <div class="alert alert-info">{{#str}}nocurricula, block_programcurriculum{{/str}}</div>
+    {{/hascurricula}}
+</div>

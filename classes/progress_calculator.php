@@ -1,0 +1,74 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+namespace block_programcurriculum;
+
+defined('MOODLE_INTERNAL') || die();
+
+class progress_calculator {
+    public function calculate_for_user(int $userid, int $curriculumid): array {
+        global $DB;
+
+        $mappingrepository = new mapping_repository();
+        $mappings = $mappingrepository->get_by_curriculum($curriculumid);
+
+        if (empty($mappings)) {
+            return [
+                'total' => 0,
+                'completed' => 0,
+                'percent' => 0,
+                'details' => [],
+            ];
+        }
+
+        $details = [];
+        $completedcount = 0;
+        foreach ($mappings as $mapping) {
+            $completion = $this->get_course_completion_state($userid, (int)$mapping->courseid);
+            $iscompleted = ($completion === COMPLETION_COMPLETE);
+            if ($iscompleted) {
+                $completedcount++;
+            }
+
+            $course = $DB->get_record('course', ['id' => $mapping->courseid], 'id, fullname', MUST_EXIST);
+            $details[] = [
+                'courseid' => $course->id,
+                'coursename' => $course->fullname,
+                'completed' => $iscompleted,
+            ];
+        }
+
+        $total = count($mappings);
+        $percent = (int)round(($completedcount / $total) * 100);
+
+        return [
+            'total' => $total,
+            'completed' => $completedcount,
+            'percent' => $percent,
+            'details' => $details,
+        ];
+    }
+
+    private function get_course_completion_state(int $userid, int $courseid): int {
+        $course = get_course($courseid);
+        $completion = new \completion_info($course);
+        if (!$completion->is_enabled()) {
+            return COMPLETION_INCOMPLETE;
+        }
+
+        return $completion->get_course_completion_state($userid);
+    }
+}

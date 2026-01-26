@@ -1,0 +1,28 @@
+<div class="programcurriculum-mapping">
+    <h3>{{disciplinename}}</h3>
+
+    {{#hasmappings}}
+        <table class="generaltable">
+            <thead>
+                <tr>
+                    <th>{{#str}}mappedcourse, block_programcurriculum{{/str}}</th>
+                    <th>{{#str}}requiredcourse, block_programcurriculum{{/str}}</th>
+                    <th>{{#str}}actions{{/str}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#mappings}}
+                    <tr>
+                        <td>{{coursename}}</td>
+                        <td>{{#required}}{{#str}}yes{{/str}}{{/required}}{{^required}}{{#str}}no{{/str}}{{/required}}</td>
+                        <td><a href="{{editurl}}">{{#str}}editmapping, block_programcurriculum{{/str}}</a></td>
+                    </tr>
+                {{/mappings}}
+            </tbody>
+        </table>
+    {{/hasmappings}}
+
+    {{^hasmappings}}
+        <div class="alert alert-info">{{#str}}nomappings, block_programcurriculum{{/str}}</div>
+    {{/hasmappings}}
+</div>

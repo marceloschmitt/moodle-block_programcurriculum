@@ -1,0 +1,36 @@
+<div class="programcurriculum-manage">
+    <div class="mb-3">
+        <a class="btn btn-primary" href="{{addcurriculumurl}}">{{#str}}addcurriculum, block_programcurriculum{{/str}}</a>
+    </div>
+
+    {{#hascurricula}}
+        <table class="generaltable">
+            <thead>
+                <tr>
+                    <th>{{#str}}curriculumname, block_programcurriculum{{/str}}</th>
+                    <th>{{#str}}curriculumcode, block_programcurriculum{{/str}}</th>
+                    <th>{{#str}}disciplines, block_programcurriculum{{/str}}</th>
+                    <th>{{#str}}actions{{/str}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#curricula}}
+                    <tr>
+                        <td>{{name}}</td>
+                        <td>{{externalcode}}</td>
+                        <td>{{disciplinecount}}</td>
+                        <td>
+                            <a href="{{editurl}}">{{#str}}editcurriculum, block_programcurriculum{{/str}}</a>
+                            |
+                            <a href="{{disciplinesurl}}">{{#str}}disciplines, block_programcurriculum{{/str}}</a>
+                        </td>
+                    </tr>
+                {{/curricula}}
+            </tbody>
+        </table>
+    {{/hascurricula}}
+
+    {{^hascurricula}}
+        <div class="alert alert-info">{{#str}}nocurricula, block_programcurriculum{{/str}}</div>
+    {{/hascurricula}}
+</div>

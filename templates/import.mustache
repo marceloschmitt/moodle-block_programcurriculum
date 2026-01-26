@@ -1,0 +1,14 @@
+<div class="programcurriculum-import">
+    <div class="alert alert-info">{{helptext}}</div>
+
+    {{#haserrors}}
+        <div class="alert alert-danger">
+            <strong>{{#str}}importerrors, block_programcurriculum{{/str}}</strong>
+            <ul>
+                {{#errors}}
+                    <li>{{.}}</li>
+                {{/errors}}
+            </ul>
+        </div>
+    {{/haserrors}}
+</div>

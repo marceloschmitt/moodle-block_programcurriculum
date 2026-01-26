@@ -1,0 +1,34 @@
+<div class="programcurriculum-discipline">
+    <h3>{{curriculumname}}</h3>
+
+    {{#hasdisciplines}}
+        <table class="generaltable">
+            <thead>
+                <tr>
+                    <th>{{#str}}disciplinename, block_programcurriculum{{/str}}</th>
+                    <th>{{#str}}disciplinecode, block_programcurriculum{{/str}}</th>
+                    <th>{{#str}}sortorder, block_programcurriculum{{/str}}</th>
+                    <th>{{#str}}actions{{/str}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#disciplines}}
+                    <tr>
+                        <td>{{name}}</td>
+                        <td>{{externalcode}}</td>
+                        <td>{{sortorder}}</td>
+                        <td>
+                            <a href="{{editurl}}">{{#str}}editdiscipline, block_programcurriculum{{/str}}</a>
+                            |
+                            <a href="{{mappingurl}}">{{#str}}mappings, block_programcurriculum{{/str}}</a>
+                        </td>
+                    </tr>
+                {{/disciplines}}
+            </tbody>
+        </table>
+    {{/hasdisciplines}}
+
+    {{^hasdisciplines}}
+        <div class="alert alert-info">{{#str}}nodisciplines, block_programcurriculum{{/str}}</div>
+    {{/hasdisciplines}}
+</div>
