@@ -24,6 +24,10 @@ require_capability('block/programcurriculum:manage', $context);
 $disciplineid = required_param('disciplineid', PARAM_INT);
 $id = optional_param('id', 0, PARAM_INT);
 
+$PAGE->set_context($context);
+$PAGE->set_url('/blocks/programcurriculum/mapping.php', ['disciplineid' => $disciplineid, 'id' => $id]);
+$PAGE->set_title(get_string('mappings', 'block_programcurriculum'));
+
 $disciplinesrepo = new \block_programcurriculum\discipline_repository();
 $discipline = $disciplinesrepo->get($disciplineid);
 if (!$discipline) {
@@ -71,9 +75,6 @@ foreach ($mappingrepo->get_by_discipline($disciplineid) as $item) {
     ];
 }
 
-$PAGE->set_context($context);
-$PAGE->set_url('/blocks/programcurriculum/mapping.php', ['disciplineid' => $disciplineid, 'id' => $id]);
-$PAGE->set_title(get_string('mappings', 'block_programcurriculum'));
 $PAGE->set_heading($discipline->name);
 
 echo $OUTPUT->header();
