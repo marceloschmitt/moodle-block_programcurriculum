@@ -53,11 +53,11 @@ if ($action === 'delete' && $id) {
 }
 
 $courses = [];
-foreach (get_courses() as $course) {
-    if ((int)$course->id === SITEID) {
+foreach (get_courses() as $moodlecourse) {
+    if ((int)$moodlecourse->id === SITEID) {
         continue;
     }
-    $courses[$course->id] = format_string($course->fullname, true, ['context' => context_course::instance($course->id)]);
+    $courses[$moodlecourse->id] = format_string($moodlecourse->fullname, true, ['context' => context_course::instance($moodlecourse->id)]);
 }
 
 $mform = new \block_programcurriculum\form\mapping_form(null, ['courses' => $courses]);
