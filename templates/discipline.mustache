@@ -1,4 +1,5 @@
 <div class="programcurriculum-discipline">
+    <h4>{{#str}}listofdisciplines, block_programcurriculum{{/str}}</h4>
     {{#validationerror}}
         <div class="alert alert-danger">{{#str}}disciplineformerror, block_programcurriculum{{/str}}</div>
     {{/validationerror}}
@@ -34,7 +35,7 @@
                                 </a>
                             </li>
                             <li><a class="dropdown-item" href="{{mappingurl}}">{{#str}}mappings, block_programcurriculum{{/str}}</a></li>
-                            <li><a class="dropdown-item" href="{{moveactionurl}}" data-move-url="{{moveactionurl}}" data-current-position="{{position}}" data-max-position="{{totalpositions}}">{{#str}}move{{/str}}</a></li>
+                            <li><a class="dropdown-item" href="{{moveactionurl}}" data-move-url="{{moveactionurl}}" data-move-name="{{name}}" data-current-position="{{position}}" data-max-position="{{totalpositions}}">{{#str}}move{{/str}}</a></li>
                             {{#candelete}}
                                 <li><a class="dropdown-item" href="{{deleteurl}}" data-confirm-message="{{deleteconfirm}}" data-confirm-name="{{name}}">{{#str}}delete{{/str}}</a></li>
                             {{/candelete}}

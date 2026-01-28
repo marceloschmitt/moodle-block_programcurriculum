@@ -68,15 +68,19 @@ define(['core/notification', 'core/modal_save_cancel', 'core/modal_delete_cancel
                 var max = parseInt(link.getAttribute('data-max-position') || '1', 10);
                 var current = parseInt(link.getAttribute('data-current-position') || '1', 10);
                 var url = link.getAttribute('data-move-url') || link.href;
+                var disciplineName = link.getAttribute('data-move-name') || '';
 
-                Str.get_strings([
+                var stringRequests = [
                     {key: 'movemodaltitle', component: 'block_programcurriculum'},
+                    {key: 'movemodaltitlewithname', component: 'block_programcurriculum', param: disciplineName},
                     {key: 'move', component: 'block_programcurriculum'},
                     {key: 'cancel', component: 'moodle'},
                     {key: 'movepositioninvalid', component: 'block_programcurriculum'},
                     {key: 'movepositionhelp', component: 'block_programcurriculum', param: max},
                     {key: 'moveto', component: 'block_programcurriculum'}
-                ]).then(function(strings) {
+                ];
+                Str.get_strings(stringRequests).then(function(strings) {
+                    var title = disciplineName ? strings[1] : strings[0];
                     var body = '<div class="block-programcurriculum-move">' +
                         '<div class="d-flex align-items-center gap-2 flex-wrap">' +
                         '<label class="form-label mb-0" for="block-programcurriculum-move-input">' + strings[5] + '</label>' +
@@ -86,11 +90,11 @@ define(['core/notification', 'core/modal_save_cancel', 'core/modal_delete_cancel
                         '</div>' +
                         '</div>';
                     return ModalSaveCancel.create({
-                        title: strings[0],
+                        title: title,
                         body: body,
                         buttons: {
-                            save: strings[1],
-                            cancel: strings[2]
+                            save: strings[2],
+                            cancel: strings[3]
                         }
                     }).then(function(modal) {
                         modal.getRoot().on(ModalEvents.save, function(e) {
@@ -98,7 +102,7 @@ define(['core/notification', 'core/modal_save_cancel', 'core/modal_delete_cancel
                             var position = parseInt(input, 10);
                             if (isNaN(position) || position < 1 || position > max) {
                                 e.preventDefault();
-                                Notification.alert('', strings[3], '');
+                                Notification.alert('', strings[4], '');
                                 return;
                             }
                             var separator = url.indexOf('?') === -1 ? '?' : '&';
