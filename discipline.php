@@ -103,7 +103,7 @@ if ($data = $mform->get_data()) {
     redirect(new moodle_url('/blocks/programcurriculum/discipline.php', ['curriculumid' => $curriculumid]));
 }
 
-$openmodal = !empty($id) || ($mform->is_submitted() && !$mform->is_cancelled());
+$validationerror = $mform->is_submitted() && !$mform->is_cancelled() && !$mform->is_validated();
 
 $disciplines = [];
 $disciplinelist = array_values($disciplinesrepo->get_by_curriculum($curriculumid));
@@ -159,6 +159,6 @@ echo $OUTPUT->render_from_template('block_programcurriculum/discipline', [
         return (string)ob_get_clean();
     })(),
     'modaltitle' => $id ? get_string('editdiscipline', 'block_programcurriculum') : get_string('adddiscipline', 'block_programcurriculum'),
-    'openmodal' => $openmodal,
+    'validationerror' => $validationerror,
 ]);
 echo $OUTPUT->footer();

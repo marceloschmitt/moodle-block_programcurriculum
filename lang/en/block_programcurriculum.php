@@ -41,6 +41,7 @@ $string['duplicatedisciplinecode'] = 'This discipline code is already in use.';
 $string['deletedisciplineconfirm'] = 'Delete this discipline?';
 $string['disciplinedeleted'] = 'Discipline deleted.';
 $string['disciplinedeletemappings'] = 'You cannot delete a discipline that has mappings.';
+$string['disciplineformerror'] = 'Please fix the errors in the discipline form.';
 $string['sortorder'] = 'Sort order';
 $string['moveto'] = 'Move to position';
 $string['movemodaltitle'] = 'Move discipline';

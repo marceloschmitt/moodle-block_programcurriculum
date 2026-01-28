@@ -81,10 +81,6 @@ define(['core/notification', 'core/modal_save_cancel', 'core/modal_events', 'cor
             });
         });
 
-        var openModalButton = document.querySelector('[data-open-discipline-modal="1"]');
-        if (openModalButton) {
-            openModalButton.click();
-        }
     };
 
     return {

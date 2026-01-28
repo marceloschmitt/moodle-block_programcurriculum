@@ -1,13 +1,14 @@
 <div class="programcurriculum-discipline">
     <h3>{{curriculumname}}</h3>
 
+    {{#validationerror}}
+        <div class="alert alert-danger">{{#str}}disciplineformerror, block_programcurriculum{{/str}}</div>
+    {{/validationerror}}
+
     <div class="mb-2">
         <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#programcurriculum-discipline-modal">
             {{#str}}adddiscipline, block_programcurriculum{{/str}}
         </button>
-        {{#openmodal}}
-            <button class="d-none" type="button" data-open-discipline-modal="1" data-bs-toggle="modal" data-bs-target="#programcurriculum-discipline-modal"></button>
-        {{/openmodal}}
     </div>
 
     {{#hasdisciplines}}
