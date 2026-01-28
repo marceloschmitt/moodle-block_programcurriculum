@@ -98,7 +98,7 @@ foreach ($mappingrepo->get_by_discipline($disciplineid) as $item) {
 }
 
 $PAGE->set_heading($discipline->name);
-$PAGE->requires->js_call_amd('block_programcurriculum/confirm_delete', 'init');
+$PAGE->requires->js_call_amd('block_programcurriculum/discipline_actions', 'init');
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('block_programcurriculum/mapping', [

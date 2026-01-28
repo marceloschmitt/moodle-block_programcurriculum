@@ -34,7 +34,7 @@ $PAGE->set_context($context);
 $PAGE->set_url('/blocks/programcurriculum/discipline.php', ['curriculumid' => $curriculumid, 'id' => $id]);
 $PAGE->set_title(get_string('disciplines', 'block_programcurriculum'));
 $PAGE->set_heading($curriculum->name);
-$PAGE->requires->js_call_amd('block_programcurriculum/confirm_delete', 'init');
+$PAGE->requires->js_call_amd('block_programcurriculum/discipline_actions', 'init');
 
 $disciplinesrepo = new \block_programcurriculum\discipline_repository();
 $discipline = $id ? $disciplinesrepo->get($id) : null;
