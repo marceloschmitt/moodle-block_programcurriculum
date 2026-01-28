@@ -42,12 +42,12 @@ function xmldb_block_programcurriculum_upgrade(int $oldversion): bool {
             $dbman->drop_index($table, $oldindex);
         }
 
-        $field = new xmldb_field('courseid');
+        $field = new xmldb_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
         if ($dbman->table_exists($table) && $dbman->field_exists($table, $field)) {
             $dbman->rename_field($table, $field, 'moodlecourseid');
         }
 
-        $field = new xmldb_field('disciplineid');
+        $field = new xmldb_field('disciplineid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
         if ($dbman->table_exists($table) && $dbman->field_exists($table, $field)) {
             $dbman->rename_field($table, $field, 'courseid');
         }
