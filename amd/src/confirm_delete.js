@@ -1,6 +1,7 @@
-define(['core/notification', 'core/modal_save_cancel', 'core/modal_events', 'core/str'], function(
+define(['core/notification', 'core/modal_save_cancel', 'core/modal_delete_cancel', 'core/modal_events', 'core/str'], function(
     Notification,
     ModalSaveCancel,
+    ModalDeleteCancel,
     ModalEvents,
     Str
 ) {
@@ -16,19 +17,15 @@ define(['core/notification', 'core/modal_save_cancel', 'core/modal_events', 'cor
             link.addEventListener('click', function(event) {
                 event.preventDefault();
                 var message = link.getAttribute('data-confirm-message') || '';
-                Str.get_strings([
-                    {key: 'delete', component: 'moodle'},
-                    {key: 'cancel', component: 'moodle'}
-                ]).then(function(strings) {
-                    Notification.confirm(
-                        '',
-                        message,
-                        strings[0],
-                        strings[1],
-                        function() {
-                            window.location.href = link.href;
-                        }
-                    );
+                ModalDeleteCancel.create({
+                    title: message,
+                    body: ''
+                }).then(function(modal) {
+                    modal.getRoot().on(ModalEvents.save, function() {
+                        window.location.href = link.href;
+                    });
+                    modal.show();
+                    return modal;
                 }).catch(Notification.exception);
             });
         });
@@ -55,10 +52,10 @@ define(['core/notification', 'core/modal_save_cancel', 'core/modal_events', 'cor
                     {key: 'moveto', component: 'block_programcurriculum'}
                 ]).then(function(strings) {
                     var body = '<div class="block-programcurriculum-move">' +
-                        '<label class="form-label" for="block-programcurriculum-move-input">' + strings[5] + '</label>' +
+                        '<label class="form-label mb-2" for="block-programcurriculum-move-input">' + strings[5] + '</label>' +
                         '<input id="block-programcurriculum-move-input" type="number" min="1" max="' + max +
-                        '" value="' + current + '" class="form-control">' +
-                        '<div class="form-text">' + strings[4] + '</div>' +
+                        '" value="' + current + '" class="form-control d-inline-block w-auto me-2" style="max-width: 120px;">' +
+                        '<span class="text-muted">' + strings[4] + '</span>' +
                         '</div>';
                     return ModalSaveCancel.create({
                         title: strings[0],
