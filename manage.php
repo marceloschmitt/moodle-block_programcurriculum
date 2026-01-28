@@ -48,7 +48,7 @@ $data = [
 $PAGE->set_context($context);
 $PAGE->set_url('/blocks/programcurriculum/manage.php');
 $PAGE->set_title(get_string('managecurricula', 'block_programcurriculum'));
-$PAGE->set_heading(get_string('managecurricula', 'block_programcurriculum'));
+$PAGE->set_heading(get_string('pluginname', 'block_programcurriculum'));
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('block_programcurriculum/manage', $data);

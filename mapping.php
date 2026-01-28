@@ -97,7 +97,7 @@ foreach ($mappingrepo->get_by_discipline($disciplineid) as $item) {
     ];
 }
 
-$PAGE->set_heading($discipline->name);
+$PAGE->set_heading(get_string('pluginname', 'block_programcurriculum'));
 $PAGE->requires->js_call_amd('block_programcurriculum/discipline_actions', 'init');
 
 echo $OUTPUT->header();

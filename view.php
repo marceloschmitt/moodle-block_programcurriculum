@@ -81,7 +81,7 @@ $PAGE->set_url('/blocks/programcurriculum/view.php', [
     'curriculumid' => $curriculumid,
 ]);
 $PAGE->set_title(get_string('viewtitle', 'block_programcurriculum'));
-$PAGE->set_heading(get_string('viewtitle', 'block_programcurriculum'));
+$PAGE->set_heading(get_string('pluginname', 'block_programcurriculum'));
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('block_programcurriculum/progress', $progressdata);

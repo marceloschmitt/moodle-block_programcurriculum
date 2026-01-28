@@ -27,7 +27,7 @@ $returnurl = new moodle_url('/blocks/programcurriculum/manage.php');
 $PAGE->set_context($context);
 $PAGE->set_url('/blocks/programcurriculum/curriculum.php', ['id' => $id]);
 $PAGE->set_title($id ? get_string('editcurriculum', 'block_programcurriculum') : get_string('addcurriculum', 'block_programcurriculum'));
-$PAGE->set_heading(get_string('managecurricula', 'block_programcurriculum'));
+$PAGE->set_heading(get_string('pluginname', 'block_programcurriculum'));
 
 $repo = new \block_programcurriculum\curriculum_repository();
 $record = $id ? $repo->get($id) : null;
