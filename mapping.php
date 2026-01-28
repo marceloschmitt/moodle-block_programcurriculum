@@ -52,7 +52,51 @@ if ($action === 'delete' && $id) {
     );
 }
 
-$action = optional_param('action', '', PARAM_ALPHA);
+if ($action === 'automatic') {
+    require_sesskey();
+    $code = $course->externalcode;
+    if ($code === '') {
+        redirect(
+            new moodle_url('/blocks/programcurriculum/mapping.php', ['courseid' => $courseid]),
+            get_string('automaticmappingnocode', 'block_programcurriculum'),
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    }
+    $like = $DB->sql_like('c.fullname', ':like1', false, false) . ' OR ' .
+            $DB->sql_like('c.shortname', ':like2', false, false);
+    $sql = "SELECT c.id, c.fullname, c.shortname
+              FROM {course} c
+             WHERE c.id <> :siteid
+               AND ({$like})";
+    $params = [
+        'siteid' => SITEID,
+        'like1' => '%' . $DB->sql_like_escape($code) . '%',
+        'like2' => '%' . $DB->sql_like_escape($code) . '%',
+    ];
+    $matches = $DB->get_records_sql($sql, $params);
+    $created = 0;
+    foreach ($matches as $c) {
+        $exists = $DB->record_exists('block_programcurriculum_mapping', [
+            'courseid' => $courseid,
+            'moodlecourseid' => $c->id,
+        ]);
+        if (!$exists) {
+            $mappingrepo->upsert((object)[
+                'courseid' => $courseid,
+                'moodlecourseid' => $c->id,
+            ]);
+            $created++;
+        }
+    }
+    redirect(
+        new moodle_url('/blocks/programcurriculum/mapping.php', ['courseid' => $courseid]),
+        get_string('automaticmappingdone', 'block_programcurriculum', $created),
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
+
 $courses = [];
 foreach (get_courses() as $moodlecourse) {
     if ((int)$moodlecourse->id === SITEID) {
@@ -69,7 +113,7 @@ $mform = new \block_programcurriculum\form\mapping_form(null, [
 if ($mapping) {
     $mform->set_data($mapping);
 } else {
-    $mform->set_data((object)['courseid' => $courseid, 'required' => 1]);
+    $mform->set_data((object)['courseid' => $courseid]);
 }
 
 if ($mform->is_cancelled()) {
@@ -126,6 +170,11 @@ echo $OUTPUT->render_from_template('block_programcurriculum/mapping', [
     'coursename' => $course->name,
     'coursecode' => $course->externalcode,
     'backurl' => (new moodle_url('/blocks/programcurriculum/course.php', ['curriculumid' => $course->curriculumid]))->out(false),
+    'automaticurl' => (new moodle_url('/blocks/programcurriculum/mapping.php', [
+        'courseid' => $courseid,
+        'action' => 'automatic',
+        'sesskey' => sesskey(),
+    ]))->out(false),
     'courseid' => $courseid,
     'mappings' => $mappings,
     'hasmappings' => !empty($mappings),

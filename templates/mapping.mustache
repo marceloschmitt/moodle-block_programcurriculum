@@ -10,8 +10,9 @@
 
     <div class="mb-2">
         <button class="btn btn-primary" type="button" data-action="add-mapping" data-course-id="{{courseid}}" data-bs-toggle="modal" data-bs-target="#programcurriculum-mapping-modal">
-            {{#str}}addmapping, block_programcurriculum{{/str}}
+            {{#str}}manualmapping, block_programcurriculum{{/str}}
         </button>
+        <a class="btn btn-secondary" href="{{automaticurl}}">{{#str}}automaticmapping, block_programcurriculum{{/str}}</a>
         <button class="d-none" type="button" data-open-mapping-modal="1" data-bs-toggle="modal" data-bs-target="#programcurriculum-mapping-modal"></button>
     </div>
 
@@ -37,7 +38,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="programcurriculum-mapping-modal-title"
-                        data-add-title="{{#str}}addmapping, block_programcurriculum{{/str}}"
+                        data-add-title="{{#str}}manualmapping, block_programcurriculum{{/str}}"
                         data-edit-title="{{#str}}editmapping, block_programcurriculum{{/str}}">
                         {{modaltitle}}
                     </h5>
