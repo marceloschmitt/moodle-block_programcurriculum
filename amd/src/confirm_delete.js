@@ -81,6 +81,30 @@ define(['core/notification', 'core/modal_save_cancel', 'core/modal_events', 'cor
             });
         });
 
+        var editLinks = document.querySelectorAll('a[data-open-discipline-modal="1"]');
+        editLinks.forEach(function(link) {
+            if (link.dataset.modalBound === '1') {
+                return;
+            }
+            link.dataset.modalBound = '1';
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                var target = link.getAttribute('href');
+                if (!target) {
+                    return;
+                }
+                window.location.href = target + '#open-discipline-modal';
+            });
+        });
+
+        if (window.location.hash === '#open-discipline-modal') {
+            var modal = document.getElementById('programcurriculum-discipline-modal');
+            if (modal && typeof bootstrap !== 'undefined') {
+                var instance = bootstrap.Modal.getOrCreateInstance(modal);
+                instance.show();
+            }
+        }
+
     };
 
     return {
