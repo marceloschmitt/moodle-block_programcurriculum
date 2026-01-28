@@ -16,15 +16,20 @@ define(['core/notification', 'core/modal_save_cancel', 'core/modal_events', 'cor
             link.addEventListener('click', function(event) {
                 event.preventDefault();
                 var message = link.getAttribute('data-confirm-message') || '';
-                Notification.confirm(
-                    '',
-                    message,
-                    '',
-                    null,
-                    function() {
-                        window.location.href = link.href;
-                    }
-                );
+                Str.get_strings([
+                    {key: 'delete', component: 'moodle'},
+                    {key: 'cancel', component: 'moodle'}
+                ]).then(function(strings) {
+                    Notification.confirm(
+                        '',
+                        message,
+                        strings[0],
+                        strings[1],
+                        function() {
+                            window.location.href = link.href;
+                        }
+                    );
+                }).catch(Notification.exception);
             });
         });
 
