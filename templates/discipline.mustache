@@ -2,38 +2,30 @@
     <h3>{{curriculumname}}</h3>
 
     {{#hasdisciplines}}
-        <table class="generaltable">
-            <thead>
-                <tr>
-                    <th>{{#str}}disciplinename, block_programcurriculum{{/str}}</th>
-                    <th>{{#str}}disciplinecode, block_programcurriculum{{/str}}</th>
-                    <th>{{#str}}actions{{/str}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#disciplines}}
-                    <tr>
-                        <td>{{name}}</td>
-                        <td>{{externalcode}}</td>
-                        <td>
-                            <a href="{{editurl}}">{{#str}}editdiscipline, block_programcurriculum{{/str}}</a>
-                            |
-                            <a href="{{mappingurl}}">{{#str}}mappings, block_programcurriculum{{/str}}</a>
-                            |
-                            <form class="d-inline" method="post" action="{{moveactionurl}}">
-                                <label class="sr-only" for="move-{{id}}">{{#str}}moveto, block_programcurriculum{{/str}}</label>
-                                <input id="move-{{id}}" name="position" type="number" min="1" max="{{totalpositions}}" value="{{position}}" class="form-control d-inline-block w-auto">
-                                <button type="submit" class="btn btn-link p-0 align-baseline">{{#str}}move{{/str}}</button>
-                            </form>
+        <ul class="list-unstyled">
+            {{#disciplines}}
+                <li class="d-flex align-items-center py-1 border-bottom">
+                    <span class="text-muted me-2">{{position}}</span>
+                    <span class="flex-grow-1">{{name}}</span>
+                    <div class="dropdown">
+                        <button class="btn btn-link p-0 text-decoration-none" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{#str}}actions{{/str}}">
+                            ...
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{{editurl}}">{{#str}}editdiscipline, block_programcurriculum{{/str}}</a></li>
+                            <li><a class="dropdown-item" href="{{mappingurl}}">{{#str}}mappings, block_programcurriculum{{/str}}</a></li>
+                            <li><a class="dropdown-item" href="{{moveactionurl}}" data-move-url="{{moveactionurl}}" data-current-position="{{position}}" data-max-position="{{totalpositions}}" data-move-prompt="{{moveprompt}}" data-move-invalid="{{moveinvalid}}">{{#str}}move{{/str}}</a></li>
                             {{#candelete}}
-                                |
-                                <a href="{{deleteurl}}" data-confirm-message="{{deleteconfirm}}">{{#str}}delete{{/str}}</a>
+                                <li><a class="dropdown-item" href="{{deleteurl}}" data-confirm-message="{{deleteconfirm}}">{{#str}}delete{{/str}}</a></li>
                             {{/candelete}}
-                        </td>
-                    </tr>
-                {{/disciplines}}
-            </tbody>
-        </table>
+                            {{^candelete}}
+                                <li><span class="dropdown-item disabled" aria-disabled="true">{{#str}}delete{{/str}}</span></li>
+                            {{/candelete}}
+                        </ul>
+                    </div>
+                </li>
+            {{/disciplines}}
+        </ul>
     {{/hasdisciplines}}
 
     {{^hasdisciplines}}

@@ -72,8 +72,8 @@ if ($action === 'move' && $id) {
         return (int)$item->id;
     }, $ordered);
     $position = array_search((int)$id, $orderedids, true);
-    $newposition = required_param('position', PARAM_INT);
-    if ($position !== false) {
+    $newposition = optional_param('position', 0, PARAM_INT);
+    if ($position !== false && $newposition > 0) {
         $target = max(1, min(count($orderedids), $newposition)) - 1;
         if ($target !== $position) {
             $movedid = $orderedids[$position];
@@ -106,6 +106,8 @@ if ($data = $mform->get_data()) {
 $disciplines = [];
 $disciplinelist = array_values($disciplinesrepo->get_by_curriculum($curriculumid));
 $total = count($disciplinelist);
+$moveprompt = get_string('movepositionprompt', 'block_programcurriculum', $total);
+$moveinvalid = get_string('movepositioninvalid', 'block_programcurriculum');
 foreach ($disciplinelist as $index => $item) {
     $hasmappings = $mappingrepo->has_for_discipline($item->id);
     $disciplines[] = [
@@ -128,6 +130,8 @@ foreach ($disciplinelist as $index => $item) {
         ]))->out(false),
         'position' => $index + 1,
         'totalpositions' => $total,
+        'moveprompt' => $moveprompt,
+        'moveinvalid' => $moveinvalid,
         'candelete' => !$hasmappings,
         'deleteurl' => !$hasmappings ? (new moodle_url('/blocks/programcurriculum/discipline.php', [
             'curriculumid' => $curriculumid,
