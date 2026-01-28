@@ -39,9 +39,6 @@ class mapping_form extends \moodleform {
             $mform->freeze('moodlecourseid');
         }
 
-        $mform->addElement('selectyesno', 'required', get_string('requiredcourse', 'block_programcurriculum'));
-        $mform->setType('required', PARAM_INT);
-
         $mform->addElement('hidden', 'courseid');
         $mform->setType('courseid', PARAM_INT);
 

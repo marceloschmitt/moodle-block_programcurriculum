@@ -17,26 +17,12 @@
         <ul class="list-unstyled">
             {{#mappings}}
                 <li class="d-flex align-items-center py-1 border-bottom">
-                    <span class="flex-grow-1">
-                        {{coursename}}
-                        <span class="text-muted ms-2">({{#str}}requiredcourse, block_programcurriculum{{/str}}: {{#required}}{{#str}}yes{{/str}}{{/required}}{{^required}}{{#str}}no{{/str}}{{/required}})</span>
-                    </span>
+                    <span class="flex-grow-1">{{coursename}}</span>
                     <div class="dropdown">
                         <button class="btn btn-link p-0 text-decoration-none" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{#str}}actions{{/str}}">
                             {{#pix}}i/moremenu, core{{/pix}}
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <a class="dropdown-item"
-                                   href="{{editurl}}"
-                                   data-action="edit-mapping"
-                                   data-edit-id="{{id}}"
-                                   data-edit-moodlecourseid="{{moodlecourseid}}"
-                                   data-edit-required="{{editrequired}}"
-                                   data-edit-course="{{courseid}}">
-                                    {{#str}}editmapping, block_programcurriculum{{/str}}
-                                </a>
-                            </li>
                             <li><a class="dropdown-item" href="{{deleteurl}}" data-confirm-message="{{deleteconfirm}}" data-confirm-name="{{coursename}}">{{#str}}delete{{/str}}</a></li>
                         </ul>
                     </div>

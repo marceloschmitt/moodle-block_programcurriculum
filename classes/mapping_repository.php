@@ -76,6 +76,7 @@ class mapping_repository {
         return (int)$DB->insert_record('block_programcurriculum_mapping', $record);
     }
 
+
     public function delete(int $id): void {
         global $DB;
 

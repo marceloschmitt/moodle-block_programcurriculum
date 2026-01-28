@@ -73,7 +73,6 @@ class importer {
                 $mappingrepo->upsert((object)[
                     'courseid' => $courseid,
                     'moodlecourseid' => (int)$data['moodle_course_id'],
-                    'required' => (int)$data['required'],
                 ]);
             }
         }
@@ -93,7 +92,6 @@ class importer {
             'course_code',
             'course_name',
             'moodle_course_id',
-            'required',
             'sortorder',
         ];
 
@@ -114,9 +112,8 @@ class importer {
             'course_code' => trim((string)($row[2] ?? '')),
             'course_name' => trim((string)($row[3] ?? '')),
             'moodle_course_id' => trim((string)($row[4] ?? '')),
-            'required' => $this->normalize_bool($row[5] ?? '1'),
-            'sortorder' => trim((string)($row[6] ?? '0')),
-            'curriculum_description' => trim((string)($row[7] ?? '')),
+            'sortorder' => trim((string)($row[5] ?? '0')),
+            'curriculum_description' => trim((string)($row[6] ?? '')),
         ];
     }
 

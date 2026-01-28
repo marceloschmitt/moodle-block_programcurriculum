@@ -52,6 +52,7 @@ if ($action === 'delete' && $id) {
     );
 }
 
+$action = optional_param('action', '', PARAM_ALPHA);
 $courses = [];
 foreach (get_courses() as $moodlecourse) {
     if ((int)$moodlecourse->id === SITEID) {
@@ -85,13 +86,7 @@ foreach ($mappingrepo->get_by_course($courseid) as $item) {
     $mappings[] = [
         'id' => $item->id,
         'coursename' => format_string($moodlecourse->fullname, true, ['context' => context_course::instance($moodlecourse->id)]),
-        'required' => (int)$item->required,
         'moodlecourseid' => $item->moodlecourseid,
-        'editurl' => (new moodle_url('/blocks/programcurriculum/mapping.php', [
-            'courseid' => $courseid,
-            'id' => $item->id,
-        ]))->out(false),
-        'editrequired' => (int)$item->required,
         'deleteurl' => (new moodle_url('/blocks/programcurriculum/mapping.php', [
             'courseid' => $courseid,
             'id' => $item->id,

@@ -80,5 +80,15 @@ function xmldb_block_programcurriculum_upgrade(int $oldversion): bool {
         upgrade_block_savepoint(true, 2026012834, 'programcurriculum');
     }
 
+    if ($oldversion < 2026012845) {
+        $table = new xmldb_table('block_programcurriculum_mapping');
+        $field = new xmldb_field('required');
+        if ($dbman->table_exists($table) && $dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        upgrade_block_savepoint(true, 2026012845, 'programcurriculum');
+    }
+
     return true;
 }
