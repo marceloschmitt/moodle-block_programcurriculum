@@ -24,8 +24,12 @@ function xmldb_block_programcurriculum_upgrade(int $oldversion): bool {
     if ($oldversion < 2026012834) {
         $table = new xmldb_table('block_programcurriculum_mapping');
         $oldkey = new xmldb_key('disciplineid', XMLDB_KEY_FOREIGN, ['disciplineid'], 'block_programcurriculum_discipline', ['id']);
-        if ($dbman->table_exists($table) && $dbman->key_exists($table, $oldkey)) {
-            $dbman->drop_key($table, $oldkey);
+        if ($dbman->table_exists($table)) {
+            try {
+                $dbman->drop_key($table, $oldkey);
+            } catch (\ddl_exception $e) {
+                // Key already removed or never existed.
+            }
         }
 
         $oldindex = new xmldb_index('disciplineid', XMLDB_INDEX_NOTUNIQUE, ['disciplineid']);
@@ -55,8 +59,12 @@ function xmldb_block_programcurriculum_upgrade(int $oldversion): bool {
 
         $table = new xmldb_table('block_programcurriculum_mapping');
         $key = new xmldb_key('courseid', XMLDB_KEY_FOREIGN, ['courseid'], 'block_programcurriculum_course', ['id']);
-        if ($dbman->table_exists($table) && !$dbman->key_exists($table, $key)) {
-            $dbman->add_key($table, $key);
+        if ($dbman->table_exists($table)) {
+            try {
+                $dbman->add_key($table, $key);
+            } catch (\ddl_exception $e) {
+                // Key already exists or cannot be added.
+            }
         }
 
         $index = new xmldb_index('courseid', XMLDB_INDEX_NOTUNIQUE, ['courseid']);
