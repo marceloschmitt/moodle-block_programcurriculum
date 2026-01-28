@@ -1,8 +1,7 @@
-define(['core/notification', 'core/modal_factory', 'core/modal_events', 'core/templates', 'core/str'], function(
+define(['core/notification', 'core/modal_factory', 'core/modal_events', 'core/str'], function(
     Notification,
     ModalFactory,
     ModalEvents,
-    Templates,
     Str
 ) {
     'use strict';
@@ -47,37 +46,37 @@ define(['core/notification', 'core/modal_factory', 'core/modal_events', 'core/te
                     {key: 'move', component: 'block_programcurriculum'},
                     {key: 'cancel', component: 'moodle'},
                     {key: 'movepositioninvalid', component: 'block_programcurriculum'},
-                    {key: 'movepositionhelp', component: 'block_programcurriculum', param: max}
+                    {key: 'movepositionhelp', component: 'block_programcurriculum', param: max},
+                    {key: 'moveto', component: 'block_programcurriculum'}
                 ]).then(function(strings) {
-                    return Templates.render('block_programcurriculum/move_prompt', {
-                        current: current,
-                        max: max,
-                        helptext: strings[4]
-                    }).then(function(html, js) {
-                        return ModalFactory.create({
-                            title: strings[0],
-                            body: html,
-                            type: ModalFactory.types.SAVE_CANCEL,
-                            buttons: {
-                                save: strings[1],
-                                cancel: strings[2]
+                    var body = '<div class="block-programcurriculum-move">' +
+                        '<label class="form-label" for="block-programcurriculum-move-input">' + strings[5] + '</label>' +
+                        '<input id="block-programcurriculum-move-input" type="number" min="1" max="' + max +
+                        '" value="' + current + '" class="form-control">' +
+                        '<div class="form-text">' + strings[4] + '</div>' +
+                        '</div>';
+                    return ModalFactory.create({
+                        title: strings[0],
+                        body: body,
+                        type: ModalFactory.types.SAVE_CANCEL,
+                        buttons: {
+                            save: strings[1],
+                            cancel: strings[2]
+                        }
+                    }).then(function(modal) {
+                        modal.getRoot().on(ModalEvents.save, function(e) {
+                            var input = modal.getRoot().find('#block-programcurriculum-move-input').val();
+                            var position = parseInt(input, 10);
+                            if (isNaN(position) || position < 1 || position > max) {
+                                e.preventDefault();
+                                Notification.alert('', strings[3], '');
+                                return;
                             }
-                        }).then(function(modal) {
-                            Templates.runTemplateJS(js);
-                            modal.getRoot().on(ModalEvents.save, function(e) {
-                                var input = modal.getRoot().find('#block-programcurriculum-move-input').val();
-                                var position = parseInt(input, 10);
-                                if (isNaN(position) || position < 1 || position > max) {
-                                    e.preventDefault();
-                                    Notification.alert('', strings[3], '');
-                                    return;
-                                }
-                                var separator = url.indexOf('?') === -1 ? '?' : '&';
-                                window.location.href = url + separator + 'position=' + position;
-                            });
-                            modal.show();
-                            return modal;
+                            var separator = url.indexOf('?') === -1 ? '?' : '&';
+                            window.location.href = url + separator + 'position=' + position;
                         });
+                        modal.show();
+                        return modal;
                     });
                 }).catch(Notification.exception);
             });
