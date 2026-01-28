@@ -24,6 +24,7 @@ class discipline_form extends \moodleform {
     protected function definition(): void {
         $mform = $this->_form;
         $mform->updateAttributes(['id' => 'programcurriculum-discipline-form']);
+        $mform->setRequiredNote('');
 
         $mform->addElement('text', 'name', get_string('disciplinename', 'block_programcurriculum'), ['size' => 50]);
         $mform->setType('name', PARAM_TEXT);
