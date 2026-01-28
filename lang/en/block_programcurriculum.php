@@ -52,6 +52,7 @@ $string['movepositioninvalid'] = 'Position must be between 1 and the last item.'
 $string['mappings'] = 'Mappings';
 $string['addmapping'] = 'Add mapping';
 $string['editmapping'] = 'Edit mapping';
+$string['move'] = 'Move';
 $string['deletemappingconfirm'] = 'Delete this mapping?';
 $string['mappingdeleted'] = 'Mapping deleted.';
 $string['mappedcourse'] = 'Mapped course';
