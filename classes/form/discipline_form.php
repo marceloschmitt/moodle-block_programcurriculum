@@ -23,9 +23,11 @@ require_once($GLOBALS['CFG']->libdir . '/formslib.php');
 class discipline_form extends \moodleform {
     protected function definition(): void {
         $mform = $this->_form;
+        $mform->updateAttributes(['id' => 'programcurriculum-discipline-form']);
 
         $mform->addElement('text', 'name', get_string('disciplinename', 'block_programcurriculum'));
         $mform->setType('name', PARAM_TEXT);
+        $mform->setAttribute('name', 'size', 50);
         $mform->addRule('name', null, 'required', null, 'client');
 
         $mform->addElement('text', 'externalcode', get_string('disciplinecode', 'block_programcurriculum'));
@@ -40,7 +42,5 @@ class discipline_form extends \moodleform {
 
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
-
-        $this->add_action_buttons(false, get_string('savechanges'));
     }
 }
