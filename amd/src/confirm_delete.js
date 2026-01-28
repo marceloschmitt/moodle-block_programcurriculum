@@ -1,6 +1,6 @@
-define(['core/notification', 'core/modal_factory', 'core/modal_events', 'core/str'], function(
+define(['core/notification', 'core/modal_save_cancel', 'core/modal_events', 'core/str'], function(
     Notification,
-    ModalFactory,
+    ModalSaveCancel,
     ModalEvents,
     Str
 ) {
@@ -55,10 +55,9 @@ define(['core/notification', 'core/modal_factory', 'core/modal_events', 'core/st
                         '" value="' + current + '" class="form-control">' +
                         '<div class="form-text">' + strings[4] + '</div>' +
                         '</div>';
-                    return ModalFactory.create({
+                    return ModalSaveCancel.create({
                         title: strings[0],
                         body: body,
-                        type: ModalFactory.types.SAVE_CANCEL,
                         buttons: {
                             save: strings[1],
                             cancel: strings[2]
@@ -81,6 +80,11 @@ define(['core/notification', 'core/modal_factory', 'core/modal_events', 'core/st
                 }).catch(Notification.exception);
             });
         });
+
+        var openModalButton = document.querySelector('[data-open-discipline-modal="1"]');
+        if (openModalButton) {
+            openModalButton.click();
+        }
     };
 
     return {

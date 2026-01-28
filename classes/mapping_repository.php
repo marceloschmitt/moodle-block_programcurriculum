@@ -49,6 +49,22 @@ class mapping_repository {
         return $DB->get_records_sql($sql, ['curriculumid' => $curriculumid]);
     }
 
+    public function get_counts_by_discipline_ids(array $disciplineids): array {
+        global $DB;
+
+        if (empty($disciplineids)) {
+            return [];
+        }
+
+        list($insql, $params) = $DB->get_in_or_equal($disciplineids, SQL_PARAMS_NAMED);
+        $sql = "SELECT disciplineid, COUNT(1) AS total
+                  FROM {block_programcurriculum_mapping}
+                 WHERE disciplineid {$insql}
+              GROUP BY disciplineid";
+
+        return $DB->get_records_sql_menu($sql, $params);
+    }
+
     public function upsert(\stdClass $record): int {
         global $DB;
 

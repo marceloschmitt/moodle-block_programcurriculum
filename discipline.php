@@ -106,8 +106,13 @@ if ($data = $mform->get_data()) {
 $disciplines = [];
 $disciplinelist = array_values($disciplinesrepo->get_by_curriculum($curriculumid));
 $total = count($disciplinelist);
+$disciplineids = array_map(function ($item) {
+    return (int)$item->id;
+}, $disciplinelist);
+$mappingcounts = $mappingrepo->get_counts_by_discipline_ids($disciplineids);
 foreach ($disciplinelist as $index => $item) {
-    $hasmappings = $mappingrepo->has_for_discipline($item->id);
+    $mappingcount = (int)($mappingcounts[$item->id] ?? 0);
+    $hasmappings = $mappingcount > 0;
     $disciplines[] = [
         'id' => $item->id,
         'name' => $item->name,
@@ -128,6 +133,7 @@ foreach ($disciplinelist as $index => $item) {
         ]))->out(false),
         'position' => $index + 1,
         'totalpositions' => $total,
+        'mappingcount' => $mappingcount,
         'candelete' => !$hasmappings,
         'deleteurl' => !$hasmappings ? (new moodle_url('/blocks/programcurriculum/discipline.php', [
             'curriculumid' => $curriculumid,
@@ -145,6 +151,12 @@ echo $OUTPUT->render_from_template('block_programcurriculum/discipline', [
     'curriculumname' => $curriculum->name,
     'disciplines' => $disciplines,
     'hasdisciplines' => !empty($disciplines),
+    'formhtml' => (function () use ($mform): string {
+        ob_start();
+        $mform->display();
+        return (string)ob_get_clean();
+    })(),
+    'modaltitle' => $id ? get_string('editdiscipline', 'block_programcurriculum') : get_string('adddiscipline', 'block_programcurriculum'),
+    'openmodal' => !empty($id),
 ]);
-$mform->display();
 echo $OUTPUT->footer();

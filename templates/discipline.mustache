@@ -1,13 +1,21 @@
 <div class="programcurriculum-discipline">
     <h3>{{curriculumname}}</h3>
 
+    <div class="mb-2">
+        <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#programcurriculum-discipline-modal">
+            {{#str}}adddiscipline, block_programcurriculum{{/str}}
+        </button>
+        {{#openmodal}}
+            <button class="d-none" type="button" data-open-discipline-modal="1" data-bs-toggle="modal" data-bs-target="#programcurriculum-discipline-modal"></button>
+        {{/openmodal}}
+    </div>
+
     {{#hasdisciplines}}
         <ul class="list-unstyled">
             {{#disciplines}}
                 <li class="d-flex align-items-center py-1 border-bottom">
                     <span class="text-muted me-2">{{position}}</span>
-                    <span class="text-muted me-2">{{externalcode}}</span>
-                    <span class="flex-grow-1">{{name}}</span>
+                    <span class="flex-grow-1">{{externalcode}} - {{name}} <span class="text-muted ms-2">({{mappingcount}})</span></span>
                     <div class="dropdown">
                         <button class="btn btn-link p-0 text-decoration-none" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{#str}}actions{{/str}}">
                             {{#pix}}i/moremenu, core{{/pix}}
@@ -32,4 +40,18 @@
     {{^hasdisciplines}}
         <div class="alert alert-info">{{#str}}nodisciplines, block_programcurriculum{{/str}}</div>
     {{/hasdisciplines}}
+
+    <div class="modal fade" id="programcurriculum-discipline-modal" tabindex="-1" aria-labelledby="programcurriculum-discipline-modal-title" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="programcurriculum-discipline-modal-title">{{modaltitle}}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{#str}}close, moodle{{/str}}"></button>
+                </div>
+                <div class="modal-body">
+                    {{{formhtml}}}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
