@@ -7,7 +7,6 @@
                 <tr>
                     <th>{{#str}}disciplinename, block_programcurriculum{{/str}}</th>
                     <th>{{#str}}disciplinecode, block_programcurriculum{{/str}}</th>
-                    <th>{{#str}}sortorder, block_programcurriculum{{/str}}</th>
                     <th>{{#str}}actions{{/str}}</th>
                 </tr>
             </thead>
@@ -16,19 +15,16 @@
                     <tr>
                         <td>{{name}}</td>
                         <td>{{externalcode}}</td>
-                        <td>{{sortorder}}</td>
                         <td>
                             <a href="{{editurl}}">{{#str}}editdiscipline, block_programcurriculum{{/str}}</a>
                             |
                             <a href="{{mappingurl}}">{{#str}}mappings, block_programcurriculum{{/str}}</a>
-                            {{#moveupurl}}
-                                |
-                                <a href="{{moveupurl}}">{{#str}}moveup{{/str}}</a>
-                            {{/moveupurl}}
-                            {{#movedownurl}}
-                                |
-                                <a href="{{movedownurl}}">{{#str}}movedown{{/str}}</a>
-                            {{/movedownurl}}
+                            |
+                            <form class="d-inline" method="post" action="{{moveactionurl}}">
+                                <label class="sr-only" for="move-{{id}}">{{#str}}moveto, block_programcurriculum{{/str}}</label>
+                                <input id="move-{{id}}" name="position" type="number" min="1" max="{{totalpositions}}" value="{{position}}" class="form-control d-inline-block w-auto">
+                                <button type="submit" class="btn btn-link p-0 align-baseline">{{#str}}move{{/str}}</button>
+                            </form>
                             {{#candelete}}
                                 |
                                 <a href="{{deleteurl}}" data-confirm-message="{{deleteconfirm}}">{{#str}}delete{{/str}}</a>

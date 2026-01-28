@@ -41,6 +41,7 @@ $string['deletedisciplineconfirm'] = 'Delete this discipline?';
 $string['disciplinedeleted'] = 'Discipline deleted.';
 $string['disciplinedeletemappings'] = 'You cannot delete a discipline that has mappings.';
 $string['sortorder'] = 'Sort order';
+$string['moveto'] = 'Move to position';
 $string['mappings'] = 'Mappings';
 $string['addmapping'] = 'Add mapping';
 $string['editmapping'] = 'Edit mapping';

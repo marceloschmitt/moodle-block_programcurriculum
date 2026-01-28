@@ -64,23 +64,24 @@ if ($action === 'delete' && $id) {
     );
 }
 
-$move = optional_param('move', '', PARAM_ALPHA);
-if ($move === 'up' || $move === 'down') {
+$action = optional_param('action', '', PARAM_ALPHA);
+if ($action === 'move' && $id) {
     require_sesskey();
     $ordered = array_values($disciplinesrepo->get_by_curriculum($curriculumid));
     $orderedids = array_map(function ($item) {
         return (int)$item->id;
     }, $ordered);
     $position = array_search((int)$id, $orderedids, true);
+    $newposition = required_param('position', PARAM_INT);
     if ($position !== false) {
-        $target = ($move === 'up') ? $position - 1 : $position + 1;
-        if ($target >= 0 && $target < count($orderedids)) {
-            $swap = $orderedids[$target];
-            $orderedids[$target] = $orderedids[$position];
-            $orderedids[$position] = $swap;
-            foreach ($orderedids as $index => $disciplineid) {
-                $disciplinesrepo->set_sortorder($disciplineid, $index + 1);
-            }
+        $target = max(1, min(count($orderedids), $newposition)) - 1;
+        if ($target !== $position) {
+            $movedid = $orderedids[$position];
+            array_splice($orderedids, $position, 1);
+            array_splice($orderedids, $target, 0, [$movedid]);
+        }
+        foreach ($orderedids as $index => $disciplineid) {
+            $disciplinesrepo->set_sortorder($disciplineid, $index + 1);
         }
     }
     redirect(new moodle_url('/blocks/programcurriculum/discipline.php', ['curriculumid' => $curriculumid]));
@@ -104,7 +105,7 @@ if ($data = $mform->get_data()) {
 
 $disciplines = [];
 $disciplinelist = array_values($disciplinesrepo->get_by_curriculum($curriculumid));
-$lastindex = count($disciplinelist) - 1;
+$total = count($disciplinelist);
 foreach ($disciplinelist as $index => $item) {
     $hasmappings = $mappingrepo->has_for_discipline($item->id);
     $disciplines[] = [
@@ -119,18 +120,14 @@ foreach ($disciplinelist as $index => $item) {
         'mappingurl' => (new moodle_url('/blocks/programcurriculum/mapping.php', [
             'disciplineid' => $item->id,
         ]))->out(false),
-        'moveupurl' => $index > 0 ? (new moodle_url('/blocks/programcurriculum/discipline.php', [
+        'moveactionurl' => (new moodle_url('/blocks/programcurriculum/discipline.php', [
             'curriculumid' => $curriculumid,
             'id' => $item->id,
-            'move' => 'up',
+            'action' => 'move',
             'sesskey' => sesskey(),
-        ]))->out(false) : null,
-        'movedownurl' => $index < $lastindex ? (new moodle_url('/blocks/programcurriculum/discipline.php', [
-            'curriculumid' => $curriculumid,
-            'id' => $item->id,
-            'move' => 'down',
-            'sesskey' => sesskey(),
-        ]))->out(false) : null,
+        ]))->out(false),
+        'position' => $index + 1,
+        'totalpositions' => $total,
         'candelete' => !$hasmappings,
         'deleteurl' => !$hasmappings ? (new moodle_url('/blocks/programcurriculum/discipline.php', [
             'curriculumid' => $curriculumid,
