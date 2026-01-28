@@ -27,9 +27,12 @@ define(['core/notification', 'core/modal_save_cancel', 'core/modal_delete_cancel
                             title: strings[0],
                             body: strings[1]
                         }).then(function(modal) {
-                            modal.getRoot().on(ModalEvents.save, function() {
+                            var root = modal.getRoot();
+                            var navigate = function() {
                                 window.location.href = link.href;
-                            });
+                            };
+                            root.on(ModalEvents.save, navigate);
+                            root.on('delete', navigate);
                             modal.show();
                             return modal;
                         });
@@ -41,9 +44,12 @@ define(['core/notification', 'core/modal_save_cancel', 'core/modal_delete_cancel
                     title: message,
                     body: ''
                 }).then(function(modal) {
-                    modal.getRoot().on(ModalEvents.save, function() {
+                    var root = modal.getRoot();
+                    var navigate = function() {
                         window.location.href = link.href;
-                    });
+                    };
+                    root.on(ModalEvents.save, navigate);
+                    root.on('delete', navigate);
                     modal.show();
                     return modal;
                 }).catch(Notification.exception);
