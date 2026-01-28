@@ -103,7 +103,7 @@ if ($data = $mform->get_data()) {
     redirect(new moodle_url('/blocks/programcurriculum/discipline.php', ['curriculumid' => $curriculumid]));
 }
 
-$openmodal = !empty($id) || ($mform->is_submitted() && !$mform->is_validated());
+$openmodal = !empty($id) || ($mform->is_submitted() && !$mform->is_cancelled());
 
 $disciplines = [];
 $disciplinelist = array_values($disciplinesrepo->get_by_curriculum($curriculumid));
