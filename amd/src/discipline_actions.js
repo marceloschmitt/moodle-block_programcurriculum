@@ -32,7 +32,7 @@ define(['core/notification', 'core/modal_save_cancel', 'core/modal_delete_cancel
                                 window.location.href = link.href;
                             };
                             root.on(ModalEvents.save, navigate);
-                            root.on('delete', navigate);
+                            root.on(ModalEvents.delete, navigate);
                             modal.show();
                             return modal;
                         });
@@ -49,7 +49,7 @@ define(['core/notification', 'core/modal_save_cancel', 'core/modal_delete_cancel
                         window.location.href = link.href;
                     };
                     root.on(ModalEvents.save, navigate);
-                    root.on('delete', navigate);
+                    root.on(ModalEvents.delete, navigate);
                     modal.show();
                     return modal;
                 }).catch(Notification.exception);
