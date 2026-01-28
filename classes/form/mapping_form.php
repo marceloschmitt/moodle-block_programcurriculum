@@ -28,6 +28,7 @@ class mapping_form extends \moodleform {
 
         $mform->addElement('autocomplete', 'courseid', get_string('mappedcourse', 'block_programcurriculum'), $courses, [
             'multiple' => false,
+            'placeholder' => get_string('courseplaceholder', 'block_programcurriculum'),
         ]);
         $mform->setType('courseid', PARAM_INT);
         $mform->addRule('courseid', null, 'required', null, 'client');

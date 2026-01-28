@@ -42,6 +42,7 @@ $string['mappings'] = 'Mappings';
 $string['addmapping'] = 'Add mapping';
 $string['editmapping'] = 'Edit mapping';
 $string['mappedcourse'] = 'Mapped course';
+$string['courseplaceholder'] = 'Type to search for a course';
 $string['requiredcourse'] = 'Required course';
 $string['importtitle'] = 'Import curriculum CSV';
 $string['importhelp'] = 'CSV columns: curriculum_code, curriculum_name, discipline_code, discipline_name, course_id, required, sortorder, curriculum_description';
