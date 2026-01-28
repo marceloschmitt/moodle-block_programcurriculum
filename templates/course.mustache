@@ -1,5 +1,8 @@
 <div class="programcurriculum-course">
-    <h4>{{#str}}listofcourses, block_programcurriculum{{/str}}</h4>
+    <div class="d-flex align-items-center justify-content-between mb-2">
+        <h4 class="mb-0">{{#str}}listofcourses, block_programcurriculum{{/str}} - {{curriculumname}}</h4>
+        <a class="btn btn-secondary" href="{{backurl}}">{{#str}}backtoprograms, block_programcurriculum{{/str}}</a>
+    </div>
 
     {{#validationerror}}
         <div class="alert alert-danger">{{#str}}courseformerror, block_programcurriculum{{/str}}</div>

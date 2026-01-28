@@ -153,6 +153,8 @@ foreach ($courselist as $index => $item) {
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('block_programcurriculum/course', [
+    'curriculumname' => $curriculum->name,
+    'backurl' => (new moodle_url('/blocks/programcurriculum/manage.php'))->out(false),
     'courses' => $courses,
     'hascourses' => !empty($courses),
     'validationerror' => $validationerror,
