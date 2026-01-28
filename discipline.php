@@ -88,6 +88,7 @@ if ($action === 'move' && $id) {
 }
 
 $mform = new \block_programcurriculum\form\discipline_form(null, []);
+$mform->set_cancel_url(new moodle_url('/blocks/programcurriculum/discipline.php', ['curriculumid' => $curriculumid]));
 if ($discipline) {
     $mform->set_data($discipline);
 } else {
