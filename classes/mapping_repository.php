@@ -82,4 +82,48 @@ class mapping_repository {
 
         $DB->delete_records('block_programcurriculum_mapping', ['id' => $id]);
     }
+
+    /**
+     * Create mappings for all Moodle courses whose fullname or shortname contains the given code.
+     *
+     * @param int $courseid External course (block_programcurriculum_course) id.
+     * @param string $externalcode External course code to match in Moodle course names.
+     * @return int Number of new mappings created.
+     */
+    public function run_automatic_mapping(int $courseid, string $externalcode): int {
+        global $DB;
+
+        $code = trim($externalcode);
+        if ($code === '') {
+            return 0;
+        }
+
+        $like = $DB->sql_like('c.fullname', ':like1', false, false) . ' OR ' .
+                $DB->sql_like('c.shortname', ':like2', false, false);
+        $sql = "SELECT c.id
+                  FROM {course} c
+                 WHERE c.id <> :siteid
+                   AND ({$like})";
+        $params = [
+            'siteid' => SITEID,
+            'like1' => '%' . $DB->sql_like_escape($code) . '%',
+            'like2' => '%' . $DB->sql_like_escape($code) . '%',
+        ];
+        $matches = $DB->get_records_sql($sql, $params);
+        $created = 0;
+        foreach ($matches as $c) {
+            $exists = $DB->record_exists('block_programcurriculum_mapping', [
+                'courseid' => $courseid,
+                'moodlecourseid' => $c->id,
+            ]);
+            if (!$exists) {
+                $this->upsert((object)[
+                    'courseid' => $courseid,
+                    'moodlecourseid' => $c->id,
+                ]);
+                $created++;
+            }
+        }
+        return $created;
+    }
 }

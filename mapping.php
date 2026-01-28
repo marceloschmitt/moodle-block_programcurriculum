@@ -54,8 +54,7 @@ if ($action === 'delete' && $id) {
 
 if ($action === 'automatic') {
     require_sesskey();
-    $code = $course->externalcode;
-    if ($code === '') {
+    if (trim($course->externalcode ?? '') === '') {
         redirect(
             new moodle_url('/blocks/programcurriculum/mapping.php', ['courseid' => $courseid]),
             get_string('automaticmappingnocode', 'block_programcurriculum'),
@@ -63,32 +62,7 @@ if ($action === 'automatic') {
             \core\output\notification::NOTIFY_ERROR
         );
     }
-    $like = $DB->sql_like('c.fullname', ':like1', false, false) . ' OR ' .
-            $DB->sql_like('c.shortname', ':like2', false, false);
-    $sql = "SELECT c.id, c.fullname, c.shortname
-              FROM {course} c
-             WHERE c.id <> :siteid
-               AND ({$like})";
-    $params = [
-        'siteid' => SITEID,
-        'like1' => '%' . $DB->sql_like_escape($code) . '%',
-        'like2' => '%' . $DB->sql_like_escape($code) . '%',
-    ];
-    $matches = $DB->get_records_sql($sql, $params);
-    $created = 0;
-    foreach ($matches as $c) {
-        $exists = $DB->record_exists('block_programcurriculum_mapping', [
-            'courseid' => $courseid,
-            'moodlecourseid' => $c->id,
-        ]);
-        if (!$exists) {
-            $mappingrepo->upsert((object)[
-                'courseid' => $courseid,
-                'moodlecourseid' => $c->id,
-            ]);
-            $created++;
-        }
-    }
+    $created = $mappingrepo->run_automatic_mapping($courseid, $course->externalcode);
     redirect(
         new moodle_url('/blocks/programcurriculum/mapping.php', ['courseid' => $courseid]),
         get_string('automaticmappingdone', 'block_programcurriculum', $created),

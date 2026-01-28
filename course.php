@@ -64,7 +64,21 @@ if ($action === 'delete' && $id) {
     );
 }
 
-$action = optional_param('action', '', PARAM_ALPHA);
+if ($action === 'automatic') {
+    require_sesskey();
+    $courselist = array_values($coursesrepo->get_by_curriculum($curriculumid));
+    $created = 0;
+    foreach ($courselist as $item) {
+        $created += $mappingrepo->run_automatic_mapping((int)$item->id, $item->externalcode ?? '');
+    }
+    redirect(
+        new moodle_url('/blocks/programcurriculum/course.php', ['curriculumid' => $curriculumid]),
+        get_string('automaticmappingdonecurriculum', 'block_programcurriculum', $created),
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
+
 if ($action === 'move' && $id) {
     require_sesskey();
     $ordered = array_values($coursesrepo->get_by_curriculum($curriculumid));
@@ -155,6 +169,11 @@ echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('block_programcurriculum/course', [
     'curriculumname' => $curriculum->name,
     'backurl' => (new moodle_url('/blocks/programcurriculum/manage.php'))->out(false),
+    'automaticurl' => (new moodle_url('/blocks/programcurriculum/course.php', [
+        'curriculumid' => $curriculumid,
+        'action' => 'automatic',
+        'sesskey' => sesskey(),
+    ]))->out(false),
     'courses' => $courses,
     'hascourses' => !empty($courses),
     'validationerror' => $validationerror,

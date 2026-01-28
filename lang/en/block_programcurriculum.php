@@ -59,6 +59,7 @@ $string['manualmapping'] = 'Manual mapping';
 $string['automaticmapping'] = 'Automatic mapping';
 $string['automaticmappingdone'] = 'Automatic mapping completed. {$a} mapping(s) created.';
 $string['automaticmappingnocode'] = 'External course has no code. Cannot run automatic mapping.';
+$string['automaticmappingdonecurriculum'] = 'Automatic mapping completed. {$a} mapping(s) created for the curriculum courses.';
 $string['editmapping'] = 'Edit requirement';
 $string['move'] = 'Move';
 $string['deletemappingconfirm'] = 'Delete this mapping?';
