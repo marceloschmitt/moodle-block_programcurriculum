@@ -98,9 +98,10 @@ define(['core/notification', 'core/modal_save_cancel', 'core/modal_events', 'cor
         });
 
         if (window.location.hash === '#open-discipline-modal') {
-            var openButton = document.querySelector('[data-open-discipline-modal="1"]');
-            if (openButton) {
-                openButton.click();
+            var modal = document.getElementById('programcurriculum-discipline-modal');
+            if (modal && typeof bootstrap !== 'undefined') {
+                var instance = bootstrap.Modal.getOrCreateInstance(modal);
+                instance.show();
             }
         }
 

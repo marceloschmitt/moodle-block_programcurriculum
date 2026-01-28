@@ -104,7 +104,6 @@ if ($data = $mform->get_data()) {
 }
 
 $validationerror = $mform->is_submitted() && !$mform->is_cancelled() && !$mform->is_validated();
-$openmodal = !empty($id);
 
 $disciplines = [];
 $disciplinelist = array_values($disciplinesrepo->get_by_curriculum($curriculumid));
@@ -161,6 +160,5 @@ echo $OUTPUT->render_from_template('block_programcurriculum/discipline', [
     })(),
     'modaltitle' => $id ? get_string('editdiscipline', 'block_programcurriculum') : get_string('adddiscipline', 'block_programcurriculum'),
     'validationerror' => $validationerror,
-    'openmodal' => $openmodal,
 ]);
 echo $OUTPUT->footer();
