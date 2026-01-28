@@ -1,14 +1,13 @@
 <div class="programcurriculum-discipline">
-    <h3>{{curriculumname}}</h3>
-
     {{#validationerror}}
         <div class="alert alert-danger">{{#str}}disciplineformerror, block_programcurriculum{{/str}}</div>
     {{/validationerror}}
 
     <div class="mb-2">
-        <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#programcurriculum-discipline-modal">
+        <button class="btn btn-primary" type="button" data-action="add-discipline" data-bs-toggle="modal" data-bs-target="#programcurriculum-discipline-modal">
             {{#str}}adddiscipline, block_programcurriculum{{/str}}
         </button>
+        <button class="d-none" type="button" data-open-discipline-modal="1" data-bs-toggle="modal" data-bs-target="#programcurriculum-discipline-modal"></button>
     </div>
 
     {{#hasdisciplines}}
@@ -22,7 +21,18 @@
                             {{#pix}}i/moremenu, core{{/pix}}
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="{{editurl}}#open-discipline-modal" data-open-discipline-modal="1">{{#str}}edit{{/str}}</a></li>
+                            <li>
+                                <a class="dropdown-item"
+                                   href="{{editurl}}"
+                                   data-action="edit-discipline"
+                                   data-edit-id="{{id}}"
+                                   data-edit-name="{{editname}}"
+                                   data-edit-code="{{editcode}}"
+                                   data-edit-sortorder="{{editsortorder}}"
+                                   data-edit-curriculum="{{curriculumid}}">
+                                    {{#str}}edit{{/str}}
+                                </a>
+                            </li>
                             <li><a class="dropdown-item" href="{{mappingurl}}">{{#str}}mappings, block_programcurriculum{{/str}}</a></li>
                             <li><a class="dropdown-item" href="{{moveactionurl}}" data-move-url="{{moveactionurl}}" data-current-position="{{position}}" data-max-position="{{totalpositions}}">{{#str}}move{{/str}}</a></li>
                             {{#candelete}}
@@ -46,7 +56,11 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="programcurriculum-discipline-modal-title">{{modaltitle}}</h5>
+                    <h5 class="modal-title" id="programcurriculum-discipline-modal-title"
+                        data-add-title="{{#str}}adddiscipline, block_programcurriculum{{/str}}"
+                        data-edit-title="{{#str}}editdiscipline, block_programcurriculum{{/str}}">
+                        {{modaltitle}}
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{#str}}cancel, moodle{{/str}}"></button>
                 </div>
                 <div class="modal-body">

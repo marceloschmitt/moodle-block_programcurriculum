@@ -105,7 +105,41 @@ define(['core/notification', 'core/modal_save_cancel', 'core/modal_delete_cancel
             });
         });
 
-        var editLinks = document.querySelectorAll('a[data-open-discipline-modal="1"]');
+        var openModalButton = document.querySelector('[data-open-discipline-modal="1"]');
+        var modalTitle = document.getElementById('programcurriculum-discipline-modal-title');
+        var form = document.getElementById('programcurriculum-discipline-form');
+
+        var setFormValue = function(name, value) {
+            if (!form) {
+                return;
+            }
+            var element = form.elements.namedItem(name);
+            if (element) {
+                element.value = value;
+            }
+        };
+
+        var openModal = function() {
+            if (openModalButton) {
+                openModalButton.click();
+            }
+        };
+
+        var addButton = document.querySelector('[data-action="add-discipline"]');
+        if (addButton && !addButton.dataset.modalBound) {
+            addButton.dataset.modalBound = '1';
+            addButton.addEventListener('click', function() {
+                if (modalTitle) {
+                    modalTitle.textContent = modalTitle.dataset.addTitle || modalTitle.textContent;
+                }
+                setFormValue('id', 0);
+                setFormValue('name', '');
+                setFormValue('externalcode', '');
+                setFormValue('sortorder', 0);
+            });
+        }
+
+        var editLinks = document.querySelectorAll('a[data-action="edit-discipline"]');
         editLinks.forEach(function(link) {
             if (link.dataset.modalBound === '1') {
                 return;
@@ -113,21 +147,17 @@ define(['core/notification', 'core/modal_save_cancel', 'core/modal_delete_cancel
             link.dataset.modalBound = '1';
             link.addEventListener('click', function(event) {
                 event.preventDefault();
-                var target = link.getAttribute('href');
-                if (!target) {
-                    return;
+                if (modalTitle) {
+                    modalTitle.textContent = modalTitle.dataset.editTitle || modalTitle.textContent;
                 }
-                window.location.href = target + '#open-discipline-modal';
+                setFormValue('id', link.dataset.editId || 0);
+                setFormValue('name', link.dataset.editName || '');
+                setFormValue('externalcode', link.dataset.editCode || '');
+                setFormValue('sortorder', link.dataset.editSortorder || 0);
+                setFormValue('curriculumid', link.dataset.editCurriculum || 0);
+                openModal();
             });
         });
-
-        if (window.location.hash === '#open-discipline-modal') {
-            var modal = document.getElementById('programcurriculum-discipline-modal');
-            if (modal && typeof bootstrap !== 'undefined') {
-                var instance = bootstrap.Modal.getOrCreateInstance(modal);
-                instance.show();
-            }
-        }
 
     };
 
