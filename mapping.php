@@ -81,6 +81,26 @@ if ($data = $mform->get_data()) {
     redirect(new moodle_url('/blocks/programcurriculum/mapping.php', ['courseid' => $courseid]));
 }
 
+$validationerror = $mform->is_submitted() && !$mform->is_cancelled() && !$mform->is_validated();
+$validationmessage = null;
+if ($validationerror) {
+    $moodlecourseid = optional_param('moodlecourseid', 0, PARAM_INT);
+    if ($moodlecourseid) {
+        $existing = $DB->get_record(
+            'block_programcurriculum_mapping',
+            ['courseid' => $courseid, 'moodlecourseid' => $moodlecourseid],
+            'id',
+            IGNORE_MULTIPLE
+        );
+        if ($existing && (int)$existing->id !== (int)$id) {
+            $validationmessage = get_string('duplicatemapping', 'block_programcurriculum');
+        }
+    }
+    if ($validationmessage === null) {
+        $validationmessage = get_string('mappingformerror', 'block_programcurriculum');
+    }
+}
+
 $mappings = [];
 foreach ($mappingrepo->get_by_course($courseid) as $item) {
     $moodlecourse = get_course($item->moodlecourseid);
@@ -104,10 +124,13 @@ $PAGE->requires->js_call_amd('block_programcurriculum/mapping_actions', 'init');
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('block_programcurriculum/mapping', [
     'coursename' => $course->name,
+    'coursecode' => $course->externalcode,
+    'backurl' => (new moodle_url('/blocks/programcurriculum/course.php', ['curriculumid' => $course->curriculumid]))->out(false),
     'courseid' => $courseid,
     'mappings' => $mappings,
     'hasmappings' => !empty($mappings),
-    'validationerror' => $mform->is_submitted() && !$mform->is_cancelled() && !$mform->is_validated(),
+    'validationerror' => $validationerror,
+    'validationmessage' => $validationmessage,
     'formhtml' => (function () use ($mform): string {
         ob_start();
         $mform->display();
