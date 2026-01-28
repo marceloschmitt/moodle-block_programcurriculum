@@ -45,7 +45,21 @@ class discipline_repository {
             return (int)$record->id;
         }
 
+        if (empty($record->sortorder) || (int)$record->sortorder <= 0) {
+            $record->sortorder = $this->get_next_sortorder((int)$record->curriculumid);
+        }
+
         return (int)$DB->insert_record('block_programcurriculum_discipline', $record);
+    }
+
+    private function get_next_sortorder(int $curriculumid): int {
+        global $DB;
+
+        $sql = "SELECT COALESCE(MAX(sortorder), 0) + 1
+                  FROM {block_programcurriculum_discipline}
+                 WHERE curriculumid = :curriculumid";
+
+        return (int)$DB->get_field_sql($sql, ['curriculumid' => $curriculumid]);
     }
 
     public function set_sortorder(int $id, int $sortorder): void {

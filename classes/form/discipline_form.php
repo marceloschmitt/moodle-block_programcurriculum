@@ -32,7 +32,7 @@ class discipline_form extends \moodleform {
         $mform->setType('externalcode', PARAM_ALPHANUMEXT);
         $mform->addRule('externalcode', null, 'required', null, 'client');
 
-        $mform->addElement('text', 'sortorder', get_string('sortorder', 'block_programcurriculum'));
+        $mform->addElement('hidden', 'sortorder');
         $mform->setType('sortorder', PARAM_INT);
 
         $mform->addElement('hidden', 'curriculumid');
@@ -41,6 +41,6 @@ class discipline_form extends \moodleform {
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
-        $this->add_action_buttons(true, get_string('savechanges'));
+        $this->add_action_buttons(false, get_string('savechanges'));
     }
 }
