@@ -25,6 +25,9 @@ class mapping_form extends \moodleform {
         $mform = $this->_form;
         $customdata = $this->_customdata ?? [];
         $courses = $customdata['courses'] ?? [];
+        $freezeCourse = !empty($customdata['freeze_course']);
+        $mform->updateAttributes(['id' => 'programcurriculum-mapping-form']);
+        $mform->setRequiredNote('');
 
         $mform->addElement('autocomplete', 'moodlecourseid', get_string('mappedmoodlecourse', 'block_programcurriculum'), $courses, [
             'multiple' => false,
@@ -32,6 +35,9 @@ class mapping_form extends \moodleform {
         ]);
         $mform->setType('moodlecourseid', PARAM_INT);
         $mform->addRule('moodlecourseid', null, 'required', null, 'client');
+        if ($freezeCourse) {
+            $mform->freeze('moodlecourseid');
+        }
 
         $mform->addElement('selectyesno', 'required', get_string('requiredcourse', 'block_programcurriculum'));
         $mform->setType('required', PARAM_INT);
@@ -42,6 +48,5 @@ class mapping_form extends \moodleform {
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
-        $this->add_action_buttons(true, get_string('savechanges'));
     }
 }

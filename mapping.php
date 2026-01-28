@@ -60,7 +60,10 @@ foreach (get_courses() as $moodlecourse) {
     $courses[$moodlecourse->id] = format_string($moodlecourse->fullname, true, ['context' => context_course::instance($moodlecourse->id)]);
 }
 
-$mform = new \block_programcurriculum\form\mapping_form(null, ['courses' => $courses]);
+$mform = new \block_programcurriculum\form\mapping_form(null, [
+    'courses' => $courses,
+    'freeze_course' => !empty($mapping),
+]);
 if ($mapping) {
     $mform->set_data($mapping);
 } else {
@@ -83,10 +86,12 @@ foreach ($mappingrepo->get_by_course($courseid) as $item) {
         'id' => $item->id,
         'coursename' => format_string($moodlecourse->fullname, true, ['context' => context_course::instance($moodlecourse->id)]),
         'required' => (int)$item->required,
+        'moodlecourseid' => $item->moodlecourseid,
         'editurl' => (new moodle_url('/blocks/programcurriculum/mapping.php', [
             'courseid' => $courseid,
             'id' => $item->id,
         ]))->out(false),
+        'editrequired' => (int)$item->required,
         'deleteurl' => (new moodle_url('/blocks/programcurriculum/mapping.php', [
             'courseid' => $courseid,
             'id' => $item->id,
@@ -98,13 +103,20 @@ foreach ($mappingrepo->get_by_course($courseid) as $item) {
 }
 
 $PAGE->set_heading(get_string('pluginname', 'block_programcurriculum'));
-$PAGE->requires->js_call_amd('block_programcurriculum/course_actions', 'init');
+$PAGE->requires->js_call_amd('block_programcurriculum/mapping_actions', 'init');
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('block_programcurriculum/mapping', [
     'coursename' => $course->name,
+    'courseid' => $courseid,
     'mappings' => $mappings,
     'hasmappings' => !empty($mappings),
+    'validationerror' => $mform->is_submitted() && !$mform->is_cancelled() && !$mform->is_validated(),
+    'formhtml' => (function () use ($mform): string {
+        ob_start();
+        $mform->display();
+        return (string)ob_get_clean();
+    })(),
+    'modaltitle' => $id ? get_string('editmapping', 'block_programcurriculum') : get_string('addmapping', 'block_programcurriculum'),
 ]);
-$mform->display();
 echo $OUTPUT->footer();

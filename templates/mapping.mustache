@@ -1,32 +1,73 @@
 <div class="programcurriculum-mapping">
     <h3>{{#str}}mappingofcourse, block_programcurriculum, {{coursename}}{{/str}}</h3>
+    <h4>{{#str}}listofmappings, block_programcurriculum{{/str}}</h4>
+
+    {{#validationerror}}
+        <div class="alert alert-danger">{{#str}}mappingformerror, block_programcurriculum{{/str}}</div>
+    {{/validationerror}}
+
+    <div class="mb-2">
+        <button class="btn btn-primary" type="button" data-action="add-mapping" data-course-id="{{courseid}}" data-bs-toggle="modal" data-bs-target="#programcurriculum-mapping-modal">
+            {{#str}}addmapping, block_programcurriculum{{/str}}
+        </button>
+        <button class="d-none" type="button" data-open-mapping-modal="1" data-bs-toggle="modal" data-bs-target="#programcurriculum-mapping-modal"></button>
+    </div>
 
     {{#hasmappings}}
-        <table class="generaltable">
-            <thead>
-                <tr>
-                    <th>{{#str}}mappedmoodlecourse, block_programcurriculum{{/str}}</th>
-                    <th>{{#str}}requiredcourse, block_programcurriculum{{/str}}</th>
-                    <th>{{#str}}actions{{/str}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#mappings}}
-                    <tr>
-                        <td>{{coursename}}</td>
-                        <td>{{#required}}{{#str}}yes{{/str}}{{/required}}{{^required}}{{#str}}no{{/str}}{{/required}}</td>
-                        <td>
-                            <a href="{{editurl}}">{{#str}}editmapping, block_programcurriculum{{/str}}</a>
-                            |
-                            <a href="{{deleteurl}}" data-confirm-message="{{deleteconfirm}}">{{#str}}delete{{/str}}</a>
-                        </td>
-                    </tr>
-                {{/mappings}}
-            </tbody>
-        </table>
+        <ul class="list-unstyled">
+            {{#mappings}}
+                <li class="d-flex align-items-center py-1 border-bottom">
+                    <span class="flex-grow-1">
+                        {{coursename}}
+                        <span class="text-muted ms-2">({{#str}}requiredcourse, block_programcurriculum{{/str}}: {{#required}}{{#str}}yes{{/str}}{{/required}}{{^required}}{{#str}}no{{/str}}{{/required}})</span>
+                    </span>
+                    <div class="dropdown">
+                        <button class="btn btn-link p-0 text-decoration-none" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{#str}}actions{{/str}}">
+                            {{#pix}}i/moremenu, core{{/pix}}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item"
+                                   href="{{editurl}}"
+                                   data-action="edit-mapping"
+                                   data-edit-id="{{id}}"
+                                   data-edit-moodlecourseid="{{moodlecourseid}}"
+                                   data-edit-required="{{editrequired}}"
+                                   data-edit-course="{{courseid}}">
+                                    {{#str}}editmapping, block_programcurriculum{{/str}}
+                                </a>
+                            </li>
+                            <li><a class="dropdown-item" href="{{deleteurl}}" data-confirm-message="{{deleteconfirm}}" data-confirm-name="{{coursename}}">{{#str}}delete{{/str}}</a></li>
+                        </ul>
+                    </div>
+                </li>
+            {{/mappings}}
+        </ul>
     {{/hasmappings}}
 
     {{^hasmappings}}
         <div class="alert alert-info">{{#str}}nomappings, block_programcurriculum{{/str}}</div>
     {{/hasmappings}}
+
+    <div class="modal fade" id="programcurriculum-mapping-modal" tabindex="-1" aria-labelledby="programcurriculum-mapping-modal-title" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="programcurriculum-mapping-modal-title"
+                        data-add-title="{{#str}}addmapping, block_programcurriculum{{/str}}"
+                        data-edit-title="{{#str}}editmapping, block_programcurriculum{{/str}}">
+                        {{modaltitle}}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{#str}}cancel, moodle{{/str}}"></button>
+                </div>
+                <div class="modal-body">
+                    {{{formhtml}}}
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" form="programcurriculum-mapping-form">{{#str}}savechanges{{/str}}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{#str}}cancel, moodle{{/str}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
