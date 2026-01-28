@@ -90,5 +90,15 @@ function xmldb_block_programcurriculum_upgrade(int $oldversion): bool {
         upgrade_block_savepoint(true, 2026012845, 'programcurriculum');
     }
 
+    if ($oldversion < 2026012846) {
+        $table = new xmldb_table('block_programcurriculum_mapping');
+        $index = new xmldb_index('course_moodlecourse', XMLDB_INDEX_UNIQUE, ['courseid', 'moodlecourseid']);
+        if ($dbman->table_exists($table) && !$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        upgrade_block_savepoint(true, 2026012846, 'programcurriculum');
+    }
+
     return true;
 }

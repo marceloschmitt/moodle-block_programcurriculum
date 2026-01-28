@@ -64,6 +64,7 @@ foreach (get_courses() as $moodlecourse) {
 $mform = new \block_programcurriculum\form\mapping_form(null, [
     'courses' => $courses,
     'freeze_course' => !empty($mapping),
+    'courseid' => $courseid,
 ]);
 if ($mapping) {
     $mform->set_data($mapping);

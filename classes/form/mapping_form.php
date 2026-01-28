@@ -26,6 +26,7 @@ class mapping_form extends \moodleform {
         $customdata = $this->_customdata ?? [];
         $courses = $customdata['courses'] ?? [];
         $freezeCourse = !empty($customdata['freeze_course']);
+        $courseid = (int)($customdata['courseid'] ?? 0);
         $mform->updateAttributes(['id' => 'programcurriculum-mapping-form']);
         $mform->setRequiredNote('');
 
@@ -41,9 +42,31 @@ class mapping_form extends \moodleform {
 
         $mform->addElement('hidden', 'courseid');
         $mform->setType('courseid', PARAM_INT);
+        $mform->setDefault('courseid', $courseid);
 
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
+    }
+
+    public function validation($data, $files): array {
+        global $DB;
+
+        $errors = parent::validation($data, $files);
+
+        $courseid = (int)($data['courseid'] ?? 0);
+        $moodlecourseid = (int)($data['moodlecourseid'] ?? 0);
+        if ($courseid && $moodlecourseid) {
+            $params = [
+                'courseid' => $courseid,
+                'moodlecourseid' => $moodlecourseid,
+            ];
+            $existing = $DB->get_record('block_programcurriculum_mapping', $params, 'id', IGNORE_MULTIPLE);
+            if ($existing && (int)$existing->id !== (int)($data['id'] ?? 0)) {
+                $errors['moodlecourseid'] = get_string('duplicatemapping', 'block_programcurriculum');
+            }
+        }
+
+        return $errors;
     }
 }

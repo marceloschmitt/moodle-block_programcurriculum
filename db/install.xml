@@ -49,6 +49,7 @@
       <INDEXES>
         <INDEX NAME="courseid" UNIQUE="false" FIELDS="courseid"/>
         <INDEX NAME="moodlecourseid" UNIQUE="false" FIELDS="moodlecourseid"/>
+        <INDEX NAME="course_moodlecourse" UNIQUE="true" FIELDS="courseid, moodlecourseid"/>
       </INDEXES>
     </TABLE>
   </TABLES>
