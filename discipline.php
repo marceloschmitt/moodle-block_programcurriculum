@@ -106,8 +106,6 @@ if ($data = $mform->get_data()) {
 $disciplines = [];
 $disciplinelist = array_values($disciplinesrepo->get_by_curriculum($curriculumid));
 $total = count($disciplinelist);
-$moveprompt = get_string('movepositionprompt', 'block_programcurriculum', $total);
-$moveinvalid = get_string('movepositioninvalid', 'block_programcurriculum');
 foreach ($disciplinelist as $index => $item) {
     $hasmappings = $mappingrepo->has_for_discipline($item->id);
     $disciplines[] = [
@@ -130,8 +128,6 @@ foreach ($disciplinelist as $index => $item) {
         ]))->out(false),
         'position' => $index + 1,
         'totalpositions' => $total,
-        'moveprompt' => $moveprompt,
-        'moveinvalid' => $moveinvalid,
         'candelete' => !$hasmappings,
         'deleteurl' => !$hasmappings ? (new moodle_url('/blocks/programcurriculum/discipline.php', [
             'curriculumid' => $curriculumid,

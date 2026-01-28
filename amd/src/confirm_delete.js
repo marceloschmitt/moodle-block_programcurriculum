@@ -1,4 +1,10 @@
-define(['core/notification'], function(Notification) {
+define(['core/notification', 'core/modal_factory', 'core/modal_events', 'core/templates', 'core/str'], function(
+    Notification,
+    ModalFactory,
+    ModalEvents,
+    Templates,
+    Str
+) {
     'use strict';
 
     var attachHandlers = function() {
@@ -31,24 +37,49 @@ define(['core/notification'], function(Notification) {
             link.dataset.moveBound = '1';
             link.addEventListener('click', function(event) {
                 event.preventDefault();
+
                 var max = parseInt(link.getAttribute('data-max-position') || '1', 10);
                 var current = parseInt(link.getAttribute('data-current-position') || '1', 10);
-                var promptMessage = link.getAttribute('data-move-prompt') || '';
-                var invalidMessage = link.getAttribute('data-move-invalid') || '';
-                var input = window.prompt(promptMessage, String(current));
-                if (input === null) {
-                    return;
-                }
-                var position = parseInt(input, 10);
-                if (isNaN(position) || position < 1 || position > max) {
-                    if (invalidMessage) {
-                        Notification.alert('', invalidMessage, '');
-                    }
-                    return;
-                }
                 var url = link.getAttribute('data-move-url') || link.href;
-                var separator = url.indexOf('?') === -1 ? '?' : '&';
-                window.location.href = url + separator + 'position=' + position;
+
+                Str.get_strings([
+                    {key: 'movemodaltitle', component: 'block_programcurriculum'},
+                    {key: 'move', component: 'block_programcurriculum'},
+                    {key: 'cancel', component: 'moodle'},
+                    {key: 'movepositioninvalid', component: 'block_programcurriculum'},
+                    {key: 'movepositionhelp', component: 'block_programcurriculum', param: max}
+                ]).then(function(strings) {
+                    return Templates.render('block_programcurriculum/move_prompt', {
+                        current: current,
+                        max: max,
+                        helptext: strings[4]
+                    }).then(function(html, js) {
+                        return ModalFactory.create({
+                            title: strings[0],
+                            body: html,
+                            type: ModalFactory.types.SAVE_CANCEL,
+                            buttons: {
+                                save: strings[1],
+                                cancel: strings[2]
+                            }
+                        }).then(function(modal) {
+                            Templates.runTemplateJS(js);
+                            modal.getRoot().on(ModalEvents.save, function(e) {
+                                var input = modal.getRoot().find('#block-programcurriculum-move-input').val();
+                                var position = parseInt(input, 10);
+                                if (isNaN(position) || position < 1 || position > max) {
+                                    e.preventDefault();
+                                    Notification.alert('', strings[3], '');
+                                    return;
+                                }
+                                var separator = url.indexOf('?') === -1 ? '?' : '&';
+                                window.location.href = url + separator + 'position=' + position;
+                            });
+                            modal.show();
+                            return modal;
+                        });
+                    });
+                }).catch(Notification.exception);
             });
         });
     };
