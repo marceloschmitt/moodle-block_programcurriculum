@@ -21,16 +21,16 @@ require_login();
 $context = context_system::instance();
 require_capability('block/programcurriculum:manage', $context);
 
-$disciplineid = required_param('disciplineid', PARAM_INT);
+$courseid = required_param('courseid', PARAM_INT);
 $id = optional_param('id', 0, PARAM_INT);
 
 $PAGE->set_context($context);
-$PAGE->set_url('/blocks/programcurriculum/mapping.php', ['disciplineid' => $disciplineid, 'id' => $id]);
+$PAGE->set_url('/blocks/programcurriculum/mapping.php', ['courseid' => $courseid, 'id' => $id]);
 $PAGE->set_title(get_string('mappings', 'block_programcurriculum'));
 
-$disciplinesrepo = new \block_programcurriculum\discipline_repository();
-$discipline = $disciplinesrepo->get($disciplineid);
-if (!$discipline) {
+$coursesrepo = new \block_programcurriculum\course_repository();
+$course = $coursesrepo->get($courseid);
+if (!$course) {
     throw new moodle_exception('invalidrecord', 'error');
 }
 
@@ -40,12 +40,12 @@ $mapping = $id ? $mappingrepo->get($id) : null;
 $action = optional_param('action', '', PARAM_ALPHA);
 if ($action === 'delete' && $id) {
     require_sesskey();
-    if (!$mapping || (int)$mapping->disciplineid !== (int)$disciplineid) {
+    if (!$mapping || (int)$mapping->courseid !== (int)$courseid) {
         throw new moodle_exception('invalidrecord', 'error');
     }
     $mappingrepo->delete($id);
     redirect(
-        new moodle_url('/blocks/programcurriculum/mapping.php', ['disciplineid' => $disciplineid]),
+        new moodle_url('/blocks/programcurriculum/mapping.php', ['courseid' => $courseid]),
         get_string('mappingdeleted', 'block_programcurriculum'),
         null,
         \core\output\notification::NOTIFY_SUCCESS
@@ -64,31 +64,31 @@ $mform = new \block_programcurriculum\form\mapping_form(null, ['courses' => $cou
 if ($mapping) {
     $mform->set_data($mapping);
 } else {
-    $mform->set_data((object)['disciplineid' => $disciplineid, 'required' => 1]);
+    $mform->set_data((object)['courseid' => $courseid, 'required' => 1]);
 }
 
 if ($mform->is_cancelled()) {
-    redirect(new moodle_url('/blocks/programcurriculum/discipline.php', ['curriculumid' => $discipline->curriculumid]));
+    redirect(new moodle_url('/blocks/programcurriculum/course.php', ['curriculumid' => $course->curriculumid]));
 }
 
 if ($data = $mform->get_data()) {
     $mappingrepo->upsert($data);
-    redirect(new moodle_url('/blocks/programcurriculum/mapping.php', ['disciplineid' => $disciplineid]));
+    redirect(new moodle_url('/blocks/programcurriculum/mapping.php', ['courseid' => $courseid]));
 }
 
 $mappings = [];
-foreach ($mappingrepo->get_by_discipline($disciplineid) as $item) {
-    $course = get_course($item->courseid);
+foreach ($mappingrepo->get_by_course($courseid) as $item) {
+    $moodlecourse = get_course($item->moodlecourseid);
     $mappings[] = [
         'id' => $item->id,
-        'coursename' => format_string($course->fullname, true, ['context' => context_course::instance($course->id)]),
+        'coursename' => format_string($moodlecourse->fullname, true, ['context' => context_course::instance($moodlecourse->id)]),
         'required' => (int)$item->required,
         'editurl' => (new moodle_url('/blocks/programcurriculum/mapping.php', [
-            'disciplineid' => $disciplineid,
+            'courseid' => $courseid,
             'id' => $item->id,
         ]))->out(false),
         'deleteurl' => (new moodle_url('/blocks/programcurriculum/mapping.php', [
-            'disciplineid' => $disciplineid,
+            'courseid' => $courseid,
             'id' => $item->id,
             'action' => 'delete',
             'sesskey' => sesskey(),
@@ -98,11 +98,11 @@ foreach ($mappingrepo->get_by_discipline($disciplineid) as $item) {
 }
 
 $PAGE->set_heading(get_string('pluginname', 'block_programcurriculum'));
-$PAGE->requires->js_call_amd('block_programcurriculum/discipline_actions', 'init');
+$PAGE->requires->js_call_amd('block_programcurriculum/course_actions', 'init');
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('block_programcurriculum/mapping', [
-    'disciplinename' => $discipline->name,
+    'coursename' => $course->name,
     'mappings' => $mappings,
     'hasmappings' => !empty($mappings),
 ]);

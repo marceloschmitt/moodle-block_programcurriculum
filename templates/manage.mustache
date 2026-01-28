@@ -9,7 +9,7 @@
                 <tr>
                     <th>{{#str}}curriculumname, block_programcurriculum{{/str}}</th>
                     <th>{{#str}}curriculumcode, block_programcurriculum{{/str}}</th>
-                    <th>{{#str}}disciplines, block_programcurriculum{{/str}}</th>
+                    <th>{{#str}}courses, block_programcurriculum{{/str}}</th>
                     <th>{{#str}}actions{{/str}}</th>
                 </tr>
             </thead>
@@ -18,11 +18,11 @@
                     <tr>
                         <td>{{name}}</td>
                         <td>{{externalcode}}</td>
-                        <td>{{disciplinecount}}</td>
+                        <td>{{coursecount}}</td>
                         <td>
                             <a href="{{editurl}}">{{#str}}editcurriculum, block_programcurriculum{{/str}}</a>
                             |
-                            <a href="{{disciplinesurl}}">{{#str}}disciplines, block_programcurriculum{{/str}}</a>
+                            <a href="{{coursesurl}}">{{#str}}courses, block_programcurriculum{{/str}}</a>
                         </td>
                     </tr>
                 {{/curricula}}

@@ -26,18 +26,18 @@ class mapping_form extends \moodleform {
         $customdata = $this->_customdata ?? [];
         $courses = $customdata['courses'] ?? [];
 
-        $mform->addElement('autocomplete', 'courseid', get_string('mappedcourse', 'block_programcurriculum'), $courses, [
+        $mform->addElement('autocomplete', 'moodlecourseid', get_string('mappedmoodlecourse', 'block_programcurriculum'), $courses, [
             'multiple' => false,
             'placeholder' => get_string('courseplaceholder', 'block_programcurriculum'),
         ]);
-        $mform->setType('courseid', PARAM_INT);
-        $mform->addRule('courseid', null, 'required', null, 'client');
+        $mform->setType('moodlecourseid', PARAM_INT);
+        $mform->addRule('moodlecourseid', null, 'required', null, 'client');
 
         $mform->addElement('selectyesno', 'required', get_string('requiredcourse', 'block_programcurriculum'));
         $mform->setType('required', PARAM_INT);
 
-        $mform->addElement('hidden', 'disciplineid');
-        $mform->setType('disciplineid', PARAM_INT);
+        $mform->addElement('hidden', 'courseid');
+        $mform->setType('courseid', PARAM_INT);
 
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);

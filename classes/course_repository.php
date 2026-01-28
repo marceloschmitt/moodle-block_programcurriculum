@@ -18,30 +18,30 @@ namespace block_programcurriculum;
 
 defined('MOODLE_INTERNAL') || die();
 
-class discipline_repository {
+class course_repository {
     public function get_by_curriculum(int $curriculumid): array {
         global $DB;
 
-        return $DB->get_records('block_programcurriculum_discipline', ['curriculumid' => $curriculumid], 'sortorder ASC, name ASC');
+        return $DB->get_records('block_programcurriculum_course', ['curriculumid' => $curriculumid], 'sortorder ASC, name ASC');
     }
 
     public function get(int $id): ?\stdClass {
         global $DB;
 
-        return $DB->get_record('block_programcurriculum_discipline', ['id' => $id]);
+        return $DB->get_record('block_programcurriculum_course', ['id' => $id]);
     }
 
     public function get_by_externalcode(string $externalcode): ?\stdClass {
         global $DB;
 
-        return $DB->get_record('block_programcurriculum_discipline', ['externalcode' => $externalcode]);
+        return $DB->get_record('block_programcurriculum_course', ['externalcode' => $externalcode]);
     }
 
     public function upsert(\stdClass $record): int {
         global $DB;
 
         if (!empty($record->id)) {
-            $DB->update_record('block_programcurriculum_discipline', $record);
+            $DB->update_record('block_programcurriculum_course', $record);
             return (int)$record->id;
         }
 
@@ -49,14 +49,14 @@ class discipline_repository {
             $record->sortorder = $this->get_next_sortorder((int)$record->curriculumid);
         }
 
-        return (int)$DB->insert_record('block_programcurriculum_discipline', $record);
+        return (int)$DB->insert_record('block_programcurriculum_course', $record);
     }
 
     private function get_next_sortorder(int $curriculumid): int {
         global $DB;
 
         $sql = "SELECT COALESCE(MAX(sortorder), 0) + 1
-                  FROM {block_programcurriculum_discipline}
+                  FROM {block_programcurriculum_course}
                  WHERE curriculumid = :curriculumid";
 
         return (int)$DB->get_field_sql($sql, ['curriculumid' => $curriculumid]);
@@ -65,12 +65,12 @@ class discipline_repository {
     public function set_sortorder(int $id, int $sortorder): void {
         global $DB;
 
-        $DB->set_field('block_programcurriculum_discipline', 'sortorder', $sortorder, ['id' => $id]);
+        $DB->set_field('block_programcurriculum_course', 'sortorder', $sortorder, ['id' => $id]);
     }
 
     public function delete(int $id): void {
         global $DB;
 
-        $DB->delete_records('block_programcurriculum_discipline', ['id' => $id]);
+        $DB->delete_records('block_programcurriculum_course', ['id' => $id]);
     }
 }

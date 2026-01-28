@@ -37,13 +37,13 @@ class progress_calculator {
         $details = [];
         $completedcount = 0;
         foreach ($mappings as $mapping) {
-            $completion = $this->get_course_completion_state($userid, (int)$mapping->courseid);
+            $completion = $this->get_course_completion_state($userid, (int)$mapping->moodlecourseid);
             $iscompleted = ($completion === COMPLETION_COMPLETE);
             if ($iscompleted) {
                 $completedcount++;
             }
 
-            $course = $DB->get_record('course', ['id' => $mapping->courseid], 'id, fullname', MUST_EXIST);
+            $course = $DB->get_record('course', ['id' => $mapping->moodlecourseid], 'id, fullname', MUST_EXIST);
             $details[] = [
                 'courseid' => $course->id,
                 'coursename' => $course->fullname,

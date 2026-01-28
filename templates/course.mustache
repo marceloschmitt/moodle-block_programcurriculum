@@ -1,19 +1,20 @@
-<div class="programcurriculum-discipline">
-    <h4>{{#str}}listofdisciplines, block_programcurriculum{{/str}}</h4>
+<div class="programcurriculum-course">
+    <h4>{{#str}}listofcourses, block_programcurriculum{{/str}}</h4>
+
     {{#validationerror}}
-        <div class="alert alert-danger">{{#str}}disciplineformerror, block_programcurriculum{{/str}}</div>
+        <div class="alert alert-danger">{{#str}}courseformerror, block_programcurriculum{{/str}}</div>
     {{/validationerror}}
 
     <div class="mb-2">
-        <button class="btn btn-primary" type="button" data-action="add-discipline" data-bs-toggle="modal" data-bs-target="#programcurriculum-discipline-modal">
-            {{#str}}adddiscipline, block_programcurriculum{{/str}}
+        <button class="btn btn-primary" type="button" data-action="add-course" data-bs-toggle="modal" data-bs-target="#programcurriculum-course-modal">
+            {{#str}}addcourse, block_programcurriculum{{/str}}
         </button>
-        <button class="d-none" type="button" data-open-discipline-modal="1" data-bs-toggle="modal" data-bs-target="#programcurriculum-discipline-modal"></button>
+        <button class="d-none" type="button" data-open-course-modal="1" data-bs-toggle="modal" data-bs-target="#programcurriculum-course-modal"></button>
     </div>
 
-    {{#hasdisciplines}}
+    {{#hascourses}}
         <ul class="list-unstyled">
-            {{#disciplines}}
+            {{#courses}}
                 <li class="d-flex align-items-center py-1 border-bottom">
                     <span class="text-muted me-2">{{position}}</span>
                     <span class="flex-grow-1">{{externalcode}} - {{name}} <span class="text-muted ms-2">({{mappingcount}})</span></span>
@@ -25,7 +26,7 @@
                             <li>
                                 <a class="dropdown-item"
                                    href="{{editurl}}"
-                                   data-action="edit-discipline"
+                                   data-action="edit-course"
                                    data-edit-id="{{id}}"
                                    data-edit-name="{{editname}}"
                                    data-edit-code="{{editcode}}"
@@ -45,21 +46,21 @@
                         </ul>
                     </div>
                 </li>
-            {{/disciplines}}
+            {{/courses}}
         </ul>
-    {{/hasdisciplines}}
+    {{/hascourses}}
 
-    {{^hasdisciplines}}
-        <div class="alert alert-info">{{#str}}nodisciplines, block_programcurriculum{{/str}}</div>
-    {{/hasdisciplines}}
+    {{^hascourses}}
+        <div class="alert alert-info">{{#str}}nocourses, block_programcurriculum{{/str}}</div>
+    {{/hascourses}}
 
-    <div class="modal fade" id="programcurriculum-discipline-modal" tabindex="-1" aria-labelledby="programcurriculum-discipline-modal-title" aria-hidden="true">
+    <div class="modal fade" id="programcurriculum-course-modal" tabindex="-1" aria-labelledby="programcurriculum-course-modal-title" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="programcurriculum-discipline-modal-title"
-                        data-add-title="{{#str}}adddiscipline, block_programcurriculum{{/str}}"
-                        data-edit-title="{{#str}}editdiscipline, block_programcurriculum{{/str}}">
+                    <h5 class="modal-title" id="programcurriculum-course-modal-title"
+                        data-add-title="{{#str}}addcourse, block_programcurriculum{{/str}}"
+                        data-edit-title="{{#str}}editcourse, block_programcurriculum{{/str}}">
                         {{modaltitle}}
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{#str}}cancel, moodle{{/str}}"></button>
@@ -68,7 +69,7 @@
                     {{{formhtml}}}
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" form="programcurriculum-discipline-form">{{#str}}savechanges{{/str}}</button>
+                    <button type="submit" class="btn btn-primary" form="programcurriculum-course-form">{{#str}}savechanges{{/str}}</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{#str}}cancel, moodle{{/str}}</button>
                 </div>
             </div>

@@ -20,17 +20,17 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($GLOBALS['CFG']->libdir . '/formslib.php');
 
-class discipline_form extends \moodleform {
+class course_form extends \moodleform {
     protected function definition(): void {
         $mform = $this->_form;
-        $mform->updateAttributes(['id' => 'programcurriculum-discipline-form']);
+        $mform->updateAttributes(['id' => 'programcurriculum-course-form']);
         $mform->setRequiredNote('');
 
-        $mform->addElement('text', 'name', get_string('disciplinename', 'block_programcurriculum'), ['size' => 50]);
+        $mform->addElement('text', 'name', get_string('coursename', 'block_programcurriculum'), ['size' => 50]);
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', null, 'required', null, 'client');
 
-        $mform->addElement('text', 'externalcode', get_string('disciplinecode', 'block_programcurriculum'));
+        $mform->addElement('text', 'externalcode', get_string('coursecode', 'block_programcurriculum'));
         $mform->setType('externalcode', PARAM_ALPHANUMEXT);
         $mform->addRule('externalcode', null, 'required', null, 'client');
 
@@ -51,13 +51,13 @@ class discipline_form extends \moodleform {
 
         if (!empty($data['externalcode'])) {
             $existing = $DB->get_record(
-                'block_programcurriculum_discipline',
+                'block_programcurriculum_course',
                 ['externalcode' => $data['externalcode']],
                 'id',
                 IGNORE_MULTIPLE
             );
             if ($existing && (int)$existing->id !== (int)($data['id'] ?? 0)) {
-                $errors['externalcode'] = get_string('duplicatedisciplinecode', 'block_programcurriculum');
+                $errors['externalcode'] = get_string('duplicatecoursecode', 'block_programcurriculum');
             }
         }
 

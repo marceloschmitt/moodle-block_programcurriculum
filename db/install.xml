@@ -19,7 +19,7 @@
         <INDEX NAME="externalcode" UNIQUE="true" FIELDS="externalcode"/>
       </INDEXES>
     </TABLE>
-    <TABLE NAME="block_programcurriculum_discipline" COMMENT="Curriculum disciplines">
+    <TABLE NAME="block_programcurriculum_course" COMMENT="Curriculum courses">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="curriculumid" TYPE="int" LENGTH="10" NOTNULL="true"/>
@@ -36,20 +36,20 @@
         <INDEX NAME="externalcode" UNIQUE="true" FIELDS="externalcode"/>
       </INDEXES>
     </TABLE>
-    <TABLE NAME="block_programcurriculum_mapping" COMMENT="Discipline to course mapping">
+    <TABLE NAME="block_programcurriculum_mapping" COMMENT="Course to Moodle course mapping">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="disciplineid" TYPE="int" LENGTH="10" NOTNULL="true"/>
         <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="moodlecourseid" TYPE="int" LENGTH="10" NOTNULL="true"/>
         <FIELD NAME="required" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-        <KEY NAME="disciplineid" TYPE="foreign" FIELDS="disciplineid" REFTABLE="block_programcurriculum_discipline" REFFIELDS="id"/>
+        <KEY NAME="courseid" TYPE="foreign" FIELDS="courseid" REFTABLE="block_programcurriculum_course" REFFIELDS="id"/>
       </KEYS>
       <INDEXES>
-        <INDEX NAME="disciplineid" UNIQUE="false" FIELDS="disciplineid"/>
         <INDEX NAME="courseid" UNIQUE="false" FIELDS="courseid"/>
+        <INDEX NAME="moodlecourseid" UNIQUE="false" FIELDS="moodlecourseid"/>
       </INDEXES>
     </TABLE>
   </TABLES>

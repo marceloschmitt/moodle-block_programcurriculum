@@ -31,34 +31,34 @@ if (!$curriculum) {
 }
 
 $PAGE->set_context($context);
-$PAGE->set_url('/blocks/programcurriculum/discipline.php', ['curriculumid' => $curriculumid, 'id' => $id]);
-$PAGE->set_title(get_string('disciplines', 'block_programcurriculum'));
+$PAGE->set_url('/blocks/programcurriculum/course.php', ['curriculumid' => $curriculumid, 'id' => $id]);
+$PAGE->set_title(get_string('courses', 'block_programcurriculum'));
 $PAGE->set_heading(get_string('pluginname', 'block_programcurriculum'));
-$PAGE->requires->js_call_amd('block_programcurriculum/discipline_actions', 'init');
+$PAGE->requires->js_call_amd('block_programcurriculum/course_actions', 'init');
 
-$disciplinesrepo = new \block_programcurriculum\discipline_repository();
-$discipline = $id ? $disciplinesrepo->get($id) : null;
+$coursesrepo = new \block_programcurriculum\course_repository();
+$course = $id ? $coursesrepo->get($id) : null;
 
 $mappingrepo = new \block_programcurriculum\mapping_repository();
 
 $action = optional_param('action', '', PARAM_ALPHA);
 if ($action === 'delete' && $id) {
     require_sesskey();
-    if (!$discipline || (int)$discipline->curriculumid !== (int)$curriculumid) {
+    if (!$course || (int)$course->curriculumid !== (int)$curriculumid) {
         throw new moodle_exception('invalidrecord', 'error');
     }
-    if ($mappingrepo->has_for_discipline($discipline->id)) {
+    if ($mappingrepo->has_for_course($course->id)) {
         redirect(
-            new moodle_url('/blocks/programcurriculum/discipline.php', ['curriculumid' => $curriculumid]),
-            get_string('disciplinedeletemappings', 'block_programcurriculum'),
+            new moodle_url('/blocks/programcurriculum/course.php', ['curriculumid' => $curriculumid]),
+            get_string('coursedeletemappings', 'block_programcurriculum'),
             null,
             \core\output\notification::NOTIFY_ERROR
         );
     }
-    $disciplinesrepo->delete($discipline->id);
+    $coursesrepo->delete($course->id);
     redirect(
-        new moodle_url('/blocks/programcurriculum/discipline.php', ['curriculumid' => $curriculumid]),
-        get_string('disciplinedeleted', 'block_programcurriculum'),
+        new moodle_url('/blocks/programcurriculum/course.php', ['curriculumid' => $curriculumid]),
+        get_string('coursedeleted', 'block_programcurriculum'),
         null,
         \core\output\notification::NOTIFY_SUCCESS
     );
@@ -67,7 +67,7 @@ if ($action === 'delete' && $id) {
 $action = optional_param('action', '', PARAM_ALPHA);
 if ($action === 'move' && $id) {
     require_sesskey();
-    $ordered = array_values($disciplinesrepo->get_by_curriculum($curriculumid));
+    $ordered = array_values($coursesrepo->get_by_curriculum($curriculumid));
     $orderedids = array_map(function ($item) {
         return (int)$item->id;
     }, $ordered);
@@ -80,55 +80,55 @@ if ($action === 'move' && $id) {
             array_splice($orderedids, $position, 1);
             array_splice($orderedids, $target, 0, [$movedid]);
         }
-        foreach ($orderedids as $index => $disciplineid) {
-            $disciplinesrepo->set_sortorder($disciplineid, $index + 1);
+        foreach ($orderedids as $index => $courseid) {
+            $coursesrepo->set_sortorder($courseid, $index + 1);
         }
     }
-    redirect(new moodle_url('/blocks/programcurriculum/discipline.php', ['curriculumid' => $curriculumid]));
+    redirect(new moodle_url('/blocks/programcurriculum/course.php', ['curriculumid' => $curriculumid]));
 }
 
-$mform = new \block_programcurriculum\form\discipline_form(null, []);
-if ($discipline) {
-    $mform->set_data($discipline);
+$mform = new \block_programcurriculum\form\course_form(null, []);
+if ($course) {
+    $mform->set_data($course);
 } else {
     $mform->set_data((object)['curriculumid' => $curriculumid]);
 }
 
 if ($mform->is_cancelled()) {
-    redirect(new moodle_url('/blocks/programcurriculum/discipline.php', ['curriculumid' => $curriculumid]));
+    redirect(new moodle_url('/blocks/programcurriculum/manage.php'));
 }
 
 if ($data = $mform->get_data()) {
-    $disciplinesrepo->upsert($data);
-    redirect(new moodle_url('/blocks/programcurriculum/discipline.php', ['curriculumid' => $curriculumid]));
+    $coursesrepo->upsert($data);
+    redirect(new moodle_url('/blocks/programcurriculum/course.php', ['curriculumid' => $curriculumid]));
 }
 
 $validationerror = $mform->is_submitted() && !$mform->is_cancelled() && !$mform->is_validated();
 
-$disciplines = [];
-$disciplinelist = array_values($disciplinesrepo->get_by_curriculum($curriculumid));
-$total = count($disciplinelist);
-$disciplineids = array_map(function ($item) {
+$courses = [];
+$courselist = array_values($coursesrepo->get_by_curriculum($curriculumid));
+$total = count($courselist);
+$courseids = array_map(function ($item) {
     return (int)$item->id;
-}, $disciplinelist);
-$mappingcounts = $mappingrepo->get_counts_by_discipline_ids($disciplineids);
-foreach ($disciplinelist as $index => $item) {
+}, $courselist);
+$mappingcounts = $mappingrepo->get_counts_by_course_ids($courseids);
+foreach ($courselist as $index => $item) {
     $mappingcount = (int)($mappingcounts[$item->id] ?? 0);
     $hasmappings = $mappingcount > 0;
-    $disciplines[] = [
+    $courses[] = [
         'id' => $item->id,
         'name' => $item->name,
         'externalcode' => $item->externalcode,
         'sortorder' => $item->sortorder,
         'curriculumid' => $curriculumid,
-        'editurl' => (new moodle_url('/blocks/programcurriculum/discipline.php', [
+        'editurl' => (new moodle_url('/blocks/programcurriculum/course.php', [
             'curriculumid' => $curriculumid,
             'id' => $item->id,
         ]))->out(false),
         'mappingurl' => (new moodle_url('/blocks/programcurriculum/mapping.php', [
-            'disciplineid' => $item->id,
+            'courseid' => $item->id,
         ]))->out(false),
-        'moveactionurl' => (new moodle_url('/blocks/programcurriculum/discipline.php', [
+        'moveactionurl' => (new moodle_url('/blocks/programcurriculum/course.php', [
             'curriculumid' => $curriculumid,
             'id' => $item->id,
             'action' => 'move',
@@ -141,28 +141,26 @@ foreach ($disciplinelist as $index => $item) {
         'editcode' => $item->externalcode,
         'editsortorder' => $item->sortorder,
         'candelete' => !$hasmappings,
-        'deleteurl' => !$hasmappings ? (new moodle_url('/blocks/programcurriculum/discipline.php', [
+        'deleteurl' => !$hasmappings ? (new moodle_url('/blocks/programcurriculum/course.php', [
             'curriculumid' => $curriculumid,
             'id' => $item->id,
             'action' => 'delete',
             'sesskey' => sesskey(),
         ]))->out(false) : null,
-        'deleteconfirm' => get_string('deletedisciplineconfirm', 'block_programcurriculum'),
+        'deleteconfirm' => get_string('deletecourseconfirm', 'block_programcurriculum'),
     ];
 }
 
-
 echo $OUTPUT->header();
-echo $OUTPUT->render_from_template('block_programcurriculum/discipline', [
-    'curriculumname' => $curriculum->name,
-    'disciplines' => $disciplines,
-    'hasdisciplines' => !empty($disciplines),
+echo $OUTPUT->render_from_template('block_programcurriculum/course', [
+    'courses' => $courses,
+    'hascourses' => !empty($courses),
+    'validationerror' => $validationerror,
     'formhtml' => (function () use ($mform): string {
         ob_start();
         $mform->display();
         return (string)ob_get_clean();
     })(),
-    'modaltitle' => $id ? get_string('editdiscipline', 'block_programcurriculum') : get_string('adddiscipline', 'block_programcurriculum'),
-    'validationerror' => $validationerror,
+    'modaltitle' => $id ? get_string('editcourse', 'block_programcurriculum') : get_string('addcourse', 'block_programcurriculum'),
 ]);
 echo $OUTPUT->footer();

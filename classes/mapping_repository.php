@@ -25,16 +25,16 @@ class mapping_repository {
         return $DB->get_record('block_programcurriculum_mapping', ['id' => $id]);
     }
 
-    public function get_by_discipline(int $disciplineid): array {
+    public function get_by_course(int $courseid): array {
         global $DB;
 
-        return $DB->get_records('block_programcurriculum_mapping', ['disciplineid' => $disciplineid], 'id ASC');
+        return $DB->get_records('block_programcurriculum_mapping', ['courseid' => $courseid], 'id ASC');
     }
 
-    public function has_for_discipline(int $disciplineid): bool {
+    public function has_for_course(int $courseid): bool {
         global $DB;
 
-        return $DB->record_exists('block_programcurriculum_mapping', ['disciplineid' => $disciplineid]);
+        return $DB->record_exists('block_programcurriculum_mapping', ['courseid' => $courseid]);
     }
 
     public function get_by_curriculum(int $curriculumid): array {
@@ -42,25 +42,25 @@ class mapping_repository {
 
         $sql = "SELECT m.*
                   FROM {block_programcurriculum_mapping} m
-                  JOIN {block_programcurriculum_discipline} d
-                    ON d.id = m.disciplineid
-                 WHERE d.curriculumid = :curriculumid";
+                  JOIN {block_programcurriculum_course} c
+                    ON c.id = m.courseid
+                 WHERE c.curriculumid = :curriculumid";
 
         return $DB->get_records_sql($sql, ['curriculumid' => $curriculumid]);
     }
 
-    public function get_counts_by_discipline_ids(array $disciplineids): array {
+    public function get_counts_by_course_ids(array $courseids): array {
         global $DB;
 
-        if (empty($disciplineids)) {
+        if (empty($courseids)) {
             return [];
         }
 
-        list($insql, $params) = $DB->get_in_or_equal($disciplineids, SQL_PARAMS_NAMED);
-        $sql = "SELECT disciplineid, COUNT(1) AS total
+        list($insql, $params) = $DB->get_in_or_equal($courseids, SQL_PARAMS_NAMED);
+        $sql = "SELECT courseid, COUNT(1) AS total
                   FROM {block_programcurriculum_mapping}
-                 WHERE disciplineid {$insql}
-              GROUP BY disciplineid";
+                 WHERE courseid {$insql}
+              GROUP BY courseid";
 
         return $DB->get_records_sql_menu($sql, $params);
     }

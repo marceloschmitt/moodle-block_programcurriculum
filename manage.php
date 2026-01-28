@@ -22,10 +22,10 @@ $context = context_system::instance();
 require_capability('block/programcurriculum:manage', $context);
 
 $curriculumrepo = new \block_programcurriculum\curriculum_repository();
-$disciplinesql = "SELECT curriculumid, COUNT(*) AS total
-                    FROM {block_programcurriculum_discipline}
+$coursesql = "SELECT curriculumid, COUNT(*) AS total
+                    FROM {block_programcurriculum_course}
                 GROUP BY curriculumid";
-$disciplinecounts = $DB->get_records_sql_menu($disciplinesql);
+$coursecounts = $DB->get_records_sql_menu($coursesql);
 
 $curricula = [];
 foreach ($curriculumrepo->get_all() as $curriculum) {
@@ -33,9 +33,9 @@ foreach ($curriculumrepo->get_all() as $curriculum) {
         'id' => $curriculum->id,
         'name' => $curriculum->name,
         'externalcode' => $curriculum->externalcode,
-        'disciplinecount' => $disciplinecounts[$curriculum->id] ?? 0,
+        'coursecount' => $coursecounts[$curriculum->id] ?? 0,
         'editurl' => (new moodle_url('/blocks/programcurriculum/curriculum.php', ['id' => $curriculum->id]))->out(false),
-        'disciplinesurl' => (new moodle_url('/blocks/programcurriculum/discipline.php', ['curriculumid' => $curriculum->id]))->out(false),
+        'coursesurl' => (new moodle_url('/blocks/programcurriculum/course.php', ['curriculumid' => $curriculum->id]))->out(false),
     ];
 }
 

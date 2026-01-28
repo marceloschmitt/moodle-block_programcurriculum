@@ -33,7 +33,7 @@ class importer {
         }
 
         $curriculumrepo = new curriculum_repository();
-        $disciplinerepo = new discipline_repository();
+        $courserepo = new course_repository();
         $mappingrepo = new mapping_repository();
 
         $line = 1;
@@ -54,25 +54,25 @@ class importer {
             ];
             $curriculumid = $curriculumrepo->upsert($curriculumrecord);
 
-            if (empty($data['discipline_code']) || empty($data['discipline_name'])) {
-                $errors[] = "Line {$line}: Missing discipline fields.";
+            if (empty($data['course_code']) || empty($data['course_name'])) {
+                $errors[] = "Line {$line}: Missing course fields.";
                 continue;
             }
 
-            $discipline = $disciplinerepo->get_by_externalcode($data['discipline_code']);
-            $disciplinerecord = (object)[
-                'id' => $discipline->id ?? 0,
+            $course = $courserepo->get_by_externalcode($data['course_code']);
+            $courserecord = (object)[
+                'id' => $course->id ?? 0,
                 'curriculumid' => $curriculumid,
-                'name' => $data['discipline_name'],
-                'externalcode' => $data['discipline_code'],
+                'name' => $data['course_name'],
+                'externalcode' => $data['course_code'],
                 'sortorder' => (int)$data['sortorder'],
             ];
-            $disciplineid = $disciplinerepo->upsert($disciplinerecord);
+            $courseid = $courserepo->upsert($courserecord);
 
-            if (!empty($data['course_id'])) {
+            if (!empty($data['moodle_course_id'])) {
                 $mappingrepo->upsert((object)[
-                    'disciplineid' => $disciplineid,
-                    'courseid' => (int)$data['course_id'],
+                    'courseid' => $courseid,
+                    'moodlecourseid' => (int)$data['moodle_course_id'],
                     'required' => (int)$data['required'],
                 ]);
             }
@@ -90,9 +90,9 @@ class importer {
         $required = [
             'curriculum_code',
             'curriculum_name',
-            'discipline_code',
-            'discipline_name',
-            'course_id',
+            'course_code',
+            'course_name',
+            'moodle_course_id',
             'required',
             'sortorder',
         ];
@@ -111,9 +111,9 @@ class importer {
         return [
             'curriculum_code' => trim((string)($row[0] ?? '')),
             'curriculum_name' => trim((string)($row[1] ?? '')),
-            'discipline_code' => trim((string)($row[2] ?? '')),
-            'discipline_name' => trim((string)($row[3] ?? '')),
-            'course_id' => trim((string)($row[4] ?? '')),
+            'course_code' => trim((string)($row[2] ?? '')),
+            'course_name' => trim((string)($row[3] ?? '')),
+            'moodle_course_id' => trim((string)($row[4] ?? '')),
             'required' => $this->normalize_bool($row[5] ?? '1'),
             'sortorder' => trim((string)($row[6] ?? '0')),
             'curriculum_description' => trim((string)($row[7] ?? '')),
