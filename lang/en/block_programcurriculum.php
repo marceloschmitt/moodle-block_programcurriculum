@@ -37,6 +37,7 @@ $string['adddiscipline'] = 'Add discipline';
 $string['editdiscipline'] = 'Edit discipline';
 $string['disciplinename'] = 'Discipline name';
 $string['disciplinecode'] = 'Discipline code';
+$string['duplicatedisciplinecode'] = 'This discipline code is already in use.';
 $string['deletedisciplineconfirm'] = 'Delete this discipline?';
 $string['disciplinedeleted'] = 'Discipline deleted.';
 $string['disciplinedeletemappings'] = 'You cannot delete a discipline that has mappings.';

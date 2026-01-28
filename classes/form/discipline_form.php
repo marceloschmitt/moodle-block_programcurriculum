@@ -42,4 +42,24 @@ class discipline_form extends \moodleform {
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
     }
+
+    public function validation($data, $files): array {
+        global $DB;
+
+        $errors = parent::validation($data, $files);
+
+        if (!empty($data['externalcode'])) {
+            $existing = $DB->get_record(
+                'block_programcurriculum_discipline',
+                ['externalcode' => $data['externalcode']],
+                'id',
+                IGNORE_MULTIPLE
+            );
+            if ($existing && (int)$existing->id !== (int)($data['id'] ?? 0)) {
+                $errors['externalcode'] = get_string('duplicatedisciplinecode', 'block_programcurriculum');
+            }
+        }
+
+        return $errors;
+    }
 }
