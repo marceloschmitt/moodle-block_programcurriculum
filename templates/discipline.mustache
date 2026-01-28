@@ -21,6 +21,18 @@
                             <a href="{{editurl}}">{{#str}}editdiscipline, block_programcurriculum{{/str}}</a>
                             |
                             <a href="{{mappingurl}}">{{#str}}mappings, block_programcurriculum{{/str}}</a>
+                            {{#moveupurl}}
+                                |
+                                <a href="{{moveupurl}}">{{#str}}moveup{{/str}}</a>
+                            {{/moveupurl}}
+                            {{#movedownurl}}
+                                |
+                                <a href="{{movedownurl}}">{{#str}}movedown{{/str}}</a>
+                            {{/movedownurl}}
+                            {{#candelete}}
+                                |
+                                <a href="{{deleteurl}}" data-confirm-message="{{deleteconfirm}}">{{#str}}delete{{/str}}</a>
+                            {{/candelete}}
                         </td>
                     </tr>
                 {{/disciplines}}

@@ -34,9 +34,57 @@ $PAGE->set_context($context);
 $PAGE->set_url('/blocks/programcurriculum/discipline.php', ['curriculumid' => $curriculumid, 'id' => $id]);
 $PAGE->set_title(get_string('disciplines', 'block_programcurriculum'));
 $PAGE->set_heading($curriculum->name);
+$PAGE->requires->js_call_amd('block_programcurriculum/confirm_delete', 'init');
 
 $disciplinesrepo = new \block_programcurriculum\discipline_repository();
 $discipline = $id ? $disciplinesrepo->get($id) : null;
+
+$mappingrepo = new \block_programcurriculum\mapping_repository();
+
+$action = optional_param('action', '', PARAM_ALPHA);
+if ($action === 'delete' && $id) {
+    require_sesskey();
+    if (!$discipline || (int)$discipline->curriculumid !== (int)$curriculumid) {
+        throw new moodle_exception('invalidrecord', 'error');
+    }
+    if ($mappingrepo->has_for_discipline($discipline->id)) {
+        redirect(
+            new moodle_url('/blocks/programcurriculum/discipline.php', ['curriculumid' => $curriculumid]),
+            get_string('disciplinedeletemappings', 'block_programcurriculum'),
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    }
+    $disciplinesrepo->delete($discipline->id);
+    redirect(
+        new moodle_url('/blocks/programcurriculum/discipline.php', ['curriculumid' => $curriculumid]),
+        get_string('disciplinedeleted', 'block_programcurriculum'),
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
+
+$move = optional_param('move', '', PARAM_ALPHA);
+if ($move === 'up' || $move === 'down') {
+    require_sesskey();
+    $ordered = array_values($disciplinesrepo->get_by_curriculum($curriculumid));
+    $orderedids = array_map(function ($item) {
+        return (int)$item->id;
+    }, $ordered);
+    $position = array_search((int)$id, $orderedids, true);
+    if ($position !== false) {
+        $target = ($move === 'up') ? $position - 1 : $position + 1;
+        if ($target >= 0 && $target < count($orderedids)) {
+            $swap = $orderedids[$target];
+            $orderedids[$target] = $orderedids[$position];
+            $orderedids[$position] = $swap;
+            foreach ($orderedids as $index => $disciplineid) {
+                $disciplinesrepo->set_sortorder($disciplineid, $index + 1);
+            }
+        }
+    }
+    redirect(new moodle_url('/blocks/programcurriculum/discipline.php', ['curriculumid' => $curriculumid]));
+}
 
 $mform = new \block_programcurriculum\form\discipline_form(null, []);
 if ($discipline) {
@@ -55,7 +103,10 @@ if ($data = $mform->get_data()) {
 }
 
 $disciplines = [];
-foreach ($disciplinesrepo->get_by_curriculum($curriculumid) as $item) {
+$disciplinelist = array_values($disciplinesrepo->get_by_curriculum($curriculumid));
+$lastindex = count($disciplinelist) - 1;
+foreach ($disciplinelist as $index => $item) {
+    $hasmappings = $mappingrepo->has_for_discipline($item->id);
     $disciplines[] = [
         'id' => $item->id,
         'name' => $item->name,
@@ -68,6 +119,26 @@ foreach ($disciplinesrepo->get_by_curriculum($curriculumid) as $item) {
         'mappingurl' => (new moodle_url('/blocks/programcurriculum/mapping.php', [
             'disciplineid' => $item->id,
         ]))->out(false),
+        'moveupurl' => $index > 0 ? (new moodle_url('/blocks/programcurriculum/discipline.php', [
+            'curriculumid' => $curriculumid,
+            'id' => $item->id,
+            'move' => 'up',
+            'sesskey' => sesskey(),
+        ]))->out(false) : null,
+        'movedownurl' => $index < $lastindex ? (new moodle_url('/blocks/programcurriculum/discipline.php', [
+            'curriculumid' => $curriculumid,
+            'id' => $item->id,
+            'move' => 'down',
+            'sesskey' => sesskey(),
+        ]))->out(false) : null,
+        'candelete' => !$hasmappings,
+        'deleteurl' => !$hasmappings ? (new moodle_url('/blocks/programcurriculum/discipline.php', [
+            'curriculumid' => $curriculumid,
+            'id' => $item->id,
+            'action' => 'delete',
+            'sesskey' => sesskey(),
+        ]))->out(false) : null,
+        'deleteconfirm' => get_string('deletedisciplineconfirm', 'block_programcurriculum'),
     ];
 }
 

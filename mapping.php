@@ -37,6 +37,21 @@ if (!$discipline) {
 $mappingrepo = new \block_programcurriculum\mapping_repository();
 $mapping = $id ? $mappingrepo->get($id) : null;
 
+$action = optional_param('action', '', PARAM_ALPHA);
+if ($action === 'delete' && $id) {
+    require_sesskey();
+    if (!$mapping || (int)$mapping->disciplineid !== (int)$disciplineid) {
+        throw new moodle_exception('invalidrecord', 'error');
+    }
+    $mappingrepo->delete($id);
+    redirect(
+        new moodle_url('/blocks/programcurriculum/mapping.php', ['disciplineid' => $disciplineid]),
+        get_string('mappingdeleted', 'block_programcurriculum'),
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
+
 $courses = [];
 foreach (get_courses() as $course) {
     if ((int)$course->id === SITEID) {
@@ -72,10 +87,18 @@ foreach ($mappingrepo->get_by_discipline($disciplineid) as $item) {
             'disciplineid' => $disciplineid,
             'id' => $item->id,
         ]))->out(false),
+        'deleteurl' => (new moodle_url('/blocks/programcurriculum/mapping.php', [
+            'disciplineid' => $disciplineid,
+            'id' => $item->id,
+            'action' => 'delete',
+            'sesskey' => sesskey(),
+        ]))->out(false),
+        'deleteconfirm' => get_string('deletemappingconfirm', 'block_programcurriculum'),
     ];
 }
 
 $PAGE->set_heading($discipline->name);
+$PAGE->requires->js_call_amd('block_programcurriculum/confirm_delete', 'init');
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('block_programcurriculum/mapping', [

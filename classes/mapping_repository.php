@@ -31,6 +31,12 @@ class mapping_repository {
         return $DB->get_records('block_programcurriculum_mapping', ['disciplineid' => $disciplineid], 'id ASC');
     }
 
+    public function has_for_discipline(int $disciplineid): bool {
+        global $DB;
+
+        return $DB->record_exists('block_programcurriculum_mapping', ['disciplineid' => $disciplineid]);
+    }
+
     public function get_by_curriculum(int $curriculumid): array {
         global $DB;
 
@@ -52,5 +58,11 @@ class mapping_repository {
         }
 
         return (int)$DB->insert_record('block_programcurriculum_mapping', $record);
+    }
+
+    public function delete(int $id): void {
+        global $DB;
+
+        $DB->delete_records('block_programcurriculum_mapping', ['id' => $id]);
     }
 }

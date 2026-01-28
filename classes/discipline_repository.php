@@ -47,4 +47,16 @@ class discipline_repository {
 
         return (int)$DB->insert_record('block_programcurriculum_discipline', $record);
     }
+
+    public function set_sortorder(int $id, int $sortorder): void {
+        global $DB;
+
+        $DB->set_field('block_programcurriculum_discipline', 'sortorder', $sortorder, ['id' => $id]);
+    }
+
+    public function delete(int $id): void {
+        global $DB;
+
+        $DB->delete_records('block_programcurriculum_discipline', ['id' => $id]);
+    }
 }

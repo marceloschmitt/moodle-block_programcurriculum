@@ -15,7 +15,11 @@
                     <tr>
                         <td>{{coursename}}</td>
                         <td>{{#required}}{{#str}}yes{{/str}}{{/required}}{{^required}}{{#str}}no{{/str}}{{/required}}</td>
-                        <td><a href="{{editurl}}">{{#str}}editmapping, block_programcurriculum{{/str}}</a></td>
+                        <td>
+                            <a href="{{editurl}}">{{#str}}editmapping, block_programcurriculum{{/str}}</a>
+                            |
+                            <a href="{{deleteurl}}" data-confirm-message="{{deleteconfirm}}">{{#str}}delete{{/str}}</a>
+                        </td>
                     </tr>
                 {{/mappings}}
             </tbody>
