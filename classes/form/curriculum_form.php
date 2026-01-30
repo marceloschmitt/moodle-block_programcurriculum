@@ -27,11 +27,11 @@ class curriculum_form extends \moodleform {
         $mform->updateAttributes(['id' => 'programcurriculum-curriculum-form']);
         $mform->setRequiredNote('');
 
-        $mform->addElement('text', 'name', get_string('curriculumname', 'block_programcurriculum'));
+        $mform->addElement('text', 'name', get_string('curriculumname', 'block_programcurriculum'), ['size' => 50]);
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', null, 'required', null, 'client');
 
-        $mform->addElement('text', 'externalcode', get_string('curriculumcode', 'block_programcurriculum'));
+        $mform->addElement('text', 'externalcode', get_string('curriculumcode', 'block_programcurriculum'), ['size' => 7]);
         $mform->setType('externalcode', PARAM_ALPHANUMEXT);
         $mform->addRule('externalcode', null, 'required', null, 'client');
 
