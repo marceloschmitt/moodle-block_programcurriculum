@@ -52,7 +52,8 @@ $validationerror = $mform->is_submitted() && !$mform->is_cancelled() && !$mform-
 
 $validationmessage = null;
 if ($validationerror) {
-    $errors = $mform->get_errors();
+    // Access validation errors from the form's internal property.
+    $errors = $mform->_errors ?? [];
     $hasduplicatename = !empty($errors['name']);
     $hasduplicatecode = !empty($errors['externalcode']);
     if ($hasduplicatename || $hasduplicatecode) {
