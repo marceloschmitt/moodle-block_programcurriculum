@@ -50,7 +50,8 @@ if ($data = $mform->get_data()) {
 
 $validationerror = $mform->is_submitted() && !$mform->is_cancelled() && !$mform->is_validated();
 
-$validationmessage = null;
+$validationmessage = optional_param('validationmessage', '', PARAM_TEXT);
+
 if ($validationerror) {
     // Force validation to populate errors.
     $submitteddata = $mform->get_submitted_data();
@@ -64,6 +65,9 @@ if ($validationerror) {
     } else {
         $validationmessage = get_string('curriculumformerror', 'block_programcurriculum');
     }
+    
+    // Redirect to clear the form and show only the error message.
+    redirect(new moodle_url('/blocks/programcurriculum/manage.php', ['validationmessage' => $validationmessage]));
 }
 
 $coursesql = "SELECT curriculumid, COUNT(*) AS total
@@ -92,7 +96,7 @@ echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('block_programcurriculum/manage', [
     'curricula' => $curricula,
     'hascurricula' => !empty($curricula),
-    'validationerror' => $validationerror,
+    'validationerror' => !empty($validationmessage),
     'validationmessage' => $validationmessage,
     'formhtml' => (function () use ($mform): string {
         ob_start();
