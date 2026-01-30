@@ -17,6 +17,7 @@
       </KEYS>
       <INDEXES>
         <INDEX NAME="externalcode" UNIQUE="true" FIELDS="externalcode"/>
+        <INDEX NAME="name" UNIQUE="true" FIELDS="name"/>
       </INDEXES>
     </TABLE>
     <TABLE NAME="block_programcurriculum_course" COMMENT="Curriculum courses">

@@ -47,6 +47,18 @@ class curriculum_form extends \moodleform {
 
         $errors = parent::validation($data, $files);
 
+        if (!empty(trim($data['name'] ?? ''))) {
+            $existing = $DB->get_record(
+                'block_programcurriculum_curriculum',
+                ['name' => trim($data['name'])],
+                'id',
+                IGNORE_MULTIPLE
+            );
+            if ($existing && (int)$existing->id !== (int)($data['id'] ?? 0)) {
+                $errors['name'] = get_string('duplicatecurriculumname', 'block_programcurriculum');
+            }
+        }
+
         if (!empty($data['externalcode'])) {
             $existing = $DB->get_record(
                 'block_programcurriculum_curriculum',

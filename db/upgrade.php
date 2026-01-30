@@ -100,5 +100,19 @@ function xmldb_block_programcurriculum_upgrade(int $oldversion): bool {
         upgrade_block_savepoint(true, 2026012846, 'programcurriculum');
     }
 
+    if ($oldversion < 2026013002) {
+        $table = new xmldb_table('block_programcurriculum_curriculum');
+        $index = new xmldb_index('name', XMLDB_INDEX_UNIQUE, ['name']);
+        if ($dbman->table_exists($table) && !$dbman->index_exists($table, $index)) {
+            try {
+                $dbman->add_index($table, $index);
+            } catch (\ddl_exception $e) {
+                // Index may already exist or duplicate names prevent it.
+            }
+        }
+
+        upgrade_block_savepoint(true, 2026013002, 'programcurriculum');
+    }
+
     return true;
 }
