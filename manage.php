@@ -55,7 +55,7 @@ if ($validationerror) {
     // Force validation to populate errors.
     $submitteddata = $mform->get_submitted_data();
     $files = [];
-    $errors = $mform->validation($submitteddata, $files);
+    $errors = $mform->validation((array)$submitteddata, $files);
     
     $hasduplicatename = !empty($errors['name']);
     $hasduplicatecode = !empty($errors['externalcode']);
