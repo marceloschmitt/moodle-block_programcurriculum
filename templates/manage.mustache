@@ -1,38 +1,72 @@
-<div class="programcurriculum-manage">
-    <h4>{{#str}}listofprograms, block_programcurriculum{{/str}}</h4>
+<div class="programcurriculum-manage" {{#validationerror}}data-validation-error="1"{{/validationerror}}>
+    <div class="d-flex align-items-center justify-content-between mb-2">
+        <h4 class="mb-0">{{#str}}listofprograms, block_programcurriculum{{/str}}</h4>
+    </div>
 
-    <div class="mb-3">
-        <a class="btn btn-primary" href="{{addcurriculumurl}}">{{#str}}addcurriculum, block_programcurriculum{{/str}}</a>
+    {{#validationerror}}
+        <div class="alert alert-danger">{{validationmessage}}</div>
+    {{/validationerror}}
+
+    <div class="mb-2">
+        <button class="btn btn-primary" type="button" data-action="add-curriculum" data-bs-toggle="modal" data-bs-target="#programcurriculum-curriculum-modal">
+            {{#str}}addcurriculum, block_programcurriculum{{/str}}
+        </button>
+        <button class="d-none" type="button" data-open-curriculum-modal="1" data-bs-toggle="modal" data-bs-target="#programcurriculum-curriculum-modal"></button>
     </div>
 
     {{#hascurricula}}
-        <table class="generaltable">
-            <thead>
-                <tr>
-                    <th>{{#str}}curriculumname, block_programcurriculum{{/str}}</th>
-                    <th>{{#str}}curriculumcode, block_programcurriculum{{/str}}</th>
-                    <th>{{#str}}courses, block_programcurriculum{{/str}}</th>
-                    <th>{{#str}}actions{{/str}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#curricula}}
-                    <tr>
-                        <td>{{name}}</td>
-                        <td>{{externalcode}}</td>
-                        <td>{{coursecount}}</td>
-                        <td>
-                            <a href="{{editurl}}">{{#str}}editcurriculum, block_programcurriculum{{/str}}</a>
-                            |
-                            <a href="{{coursesurl}}">{{#str}}courses, block_programcurriculum{{/str}}</a>
-                        </td>
-                    </tr>
-                {{/curricula}}
-            </tbody>
-        </table>
+        <ul class="list-unstyled">
+            {{#curricula}}
+                <li class="d-flex align-items-center py-1 border-bottom">
+                    <span class="text-muted me-2">{{position}}</span>
+                    <span class="flex-grow-1">{{externalcode}} - {{name}} <span class="text-muted ms-2">({{coursecount}})</span></span>
+                    <div class="dropdown">
+                        <button class="btn btn-link p-0 text-decoration-none" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{#str}}actions{{/str}}">
+                            {{#pix}}i/moremenu, core{{/pix}}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item"
+                                   href="{{editurl}}"
+                                   data-action="edit-curriculum"
+                                   data-edit-id="{{id}}"
+                                   data-edit-name="{{editname}}"
+                                   data-edit-code="{{editcode}}"
+                                   data-edit-description="{{editdescription}}">
+                                    {{#str}}edit{{/str}}
+                                </a>
+                            </li>
+                            <li><a class="dropdown-item" href="{{coursesurl}}">{{#str}}courses, block_programcurriculum{{/str}}</a></li>
+                        </ul>
+                    </div>
+                </li>
+            {{/curricula}}
+        </ul>
     {{/hascurricula}}
 
     {{^hascurricula}}
         <div class="alert alert-info">{{#str}}nocurricula, block_programcurriculum{{/str}}</div>
     {{/hascurricula}}
+
+    <div class="modal fade" id="programcurriculum-curriculum-modal" tabindex="-1" aria-labelledby="programcurriculum-curriculum-modal-title" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="programcurriculum-curriculum-modal-title"
+                        data-add-title="{{#str}}addcurriculum, block_programcurriculum{{/str}}"
+                        data-edit-title="{{#str}}editcurriculum, block_programcurriculum{{/str}}">
+                        {{modaltitle}}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{#str}}cancel, moodle{{/str}}"></button>
+                </div>
+                <div class="modal-body">
+                    {{{formhtml}}}
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" form="programcurriculum-curriculum-form">{{#str}}savechanges{{/str}}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{#str}}cancel, moodle{{/str}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

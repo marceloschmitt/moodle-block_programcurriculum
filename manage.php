@@ -21,35 +21,68 @@ require_login();
 $context = context_system::instance();
 require_capability('block/programcurriculum:manage', $context);
 
+$id = optional_param('id', 0, PARAM_INT);
+
+$PAGE->set_context($context);
+$PAGE->set_url('/blocks/programcurriculum/manage.php', $id ? ['id' => $id] : []);
+$PAGE->set_title(get_string('managecurricula', 'block_programcurriculum'));
+$PAGE->set_heading(get_string('pluginname', 'block_programcurriculum'));
+$PAGE->requires->js_call_amd('block_programcurriculum/manage_actions', 'init');
+
 $curriculumrepo = new \block_programcurriculum\curriculum_repository();
+$record = $id ? $curriculumrepo->get($id) : null;
+
+$mform = new \block_programcurriculum\form\curriculum_form(null, []);
+if ($record) {
+    $mform->set_data($record);
+} else {
+    $mform->set_data((object)['id' => 0]);
+}
+
+if ($mform->is_cancelled()) {
+    redirect(new moodle_url('/blocks/programcurriculum/manage.php'));
+}
+
+if ($data = $mform->get_data()) {
+    $curriculumrepo->upsert($data);
+    redirect(new moodle_url('/blocks/programcurriculum/manage.php'));
+}
+
+$validationerror = $mform->is_submitted() && !$mform->is_cancelled() && !$mform->is_validated();
+
 $coursesql = "SELECT curriculumid, COUNT(*) AS total
-                    FROM {block_programcurriculum_course}
-                GROUP BY curriculumid";
+              FROM {block_programcurriculum_course}
+              GROUP BY curriculumid";
 $coursecounts = $DB->get_records_sql_menu($coursesql);
 
 $curricula = [];
-foreach ($curriculumrepo->get_all() as $curriculum) {
+$all = array_values($curriculumrepo->get_all());
+foreach ($all as $index => $curriculum) {
     $curricula[] = [
         'id' => $curriculum->id,
         'name' => $curriculum->name,
         'externalcode' => $curriculum->externalcode,
-        'coursecount' => $coursecounts[$curriculum->id] ?? 0,
-        'editurl' => (new moodle_url('/blocks/programcurriculum/curriculum.php', ['id' => $curriculum->id]))->out(false),
+        'coursecount' => (int)($coursecounts[$curriculum->id] ?? 0),
+        'position' => $index + 1,
+        'editurl' => (new moodle_url('/blocks/programcurriculum/manage.php', ['id' => $curriculum->id]))->out(false),
         'coursesurl' => (new moodle_url('/blocks/programcurriculum/course.php', ['curriculumid' => $curriculum->id]))->out(false),
+        'editname' => $curriculum->name,
+        'editcode' => $curriculum->externalcode,
+        'editdescription' => $curriculum->description ?? '',
     ];
 }
 
-$data = [
-    'addcurriculumurl' => (new moodle_url('/blocks/programcurriculum/curriculum.php'))->out(false),
+echo $OUTPUT->header();
+echo $OUTPUT->render_from_template('block_programcurriculum/manage', [
     'curricula' => $curricula,
     'hascurricula' => !empty($curricula),
-];
-
-$PAGE->set_context($context);
-$PAGE->set_url('/blocks/programcurriculum/manage.php');
-$PAGE->set_title(get_string('managecurricula', 'block_programcurriculum'));
-$PAGE->set_heading(get_string('pluginname', 'block_programcurriculum'));
-
-echo $OUTPUT->header();
-echo $OUTPUT->render_from_template('block_programcurriculum/manage', $data);
+    'validationerror' => $validationerror,
+    'validationmessage' => $validationerror ? get_string('curriculumformerror', 'block_programcurriculum') : null,
+    'formhtml' => (function () use ($mform): string {
+        ob_start();
+        $mform->display();
+        return (string) ob_get_clean();
+    })(),
+    'modaltitle' => $id ? get_string('editcurriculum', 'block_programcurriculum') : get_string('addcurriculum', 'block_programcurriculum'),
+]);
 echo $OUTPUT->footer();

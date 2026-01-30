@@ -24,6 +24,9 @@ class curriculum_form extends \moodleform {
     protected function definition(): void {
         $mform = $this->_form;
 
+        $mform->updateAttributes(['id' => 'programcurriculum-curriculum-form']);
+        $mform->setRequiredNote('');
+
         $mform->addElement('text', 'name', get_string('curriculumname', 'block_programcurriculum'));
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', null, 'required', null, 'client');
@@ -37,8 +40,6 @@ class curriculum_form extends \moodleform {
 
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
-
-        $this->add_action_buttons(true, get_string('savechanges'));
     }
 
     public function validation($data, $files): array {
