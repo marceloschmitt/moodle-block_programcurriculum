@@ -50,6 +50,18 @@ if ($data = $mform->get_data()) {
 
 $validationerror = $mform->is_submitted() && !$mform->is_cancelled() && !$mform->is_validated();
 
+$validationmessage = null;
+if ($validationerror) {
+    $errors = $mform->get_errors();
+    $hasduplicatename = !empty($errors['name']);
+    $hasduplicatecode = !empty($errors['externalcode']);
+    if ($hasduplicatename || $hasduplicatecode) {
+        $validationmessage = get_string('duplicatecurriculumnameorcode', 'block_programcurriculum');
+    } else {
+        $validationmessage = get_string('curriculumformerror', 'block_programcurriculum');
+    }
+}
+
 $coursesql = "SELECT curriculumid, COUNT(*) AS total
               FROM {block_programcurriculum_course}
               GROUP BY curriculumid";
@@ -77,7 +89,7 @@ echo $OUTPUT->render_from_template('block_programcurriculum/manage', [
     'curricula' => $curricula,
     'hascurricula' => !empty($curricula),
     'validationerror' => $validationerror,
-    'validationmessage' => $validationerror ? get_string('curriculumformerror', 'block_programcurriculum') : null,
+    'validationmessage' => $validationmessage,
     'formhtml' => (function () use ($mform): string {
         ob_start();
         $mform->display();

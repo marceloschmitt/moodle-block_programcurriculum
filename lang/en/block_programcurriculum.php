@@ -47,6 +47,7 @@ $string['coursedeleted'] = 'Course deleted.';
 $string['coursedeletemappings'] = 'You cannot delete a course that has mappings.';
 $string['courseformerror'] = 'Please fix the errors in the course form.';
 $string['curriculumformerror'] = 'Please fix the errors in the curriculum form.';
+$string['duplicatecurriculumnameorcode'] = 'The program name or code already exists. Please choose different values.';
 $string['sortorder'] = 'Sort order';
 $string['moveto'] = 'Move to position';
 $string['movemodaltitle'] = 'Move course';
