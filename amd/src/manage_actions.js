@@ -54,11 +54,6 @@ define([], function() {
                 openModal();
             });
         });
-
-        var container = document.querySelector('.programcurriculum-manage[data-validation-error="1"]');
-        if (container && openModalButton) {
-            openModal();
-        }
     };
 
     return {
