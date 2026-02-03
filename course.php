@@ -119,6 +119,28 @@ if ($data = $mform->get_data()) {
 
 $validationerror = $mform->is_submitted() && !$mform->is_cancelled() && !$mform->is_validated();
 
+$validationmessage = optional_param('validationmessage', '', PARAM_TEXT);
+
+if ($validationerror) {
+    // Force validation to populate errors.
+    $submitteddata = $mform->get_submitted_data();
+    $files = [];
+    $errors = $mform->validation((array)$submitteddata, $files);
+    
+    $hasduplicatecode = !empty($errors['externalcode']);
+    if ($hasduplicatecode) {
+        $validationmessage = get_string('duplicatecoursecode', 'block_programcurriculum');
+    } else {
+        $validationmessage = get_string('courseformerror', 'block_programcurriculum');
+    }
+    
+    // Redirect to clear the form and show only the error message.
+    redirect(new moodle_url('/blocks/programcurriculum/course.php', [
+        'curriculumid' => $curriculumid,
+        'validationmessage' => $validationmessage
+    ]));
+}
+
 $courses = [];
 $courselist = array_values($coursesrepo->get_by_curriculum($curriculumid));
 $total = count($courselist);
@@ -176,7 +198,8 @@ echo $OUTPUT->render_from_template('block_programcurriculum/course', [
     ]))->out(false),
     'courses' => $courses,
     'hascourses' => !empty($courses),
-    'validationerror' => $validationerror,
+    'validationerror' => !empty($validationmessage),
+    'validationmessage' => $validationmessage,
     'formhtml' => (function () use ($mform): string {
         ob_start();
         $mform->display();
