@@ -61,7 +61,8 @@ foreach ($curricula as $curriculum) {
 
 if ($canviewall && !$userid) {
     // Show list of students in the course.
-    $users = get_enrolled_users($context, 'moodle/course:isincompletionreports', 0, 'u.id, u.firstname, u.lastname', 'lastname, firstname');
+    $namefields = 'u.id, u.firstname, u.lastname, u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename';
+$users = get_enrolled_users($context, 'moodle/course:isincompletionreports', 0, $namefields, 'lastname, firstname');
     foreach ($users as $u) {
         $url = new moodle_url('/blocks/programcurriculum/view.php', [
             'courseid' => $courseid,
