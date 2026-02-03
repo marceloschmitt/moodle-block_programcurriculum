@@ -61,21 +61,42 @@ $calculator = new \block_programcurriculum\progress_calculator();
 $progress = $calculator->calculate_for_user($userid, $curriculumid);
 
 $curriculumcourses = $mappingrepo->get_by_curriculum_with_details($curriculumid);
-$courserows = [];
+$grouped = [];
 foreach ($curriculumcourses as $row) {
+    $key = (int)$row->externalcourseid;
+    if (!isset($grouped[$key])) {
+        $grouped[$key] = [
+            'externalcoursename' => $row->externalcoursename,
+            'moodlecourses' => [],
+        ];
+    }
     $ctx = context_course::instance((int)$row->moodlecourseid);
-    if (!is_enrolled($ctx, $userid)) {
+    if (is_enrolled($ctx, $userid)) {
+        $completed = $progress['details_by_course'][$row->moodlecourseid] ?? false;
+        $grouped[$key]['moodlecourses'][] = [
+            'name' => $row->moodlecoursename,
+            'completed' => $completed,
+        ];
+    }
+}
+
+$data['courserows'] = [];
+foreach (array_values($grouped) as $item) {
+    $moodlecount = count($item['moodlecourses']);
+    if ($moodlecount === 0) {
         continue;
     }
-    $completed = $progress['details_by_course'][$row->moodlecourseid] ?? false;
-    $courserows[] = [
-        'externalcoursename' => $row->externalcoursename,
-        'moodlecoursename' => $row->moodlecoursename,
-        'completed' => $completed,
-        'hasenrollment' => true,
+    $completedcount = count(array_filter($item['moodlecourses'], function ($m) {
+        return $m['completed'];
+    }));
+    $data['courserows'][] = [
+        'externalcoursename' => $item['externalcoursename'],
+        'moodlecourses' => $item['moodlecourses'],
+        'moodlecount' => $moodlecount,
+        'completedcount' => $completedcount,
+        'moodlecoursesjson' => htmlspecialchars(json_encode($item['moodlecourses']), ENT_QUOTES, 'UTF-8'),
     ];
 }
-$data['courserows'] = $courserows;
 $data['progress'] = [
     'percent' => $progress['percent'],
     'completed' => $progress['completed'],
@@ -85,8 +106,8 @@ $data['progress'] = [
 $PAGE->set_context($context);
 $PAGE->set_course($course);
 $PAGE->set_pagelayout('incourse');
-$PAGE->requires->css('/blocks/programcurriculum/styles.css');
 $PAGE->set_secondary_navigation(false);
+$PAGE->requires->js_call_amd('block_programcurriculum/progress_actions', 'init');
 $PAGE->set_url('/blocks/programcurriculum/progress.php', [
     'courseid' => $courseid,
     'userid' => $userid,

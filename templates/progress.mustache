@@ -1,4 +1,4 @@
-<div class="programcurriculum-progress">
+<div class="programcurriculum-progress" data-completed-str="{{#str}}completed, block_programcurriculum{{/str}}" data-notcompleted-str="{{#str}}notcompleted, block_programcurriculum{{/str}}">
     {{#hassubtitle}}
         <h3 class="mb-3">{{programname}} - {{externalcoursename}}</h3>
     {{/hassubtitle}}
@@ -23,14 +23,32 @@
         </thead>
         <tbody>
         {{#courserows}}
-            <tr class="{{#hasenrollment}}programcurriculum-row-enrolled{{/hasenrollment}}">
-                <td><strong>{{externalcoursename}}</strong> ({{moodlecoursename}})</td>
+            <tr class="programcurriculum-row-enrolled">
                 <td>
-                    {{#completed}}{{#str}}completed, block_programcurriculum{{/str}}{{/completed}}
-                    {{^completed}}{{#str}}notcompleted, block_programcurriculum{{/str}}{{/completed}}
+                    <a href="#" class="programcurriculum-external-link" data-external-name="{{externalcoursename}}" data-moodlecourses="{{moodlecoursesjson}}">
+                        <strong>{{externalcoursename}}</strong>
+                    </a>
+                    <span class="text-muted ms-1">({{moodlecount}})</span>
                 </td>
+                <td>{{completedcount}}/{{moodlecount}}</td>
             </tr>
         {{/courserows}}
         </tbody>
     </table>
+
+    <div class="modal fade" id="programcurriculum-moodle-modal" tabindex="-1" aria-labelledby="programcurriculum-moodle-modal-title" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="programcurriculum-moodle-modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{#str}}cancel, moodle{{/str}}"></button>
+                </div>
+                <div class="modal-body" id="programcurriculum-moodle-modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{#str}}cancel, moodle{{/str}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
