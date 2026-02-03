@@ -37,12 +37,18 @@ class progress_calculator {
         $details = [];
         $completedcount = 0;
         foreach ($mappings as $mapping) {
-            $iscompleted = $this->get_course_completion_state($userid, (int)$mapping->moodlecourseid);
+            $moodlecourseid = (int)$mapping->moodlecourseid;
+            $ctx = \context_course::instance($moodlecourseid);
+            if (!is_enrolled($ctx, $userid)) {
+                continue;
+            }
+
+            $iscompleted = $this->get_course_completion_state($userid, $moodlecourseid);
             if ($iscompleted) {
                 $completedcount++;
             }
 
-            $course = $DB->get_record('course', ['id' => $mapping->moodlecourseid], 'id, fullname', MUST_EXIST);
+            $course = $DB->get_record('course', ['id' => $moodlecourseid], 'id, fullname', MUST_EXIST);
             $details[] = [
                 'courseid' => $course->id,
                 'coursename' => $course->fullname,
@@ -50,8 +56,8 @@ class progress_calculator {
             ];
         }
 
-        $total = count($mappings);
-        $percent = (int)round(($completedcount / $total) * 100);
+        $total = count($details);
+        $percent = $total > 0 ? (int)round(($completedcount / $total) * 100) : 0;
 
         return [
             'total' => $total,
