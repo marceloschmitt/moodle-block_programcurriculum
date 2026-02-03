@@ -58,9 +58,10 @@ class mapping_repository {
     public function get_by_curriculum_with_details(int $curriculumid): array {
         global $DB;
 
-        $sql = "SELECT c.id AS externalcourseid, c.name AS externalcoursename, c.sortorder, m.moodlecourseid
+        $sql = "SELECT c.id AS externalcourseid, c.name AS externalcoursename, c.sortorder, m.moodlecourseid, co.fullname AS moodlecoursename
                   FROM {block_programcurriculum_mapping} m
                   JOIN {block_programcurriculum_course} c ON c.id = m.courseid
+                  JOIN {course} co ON co.id = m.moodlecourseid
                  WHERE c.curriculumid = :curriculumid
               ORDER BY c.sortorder ASC, c.name ASC";
         return array_values($DB->get_records_sql($sql, ['curriculumid' => $curriculumid]));

@@ -59,17 +59,6 @@ $data = [
 
 $calculator = new \block_programcurriculum\progress_calculator();
 $progress = $calculator->calculate_for_user($userid, $curriculumid);
-$data['progress'] = [
-    'percent' => $progress['percent'],
-    'completed' => $progress['completed'],
-    'total' => $progress['total'],
-    'details' => array_map(function (array $detail): array {
-        return [
-            'coursename' => $detail['coursename'],
-            'completed' => $detail['completed'],
-        ];
-    }, $progress['details']),
-];
 
 $curriculumcourses = $mappingrepo->get_by_curriculum_with_details($curriculumid);
 $grouped = [];
@@ -77,26 +66,26 @@ foreach ($curriculumcourses as $row) {
     $key = (int)$row->externalcourseid;
     if (!isset($grouped[$key])) {
         $grouped[$key] = [
-            'name' => $row->externalcoursename,
-            'moodlecourseids' => [],
+            'externalcoursename' => $row->externalcoursename,
+            'moodlecourses' => [],
         ];
     }
-    $grouped[$key]['moodlecourseids'][] = (int)$row->moodlecourseid;
-}
-foreach ($grouped as $item) {
-    $enrolled = false;
-    foreach ($item['moodlecourseids'] as $mcid) {
-        $ctx = context_course::instance($mcid);
-        if (is_enrolled($ctx, $userid)) {
-            $enrolled = true;
-            break;
-        }
+    $ctx = context_course::instance((int)$row->moodlecourseid);
+    if (is_enrolled($ctx, $userid)) {
+        $completed = $progress['details_by_course'][$row->moodlecourseid] ?? false;
+        $grouped[$key]['moodlecourses'][] = [
+            'name' => $row->moodlecoursename,
+            'completed' => $completed,
+        ];
     }
-    $data['sidebarcourses'][] = [
-        'name' => $item['name'],
-        'enrolled' => $enrolled,
-    ];
 }
+
+$data['courserows'] = array_values($grouped);
+$data['progress'] = [
+    'percent' => $progress['percent'],
+    'completed' => $progress['completed'],
+    'total' => $progress['total'],
+];
 
 $PAGE->set_context($context);
 $PAGE->set_course($course);

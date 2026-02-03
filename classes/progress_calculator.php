@@ -59,11 +59,17 @@ class progress_calculator {
         $total = count($details);
         $percent = $total > 0 ? (int)round(($completedcount / $total) * 100) : 0;
 
+        $detailsbycourse = [];
+        foreach ($details as $d) {
+            $detailsbycourse[$d['courseid']] = $d['completed'];
+        }
+
         return [
             'total' => $total,
             'completed' => $completedcount,
             'percent' => $percent,
             'details' => $details,
+            'details_by_course' => $detailsbycourse,
         ];
     }
 
