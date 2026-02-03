@@ -64,7 +64,11 @@ if ($canviewall && !$userid) {
     $mappingrepo = new \block_programcurriculum\mapping_repository();
     $coursemappings = $mappingrepo->get_by_moodle_course($courseid);
     $progressdata['coursemappings'] = array_map(function ($m) {
-        return ['externalcoursename' => $m->externalcoursename, 'moodlecoursename' => $m->moodlecoursename];
+        return [
+            'externalcoursename' => $m->externalcoursename,
+            'programname' => $m->programname,
+            'moodlecoursename' => $m->moodlecoursename,
+        ];
     }, $coursemappings);
     $progressdata['hasmappings'] = !empty($coursemappings);
 

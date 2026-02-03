@@ -22,6 +22,7 @@
                 <thead>
                     <tr>
                         <th>{{#str}}externalcourse, block_programcurriculum{{/str}}</th>
+                        <th>{{#str}}program, block_programcurriculum{{/str}}</th>
                         <th>{{#str}}mappedcourse, block_programcurriculum{{/str}}</th>
                     </tr>
                 </thead>
@@ -29,6 +30,7 @@
                     {{#coursemappings}}
                     <tr>
                         <td>{{externalcoursename}}</td>
+                        <td>{{programname}}</td>
                         <td>{{moodlecoursename}}</td>
                     </tr>
                     {{/coursemappings}}
