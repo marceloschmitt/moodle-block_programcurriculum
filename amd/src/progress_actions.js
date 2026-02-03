@@ -1,29 +1,33 @@
-define(['core/modal'], function(Modal) {
+define([], function() {
     'use strict';
 
     var init = function() {
         var container = document.querySelector('.programcurriculum-progress');
+        var modalTitle = document.getElementById('programcurriculum-moodle-modal-title');
         var modalBody = document.getElementById('programcurriculum-moodle-modal-body');
-        var links = document.querySelectorAll('.programcurriculum-external-link');
+        var modalTrigger = document.getElementById('programcurriculum-moodle-modal-trigger');
+        var buttons = document.querySelectorAll('.programcurriculum-moodle-btn');
 
-        if (!container || !links.length) {
+        if (!modalTitle || !modalBody || !modalTrigger || !buttons.length) {
             return;
         }
 
-        var completedStr = container.getAttribute('data-completed-str') || 'Completed';
-        var notcompletedStr = container.getAttribute('data-notcompleted-str') || 'Not completed';
+        var completedStr = (container && container.getAttribute('data-completed-str')) || 'Completed';
+        var notcompletedStr = (container && container.getAttribute('data-notcompleted-str')) || 'Not completed';
 
-        links.forEach(function(link) {
-            link.addEventListener('click', function(e) {
+        buttons.forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
                 e.preventDefault();
-                var externalName = link.getAttribute('data-external-name') || '';
-                var moodlecoursesJson = link.getAttribute('data-moodlecourses') || '[]';
+                var externalName = btn.getAttribute('data-external-name') || '';
+                var moodlecoursesJson = btn.getAttribute('data-moodlecourses') || '[]';
                 var moodlecourses = [];
                 try {
                     moodlecourses = JSON.parse(moodlecoursesJson);
                 } catch (err) {
                     moodlecourses = [];
                 }
+
+                modalTitle.textContent = externalName;
 
                 var bodyHtml = '<ul class="list-unstyled mb-0">';
                 moodlecourses.forEach(function(mc) {
@@ -34,14 +38,9 @@ define(['core/modal'], function(Modal) {
                     bodyHtml += '</span></li>';
                 });
                 bodyHtml += '</ul>';
+                modalBody.innerHTML = bodyHtml;
 
-                Modal.create({
-                    title: externalName,
-                    body: bodyHtml,
-                    footer: '',
-                    show: true,
-                    removeOnClose: true
-                });
+                modalTrigger.click();
             });
         });
     };

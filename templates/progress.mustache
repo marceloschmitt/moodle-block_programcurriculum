@@ -26,10 +26,8 @@
             <tr class="{{#hasmoodle}}programcurriculum-row-enrolled{{/hasmoodle}}">
                 <td>
                     {{#hasmoodle}}
-                    <a href="#" class="programcurriculum-external-link" data-external-name="{{externalcoursename}}" data-moodlecourses="{{moodlecoursesjson}}">
-                        <strong>{{externalcoursename}}</strong>
-                    </a>
-                    <span class="text-muted ms-1">({{moodlecount}})</span>
+                    <strong>{{externalcoursename}}</strong>
+                    <button type="button" class="btn btn-sm btn-outline-secondary ms-1 programcurriculum-moodle-btn" data-external-name="{{externalcoursename}}" data-moodlecourses="{{moodlecoursesjson}}" aria-label="{{#str}}moodlecoursesforexternal, block_programcurriculum, {{externalcoursename}}{{/str}}">{{moodlecount}}</button>
                     {{/hasmoodle}}
                     {{^hasmoodle}}
                     <strong>{{externalcoursename}}</strong>
@@ -42,4 +40,20 @@
         </tbody>
     </table>
 
+    <button class="d-none" type="button" id="programcurriculum-moodle-modal-trigger" data-bs-toggle="modal" data-bs-target="#programcurriculum-moodle-modal"></button>
+    <div class="modal fade" id="programcurriculum-moodle-modal" tabindex="-1" aria-labelledby="programcurriculum-moodle-modal-title" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="programcurriculum-moodle-modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{#str}}cancel, moodle{{/str}}"></button>
+                </div>
+                <div class="modal-body" id="programcurriculum-moodle-modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{#str}}cancel, moodle{{/str}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
