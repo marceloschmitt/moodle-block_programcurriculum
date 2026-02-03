@@ -73,7 +73,7 @@ if ($canviewall && !$userid) {
     $progressdata['hasmappings'] = !empty($coursemappings);
 
     $namefields = 'u.id, u.firstname, u.lastname, u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename';
-    $users = get_enrolled_users($context, 'moodle/course:isincompletionreports', 0, $namefields, 'lastname, firstname');
+    $users = get_enrolled_users($context, 'moodle/course:isincompletionreports', 0, $namefields, 'u.lastname ASC, u.firstname ASC');
     foreach ($users as $u) {
         $url = new moodle_url('/blocks/programcurriculum/view.php', [
             'courseid' => $courseid,
@@ -86,6 +86,9 @@ if ($canviewall && !$userid) {
             'viewurl' => $url->out(false),
         ];
     }
+    usort($progressdata['students'], function ($a, $b) {
+        return strcoll($a['fullname'], $b['fullname']);
+    });
     $progressdata['hasstudents'] = !empty($progressdata['students']);
 } else {
     if (!$userid) {
