@@ -114,7 +114,8 @@ if ($canviewall && !$userid) {
 
 $PAGE->set_context($context);
 $PAGE->set_course($course);
-$PAGE->set_pagelayout('base');
+$PAGE->set_pagelayout('incourse');
+$PAGE->set_secondary_navigation(false);
 $PAGE->set_url('/blocks/programcurriculum/view.php', [
     'courseid' => $courseid,
     'userid' => $userid,
