@@ -64,13 +64,14 @@ $data = [
     'hasstudents' => false,
 ];
 
+$linkcurriculumid = $curriculumid > 0 ? $curriculumid : (!empty($curricula) ? (int)reset($curricula)->id : 0);
 $namefields = 'u.id, u.firstname, u.lastname, u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename';
 $users = get_enrolled_users($context, 'moodle/course:isincompletionreports', 0, $namefields, 'u.lastname ASC, u.firstname ASC');
 foreach ($users as $u) {
     $url = new moodle_url('/blocks/programcurriculum/progress.php', [
         'courseid' => $courseid,
         'userid' => $u->id,
-        'curriculumid' => $curriculumid,
+        'curriculumid' => $linkcurriculumid,
     ]);
     $data['students'][] = [
         'id' => $u->id,

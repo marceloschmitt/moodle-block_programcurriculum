@@ -17,6 +17,7 @@
 require_once(__DIR__ . '/../../config.php');
 require_once($CFG->libdir . '/completionlib.php');
 
+global $DB;
 require_login();
 
 $courseid = required_param('courseid', PARAM_INT);
@@ -107,8 +108,11 @@ $PAGE->set_url('/blocks/programcurriculum/progress.php', [
     'userid' => $userid,
     'curriculumid' => $curriculumid,
 ]);
+$user = $DB->get_record('user', ['id' => $userid], 'id, firstname, lastname, firstnamephonetic, lastnamephonetic, middlename, alternatename');
+$studentname = $user ? fullname($user) : get_string('student', 'block_programcurriculum');
+
 $PAGE->set_title(get_string('viewtitle', 'block_programcurriculum'));
-$PAGE->set_heading(get_string('progressview', 'block_programcurriculum'));
+$PAGE->set_heading($studentname);
 $PAGE->navbar->add($course->fullname, new moodle_url('/course/view.php', ['id' => $courseid]));
 $PAGE->navbar->add(get_string('viewtitle', 'block_programcurriculum'));
 
