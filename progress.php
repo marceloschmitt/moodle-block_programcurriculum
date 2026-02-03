@@ -73,9 +73,11 @@ foreach ($curriculumcourses as $row) {
     $ctx = context_course::instance((int)$row->moodlecourseid);
     if (is_enrolled($ctx, $userid)) {
         $completed = $progress['details_by_course'][$row->moodlecourseid] ?? false;
+        $courseurl = (new moodle_url('/course/view.php', ['id' => $row->moodlecourseid]))->out(false);
         $grouped[$key]['moodlecourses'][] = [
             'name' => $row->moodlecoursename,
             'completed' => $completed,
+            'url' => $courseurl,
         ];
     }
 }

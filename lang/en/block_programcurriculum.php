@@ -104,3 +104,4 @@ $string['program'] = 'Program';
 $string['enrolled'] = 'Enrolled';
 $string['notenrolled'] = 'Not enrolled';
 $string['moodlecoursesforexternal'] = 'Moodle courses for {$a}';
+$string['close'] = 'Close';

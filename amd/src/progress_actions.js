@@ -31,8 +31,10 @@ define([], function() {
 
                 var bodyHtml = '<ul class="list-unstyled mb-0">';
                 moodlecourses.forEach(function(mc) {
+                    var nameEscaped = (mc.name || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    var url = mc.url || '#';
                     bodyHtml += '<li class="py-2 border-bottom d-flex justify-content-between align-items-center">';
-                    bodyHtml += '<span>' + (mc.name || '').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</span>';
+                    bodyHtml += '<a href="' + (url.replace(/"/g, '&quot;')) + '">' + nameEscaped + '</a>';
                     bodyHtml += '<span class="badge ' + (mc.completed ? 'bg-success' : 'bg-secondary') + '">';
                     bodyHtml += mc.completed ? completedStr : notcompletedStr;
                     bodyHtml += '</span></li>';
