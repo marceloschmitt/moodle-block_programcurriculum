@@ -82,6 +82,7 @@ $string['importhelp'] = 'CSV columns: curriculum_code, curriculum_name, course_c
 $string['importsuccess'] = 'CSV import completed.';
 $string['importerrors'] = 'Import errors';
 $string['viewtitle'] = 'Curriculum progress';
+$string['progressview'] = 'Progress View';
 $string['progresspercent'] = 'Progress';
 $string['student'] = 'Student';
 $string['completionstatus'] = 'Completion status';
