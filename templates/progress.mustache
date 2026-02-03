@@ -23,14 +23,20 @@
         </thead>
         <tbody>
         {{#courserows}}
-            <tr class="programcurriculum-row-enrolled">
+            <tr class="{{#hasmoodle}}programcurriculum-row-enrolled{{/hasmoodle}}">
                 <td>
+                    {{#hasmoodle}}
                     <a href="#" class="programcurriculum-external-link" data-external-name="{{externalcoursename}}" data-moodlecourses="{{moodlecoursesjson}}">
                         <strong>{{externalcoursename}}</strong>
                     </a>
                     <span class="text-muted ms-1">({{moodlecount}})</span>
+                    {{/hasmoodle}}
+                    {{^hasmoodle}}
+                    <strong>{{externalcoursename}}</strong>
+                    <span class="text-muted ms-1">(0)</span>
+                    {{/hasmoodle}}
                 </td>
-                <td>{{completedcount}}/{{moodlecount}}</td>
+                <td>{{#hasmoodle}}{{completedcount}}/{{moodlecount}}{{/hasmoodle}}{{^hasmoodle}}-{{/hasmoodle}}</td>
             </tr>
         {{/courserows}}
         </tbody>

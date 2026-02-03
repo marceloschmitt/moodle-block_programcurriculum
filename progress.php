@@ -83,9 +83,6 @@ foreach ($curriculumcourses as $row) {
 $data['courserows'] = [];
 foreach (array_values($grouped) as $item) {
     $moodlecount = count($item['moodlecourses']);
-    if ($moodlecount === 0) {
-        continue;
-    }
     $completedcount = count(array_filter($item['moodlecourses'], function ($m) {
         return $m['completed'];
     }));
@@ -95,6 +92,7 @@ foreach (array_values($grouped) as $item) {
         'moodlecount' => $moodlecount,
         'completedcount' => $completedcount,
         'moodlecoursesjson' => htmlspecialchars(json_encode($item['moodlecourses']), ENT_QUOTES, 'UTF-8'),
+        'hasmoodle' => $moodlecount > 0,
     ];
 }
 $data['progress'] = [
