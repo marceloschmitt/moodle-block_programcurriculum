@@ -2,53 +2,32 @@
     {{#hassubtitle}}
         <h3 class="mb-3">{{programname}} - {{externalcoursename}}</h3>
     {{/hassubtitle}}
-    {{#hascurricula}}
-        {{^showstudentlist}}
-        <div class="mb-2">
-            <a class="btn btn-secondary mb-2" href="{{{courseviewurl}}}">{{#str}}backtostudents, block_programcurriculum{{/str}}</a>
-        </div>
-        {{/showstudentlist}}
 
-        {{#showprogressview}}
-        <div class="row">
-            <div class="col-md-4 col-lg-3">
-                <div class="card mb-3">
-                    <div class="card-header">{{#str}}listofcourses, block_programcurriculum{{/str}}</div>
-                    <div class="card-body p-2">
-                        <p class="small text-muted mb-2">
-                            <span class="d-inline-block me-2 p-1 rounded bg-success bg-opacity-25">{{#str}}enrolled, block_programcurriculum{{/str}}</span>
-                            <span class="d-inline-block p-1 rounded bg-secondary bg-opacity-10">{{#str}}notenrolled, block_programcurriculum{{/str}}</span>
-                        </p>
-                        <ul class="list-unstyled mb-0">
-                        {{#sidebarcourses}}
-                            <li class="py-2 px-2 border-bottom programcurriculum-sidebar-course {{#enrolled}}bg-success bg-opacity-25{{/enrolled}}{{^enrolled}}bg-secondary bg-opacity-10{{/enrolled}}">
-                                {{name}}
-                            </li>
-                        {{/sidebarcourses}}
-                        </ul>
-                    </div>
+    <div class="mb-2">
+        <a class="btn btn-secondary mb-2" href="{{{courseviewurl}}}">{{#str}}backtostudents, block_programcurriculum{{/str}}</a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 col-lg-3">
+            <div class="card mb-3">
+                <div class="card-header">{{#str}}listofcourses, block_programcurriculum{{/str}}</div>
+                <div class="card-body p-2">
+                    <p class="small text-muted mb-2">
+                        <span class="d-inline-block me-2 p-1 rounded bg-success bg-opacity-25">{{#str}}enrolled, block_programcurriculum{{/str}}</span>
+                        <span class="d-inline-block p-1 rounded bg-secondary bg-opacity-10">{{#str}}notenrolled, block_programcurriculum{{/str}}</span>
+                    </p>
+                    <ul class="list-unstyled mb-0">
+                    {{#sidebarcourses}}
+                        <li class="py-2 px-2 border-bottom programcurriculum-sidebar-course {{#enrolled}}bg-success bg-opacity-25{{/enrolled}}{{^enrolled}}bg-secondary bg-opacity-10{{/enrolled}}">
+                            {{name}}
+                        </li>
+                    {{/sidebarcourses}}
+                    </ul>
                 </div>
             </div>
-            <div class="col-md-8 col-lg-9">
-        {{/showprogressview}}
-
-        {{#showstudentlist}}
-            <h5 class="mt-3">{{#str}}listofstudents, block_programcurriculum{{/str}}</h5>
-            {{#hasstudents}}
-            <ul class="list-unstyled mt-2">
-            {{#students}}
-                <li class="py-1 border-bottom">
-                    <a href="{{viewurl}}">{{fullname}}</a>
-                </li>
-            {{/students}}
-            </ul>
-            {{/hasstudents}}
-            {{^hasstudents}}
-            <div class="alert alert-info mt-3">{{#str}}nostudents, block_programcurriculum{{/str}}</div>
-            {{/hasstudents}}
-        {{/showstudentlist}}
-
-        {{#progress}}
+        </div>
+        <div class="col-md-8 col-lg-9">
+            {{#progress}}
             <div class="mt-3">
                 <strong>{{#str}}progresspercent, block_programcurriculum{{/str}}:</strong> {{percent}}%
                 ({{completed}}/{{total}})
@@ -73,15 +52,7 @@
                     {{/details}}
                 </tbody>
             </table>
-        {{/progress}}
-
-        {{#showprogressview}}
-            </div>
+            {{/progress}}
         </div>
-        {{/showprogressview}}
-    {{/hascurricula}}
-
-    {{^hascurricula}}
-        <div class="alert alert-info">{{#str}}nocurricula, block_programcurriculum{{/str}}</div>
-    {{/hascurricula}}
+    </div>
 </div>
