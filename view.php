@@ -121,6 +121,7 @@ $PAGE->set_url('/blocks/programcurriculum/view.php', [
 ]);
 $PAGE->set_title(get_string('viewtitle', 'block_programcurriculum'));
 $PAGE->set_heading(get_string('pluginname', 'block_programcurriculum'));
+$PAGE->navbar->add($course->fullname, new moodle_url('/course/view.php', ['id' => $courseid]));
 $PAGE->navbar->add(get_string('viewtitle', 'block_programcurriculum'));
 
 echo $OUTPUT->header();

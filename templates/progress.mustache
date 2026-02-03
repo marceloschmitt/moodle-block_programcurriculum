@@ -45,9 +45,8 @@
             {{#hasstudents}}
             <ul class="list-unstyled mt-2">
             {{#students}}
-                <li class="py-1 border-bottom d-flex align-items-center justify-content-between">
-                    <span>{{fullname}}</span>
-                    <a class="btn btn-sm btn-outline-primary" href="{{viewurl}}">{{#str}}viewstudentprogress, block_programcurriculum{{/str}}</a>
+                <li class="py-1 border-bottom">
+                    <a href="{{viewurl}}">{{fullname}}</a>
                 </li>
             {{/students}}
             </ul>
