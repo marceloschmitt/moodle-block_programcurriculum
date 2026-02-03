@@ -98,3 +98,4 @@ $string['csvfile'] = 'CSV file';
 $string['upload'] = 'Upload';
 $string['courseidrequired'] = 'Course ID is required to view progress.';
 $string['mappedcourse'] = 'Mapped course';
+$string['externalcourse'] = 'External course';

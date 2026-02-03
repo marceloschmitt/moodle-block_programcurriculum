@@ -49,6 +49,23 @@ class mapping_repository {
         return $DB->get_records_sql($sql, ['curriculumid' => $curriculumid]);
     }
 
+    /**
+     * Get mappings for a Moodle course, with external course and Moodle course names.
+     *
+     * @param int $moodlecourseid Moodle course id.
+     * @return array List of objects with externalcoursename, moodlecoursename.
+     */
+    public function get_by_moodle_course(int $moodlecourseid): array {
+        global $DB;
+
+        $sql = "SELECT c.name AS externalcoursename, co.fullname AS moodlecoursename
+                  FROM {block_programcurriculum_mapping} m
+                  JOIN {block_programcurriculum_course} c ON c.id = m.courseid
+                  JOIN {course} co ON co.id = m.moodlecourseid
+                 WHERE m.moodlecourseid = :moodlecourseid";
+        return array_values($DB->get_records_sql($sql, ['moodlecourseid' => $moodlecourseid]));
+    }
+
     public function get_counts_by_course_ids(array $courseids): array {
         global $DB;
 

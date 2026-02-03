@@ -60,9 +60,16 @@ foreach ($curricula as $curriculum) {
 }
 
 if ($canviewall && !$userid) {
-    // Show list of students in the course.
+    // Show list of students in the course. Show external course <-> Moodle course mappings.
+    $mappingrepo = new \block_programcurriculum\mapping_repository();
+    $coursemappings = $mappingrepo->get_by_moodle_course($courseid);
+    $progressdata['coursemappings'] = array_map(function ($m) {
+        return ['externalcoursename' => $m->externalcoursename, 'moodlecoursename' => $m->moodlecoursename];
+    }, $coursemappings);
+    $progressdata['hasmappings'] = !empty($coursemappings);
+
     $namefields = 'u.id, u.firstname, u.lastname, u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename';
-$users = get_enrolled_users($context, 'moodle/course:isincompletionreports', 0, $namefields, 'lastname, firstname');
+    $users = get_enrolled_users($context, 'moodle/course:isincompletionreports', 0, $namefields, 'lastname, firstname');
     foreach ($users as $u) {
         $url = new moodle_url('/blocks/programcurriculum/view.php', [
             'courseid' => $courseid,
@@ -102,6 +109,7 @@ $users = get_enrolled_users($context, 'moodle/course:isincompletionreports', 0, 
 }
 
 $PAGE->set_context($context);
+$PAGE->set_course($course);
 $PAGE->set_url('/blocks/programcurriculum/view.php', [
     'courseid' => $courseid,
     'userid' => $userid,
@@ -109,6 +117,7 @@ $PAGE->set_url('/blocks/programcurriculum/view.php', [
 ]);
 $PAGE->set_title(get_string('viewtitle', 'block_programcurriculum'));
 $PAGE->set_heading(get_string('pluginname', 'block_programcurriculum'));
+$PAGE->navbar->add(get_string('viewtitle', 'block_programcurriculum'));
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('block_programcurriculum/progress', $progressdata);
