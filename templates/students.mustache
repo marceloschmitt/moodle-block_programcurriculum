@@ -3,16 +3,6 @@
         <h3 class="mb-3">{{programname}} - {{externalcoursename}}</h3>
     {{/hassubtitle}}
     {{#hascurricula}}
-        <form method="get" class="mb-3">
-            <input type="hidden" name="courseid" value="{{courseid}}">
-            <label for="curriculumid">{{#str}}choosecurriculum, block_programcurriculum{{/str}}</label>
-            <select name="curriculumid" id="curriculumid" onchange="this.form.submit()">
-                {{#curricula}}
-                    <option value="{{id}}" {{#selected}}selected{{/selected}}>{{name}}</option>
-                {{/curricula}}
-            </select>
-        </form>
-
         <h5 class="mt-3">{{#str}}listofstudents, block_programcurriculum{{/str}}</h5>
         {{#hasstudents}}
         <ul class="list-unstyled mt-2">

@@ -52,7 +52,6 @@ $data = [
     'hassubtitle' => $firstmapping && !empty($firstmapping->programname) && !empty($firstmapping->externalcoursename),
     'courseviewurl' => (new moodle_url('/blocks/programcurriculum/view.php', [
         'courseid' => $courseid,
-        'curriculumid' => $curriculumid,
     ]))->out(false),
     'progress' => null,
     'sidebarcourses' => [],

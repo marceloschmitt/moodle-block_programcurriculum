@@ -75,7 +75,7 @@ class mapping_repository {
     public function get_by_moodle_course(int $moodlecourseid): array {
         global $DB;
 
-        $sql = "SELECT c.name AS externalcoursename, cu.name AS programname, co.fullname AS moodlecoursename
+        $sql = "SELECT c.name AS externalcoursename, cu.name AS programname, cu.id AS curriculumid, co.fullname AS moodlecoursename
                   FROM {block_programcurriculum_mapping} m
                   JOIN {block_programcurriculum_course} c ON c.id = m.courseid
                   JOIN {block_programcurriculum_curriculum} cu ON cu.id = c.curriculumid

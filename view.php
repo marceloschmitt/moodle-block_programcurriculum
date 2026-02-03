@@ -27,14 +27,15 @@ require_capability('block/programcurriculum:viewprogress', $context);
 
 $canviewall = has_capability('block/programcurriculum:viewallprogress', $context);
 
-$curriculumrepo = new \block_programcurriculum\curriculum_repository();
-$curricula = $curriculumrepo->get_all();
-$curriculumid = optional_param('curriculumid', 0, PARAM_INT);
-if (!$curriculumid && !empty($curricula)) {
-    $curriculumid = (int)reset($curricula)->id;
-}
+$mappingrepo = new \block_programcurriculum\mapping_repository();
+$coursemappings = $mappingrepo->get_by_moodle_course($courseid);
+$firstmapping = !empty($coursemappings) ? reset($coursemappings) : null;
+$curriculumid = $firstmapping ? (int)$firstmapping->curriculumid : 0;
 
 if (!$canviewall) {
+    if ($curriculumid <= 0) {
+        redirect(new moodle_url('/course/view.php', ['id' => $courseid]));
+    }
     redirect(new moodle_url('/blocks/programcurriculum/progress.php', [
         'courseid' => $courseid,
         'userid' => $USER->id,
@@ -42,19 +43,8 @@ if (!$canviewall) {
     ]));
 }
 
-$mappingrepo = new \block_programcurriculum\mapping_repository();
-$coursemappings = $mappingrepo->get_by_moodle_course($courseid);
-$firstmapping = !empty($coursemappings) ? reset($coursemappings) : null;
-
 $data = [
-    'hascurricula' => !empty($curricula),
-    'curricula' => array_map(function ($c) use ($curriculumid) {
-        return [
-            'id' => $c->id,
-            'name' => $c->name,
-            'selected' => ((int)$curriculumid === (int)$c->id),
-        ];
-    }, array_values($curricula)),
+    'hascurricula' => $curriculumid > 0,
     'courseid' => $courseid,
     'curriculumid' => $curriculumid,
     'programname' => $firstmapping ? $firstmapping->programname : '',
@@ -64,14 +54,13 @@ $data = [
     'hasstudents' => false,
 ];
 
-$linkcurriculumid = $curriculumid > 0 ? $curriculumid : (!empty($curricula) ? (int)reset($curricula)->id : 0);
 $namefields = 'u.id, u.firstname, u.lastname, u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename';
 $users = get_enrolled_users($context, 'moodle/course:isincompletionreports', 0, $namefields, 'u.lastname ASC, u.firstname ASC');
 foreach ($users as $u) {
     $url = new moodle_url('/blocks/programcurriculum/progress.php', [
         'courseid' => $courseid,
         'userid' => $u->id,
-        'curriculumid' => $linkcurriculumid,
+        'curriculumid' => $curriculumid,
     ]);
     $data['students'][] = [
         'id' => $u->id,
@@ -88,7 +77,7 @@ $PAGE->set_context($context);
 $PAGE->set_course($course);
 $PAGE->set_pagelayout('incourse');
 $PAGE->set_secondary_navigation(false);
-$PAGE->set_url('/blocks/programcurriculum/view.php', ['courseid' => $courseid, 'curriculumid' => $curriculumid]);
+$PAGE->set_url('/blocks/programcurriculum/view.php', ['courseid' => $courseid]);
 $PAGE->set_title(get_string('viewtitle', 'block_programcurriculum'));
 $PAGE->set_heading(get_string('progressview', 'block_programcurriculum'));
 $PAGE->navbar->add($course->fullname, new moodle_url('/course/view.php', ['id' => $courseid]));
