@@ -61,26 +61,21 @@ $calculator = new \block_programcurriculum\progress_calculator();
 $progress = $calculator->calculate_for_user($userid, $curriculumid);
 
 $curriculumcourses = $mappingrepo->get_by_curriculum_with_details($curriculumid);
-$grouped = [];
+$courserows = [];
 foreach ($curriculumcourses as $row) {
-    $key = (int)$row->externalcourseid;
-    if (!isset($grouped[$key])) {
-        $grouped[$key] = [
-            'externalcoursename' => $row->externalcoursename,
-            'moodlecourses' => [],
-        ];
-    }
     $ctx = context_course::instance((int)$row->moodlecourseid);
-    if (is_enrolled($ctx, $userid)) {
-        $completed = $progress['details_by_course'][$row->moodlecourseid] ?? false;
-        $grouped[$key]['moodlecourses'][] = [
-            'name' => $row->moodlecoursename,
-            'completed' => $completed,
-        ];
+    if (!is_enrolled($ctx, $userid)) {
+        continue;
     }
+    $completed = $progress['details_by_course'][$row->moodlecourseid] ?? false;
+    $courserows[] = [
+        'externalcoursename' => $row->externalcoursename,
+        'moodlecoursename' => $row->moodlecoursename,
+        'completed' => $completed,
+        'hasenrollment' => true,
+    ];
 }
-
-$data['courserows'] = array_values($grouped);
+$data['courserows'] = $courserows;
 $data['progress'] = [
     'percent' => $progress['percent'],
     'completed' => $progress['completed'],
@@ -90,6 +85,7 @@ $data['progress'] = [
 $PAGE->set_context($context);
 $PAGE->set_course($course);
 $PAGE->set_pagelayout('incourse');
+$PAGE->requires->css('/blocks/programcurriculum/styles.css');
 $PAGE->set_secondary_navigation(false);
 $PAGE->set_url('/blocks/programcurriculum/progress.php', [
     'courseid' => $courseid,

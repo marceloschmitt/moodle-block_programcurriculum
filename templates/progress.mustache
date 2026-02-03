@@ -23,19 +23,13 @@
         </thead>
         <tbody>
         {{#courserows}}
-            <tr>
-                <td><strong>{{externalcoursename}}</strong></td>
-                <td></td>
-            </tr>
-            {{#moodlecourses}}
-            <tr>
-                <td class="ps-4">{{name}}</td>
+            <tr class="{{#hasenrollment}}programcurriculum-row-enrolled{{/hasenrollment}}">
+                <td><strong>{{externalcoursename}}</strong> ({{moodlecoursename}})</td>
                 <td>
                     {{#completed}}{{#str}}completed, block_programcurriculum{{/str}}{{/completed}}
                     {{^completed}}{{#str}}notcompleted, block_programcurriculum{{/str}}{{/completed}}
                 </td>
             </tr>
-            {{/moodlecourses}}
         {{/courserows}}
         </tbody>
     </table>
