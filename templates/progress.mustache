@@ -2,7 +2,14 @@
     {{#hascurricula}}
         <form method="get">
             <input type="hidden" name="courseid" value="{{courseid}}">
-            <input type="hidden" name="userid" value="{{userid}}">
+            {{#showstudentlist}}
+            {{/showstudentlist}}
+            {{^showstudentlist}}
+                <input type="hidden" name="userid" value="{{userid}}">
+                <div class="mb-2">
+                    <a class="btn btn-secondary mb-2" href="{{{courseviewurl}}}">{{#str}}backtostudents, block_programcurriculum{{/str}}</a>
+                </div>
+            {{/showstudentlist}}
             <label for="curriculumid">{{#str}}choosecurriculum, block_programcurriculum{{/str}}</label>
             <select name="curriculumid" id="curriculumid" onchange="this.form.submit()">
                 {{#curricula}}
@@ -10,6 +17,23 @@
                 {{/curricula}}
             </select>
         </form>
+
+        {{#showstudentlist}}
+            <h5 class="mt-3">{{#str}}listofstudents, block_programcurriculum{{/str}}</h5>
+            {{#hasstudents}}
+            <ul class="list-unstyled mt-2">
+            {{#students}}
+                <li class="py-1 border-bottom d-flex align-items-center justify-content-between">
+                    <span>{{fullname}}</span>
+                    <a class="btn btn-sm btn-outline-primary" href="{{viewurl}}">{{#str}}viewstudentprogress, block_programcurriculum{{/str}}</a>
+                </li>
+            {{/students}}
+            </ul>
+            {{/hasstudents}}
+            {{^hasstudents}}
+            <div class="alert alert-info mt-3">{{#str}}nostudents, block_programcurriculum{{/str}}</div>
+            {{/hasstudents}}
+        {{/showstudentlist}}
 
         {{#progress}}
             <div class="mt-3">

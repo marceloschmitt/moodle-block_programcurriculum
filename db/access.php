@@ -51,6 +51,7 @@ $capabilities = [
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => [
             'teacher' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
             'student' => CAP_ALLOW,
         ],
     ],

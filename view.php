@@ -25,13 +25,11 @@ $course = get_course($courseid);
 $context = context_course::instance($courseid);
 require_capability('block/programcurriculum:viewprogress', $context);
 
+$canviewall = has_capability('block/programcurriculum:viewallprogress', $context);
 $userid = optional_param('userid', 0, PARAM_INT);
-if ($userid && !has_capability('block/programcurriculum:viewallprogress', $context)) {
-    throw new required_capability_exception($context, 'block/programcurriculum:viewallprogress', 'nopermissions', '');
-}
 
-if (!$userid) {
-    $userid = $USER->id;
+if ($userid && !$canviewall) {
+    throw new required_capability_exception($context, 'block/programcurriculum:viewallprogress', 'nopermissions', '');
 }
 
 $curriculumrepo = new \block_programcurriculum\curriculum_repository();
@@ -48,6 +46,9 @@ $progressdata = [
     'progress' => null,
     'courseid' => $courseid,
     'userid' => $userid,
+    'showstudentlist' => $canviewall && !$userid,
+    'students' => [],
+    'hasstudents' => false,
 ];
 
 foreach ($curricula as $curriculum) {
@@ -58,20 +59,45 @@ foreach ($curricula as $curriculum) {
     ];
 }
 
-if ($curriculumid) {
-    $calculator = new \block_programcurriculum\progress_calculator();
-    $progress = $calculator->calculate_for_user($userid, $curriculumid);
-    $progressdata['progress'] = [
-        'percent' => $progress['percent'],
-        'completed' => $progress['completed'],
-        'total' => $progress['total'],
-        'details' => array_map(function (array $detail): array {
-            return [
-                'coursename' => $detail['coursename'],
-                'completed' => $detail['completed'],
-            ];
-        }, $progress['details']),
-    ];
+if ($canviewall && !$userid) {
+    // Show list of students in the course.
+    $users = get_enrolled_users($context, 'moodle/course:isincompletionreports', 0, 'u.id, u.firstname, u.lastname', 'lastname, firstname');
+    foreach ($users as $u) {
+        $url = new moodle_url('/blocks/programcurriculum/view.php', [
+            'courseid' => $courseid,
+            'userid' => $u->id,
+            'curriculumid' => $curriculumid,
+        ]);
+        $progressdata['students'][] = [
+            'id' => $u->id,
+            'fullname' => fullname($u),
+            'viewurl' => $url->out(false),
+        ];
+    }
+    $progressdata['hasstudents'] = !empty($progressdata['students']);
+} else {
+    if (!$userid) {
+        $userid = $USER->id;
+    }
+    $progressdata['userid'] = $userid;
+    $courseviewurl = new moodle_url('/blocks/programcurriculum/view.php', ['courseid' => $courseid, 'curriculumid' => $curriculumid]);
+    $progressdata['courseviewurl'] = $courseviewurl->out(false);
+
+    if ($curriculumid) {
+        $calculator = new \block_programcurriculum\progress_calculator();
+        $progress = $calculator->calculate_for_user($userid, $curriculumid);
+        $progressdata['progress'] = [
+            'percent' => $progress['percent'],
+            'completed' => $progress['completed'],
+            'total' => $progress['total'],
+            'details' => array_map(function (array $detail): array {
+                return [
+                    'coursename' => $detail['coursename'],
+                    'completed' => $detail['completed'],
+                ];
+            }, $progress['details']),
+        ];
+    }
 }
 
 $PAGE->set_context($context);
