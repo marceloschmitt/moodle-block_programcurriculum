@@ -93,7 +93,7 @@ foreach (array_values($grouped) as $item) {
         'moodlecourses' => $item['moodlecourses'],
         'moodlecount' => $moodlecount,
         'completedcount' => $completedcount,
-        'moodlecoursesjson' => htmlspecialchars(json_encode($item['moodlecourses']), ENT_QUOTES, 'UTF-8'),
+        'moodlecoursesjson' => base64_encode(json_encode($item['moodlecourses'])),
         'hasmoodle' => $moodlecount > 0,
     ];
 }

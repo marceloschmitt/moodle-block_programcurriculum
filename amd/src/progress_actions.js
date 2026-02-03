@@ -19,9 +19,10 @@ define([], function() {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 var externalName = btn.getAttribute('data-external-name') || '';
-                var moodlecoursesJson = btn.getAttribute('data-moodlecourses') || '[]';
+                var moodlecoursesEncoded = btn.getAttribute('data-moodlecourses') || '';
                 var moodlecourses = [];
                 try {
+                    var moodlecoursesJson = moodlecoursesEncoded ? atob(moodlecoursesEncoded) : '[]';
                     moodlecourses = JSON.parse(moodlecoursesJson);
                 } catch (err) {
                     moodlecourses = [];
