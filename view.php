@@ -47,8 +47,10 @@ $progressdata = [
     'courseid' => $courseid,
     'userid' => $userid,
     'showstudentlist' => $canviewall && !$userid,
+    'showprogressview' => false,
     'students' => [],
     'hasstudents' => false,
+    'sidebarcourses' => [],
 ];
 
 foreach ($curricula as $curriculum) {
@@ -92,6 +94,7 @@ if ($canviewall && !$userid) {
         $userid = $USER->id;
     }
     $progressdata['userid'] = $userid;
+    $progressdata['showprogressview'] = true;
     $courseviewurl = new moodle_url('/blocks/programcurriculum/view.php', ['courseid' => $courseid, 'curriculumid' => $curriculumid]);
     $progressdata['courseviewurl'] = $courseviewurl->out(false);
 
@@ -109,6 +112,34 @@ if ($canviewall && !$userid) {
                 ];
             }, $progress['details']),
         ];
+
+        $curriculumcourses = $mappingrepo->get_by_curriculum_with_details($curriculumid);
+        $grouped = [];
+        foreach ($curriculumcourses as $row) {
+            $key = (int)$row->externalcourseid;
+            if (!isset($grouped[$key])) {
+                $grouped[$key] = [
+                    'name' => $row->externalcoursename,
+                    'moodlecourseids' => [],
+                ];
+            }
+            $grouped[$key]['moodlecourseids'][] = (int)$row->moodlecourseid;
+        }
+        $progressdata['sidebarcourses'] = [];
+        foreach ($grouped as $item) {
+            $enrolled = false;
+            foreach ($item['moodlecourseids'] as $mcid) {
+                $ctx = context_course::instance($mcid);
+                if (is_enrolled($ctx, $userid)) {
+                    $enrolled = true;
+                    break;
+                }
+            }
+            $progressdata['sidebarcourses'][] = [
+                'name' => $item['name'],
+                'enrolled' => $enrolled,
+            ];
+        }
     }
 }
 

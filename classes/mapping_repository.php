@@ -50,6 +50,23 @@ class mapping_repository {
     }
 
     /**
+     * Get curriculum mappings with external course name and sortorder.
+     *
+     * @param int $curriculumid Curriculum id.
+     * @return array List of objects with externalcoursename, moodlecourseid, sortorder.
+     */
+    public function get_by_curriculum_with_details(int $curriculumid): array {
+        global $DB;
+
+        $sql = "SELECT c.id AS externalcourseid, c.name AS externalcoursename, c.sortorder, m.moodlecourseid
+                  FROM {block_programcurriculum_mapping} m
+                  JOIN {block_programcurriculum_course} c ON c.id = m.courseid
+                 WHERE c.curriculumid = :curriculumid
+              ORDER BY c.sortorder ASC, c.name ASC";
+        return array_values($DB->get_records_sql($sql, ['curriculumid' => $curriculumid]));
+    }
+
+    /**
      * Get mappings for a Moodle course, with external course, program and Moodle course names.
      *
      * @param int $moodlecourseid Moodle course id.

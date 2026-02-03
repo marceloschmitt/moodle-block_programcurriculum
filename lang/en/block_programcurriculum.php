@@ -101,3 +101,5 @@ $string['courseidrequired'] = 'Course ID is required to view progress.';
 $string['mappedcourse'] = 'Mapped course';
 $string['externalcourse'] = 'External course';
 $string['program'] = 'Program';
+$string['enrolled'] = 'Enrolled';
+$string['notenrolled'] = 'Not enrolled';

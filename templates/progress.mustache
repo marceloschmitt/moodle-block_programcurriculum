@@ -4,20 +4,33 @@
     {{/hassubtitle}}
     {{#hascurricula}}
         {{^showstudentlist}}
-        <form method="get">
-            <input type="hidden" name="courseid" value="{{courseid}}">
-            <input type="hidden" name="userid" value="{{userid}}">
-            <div class="mb-2">
-                <a class="btn btn-secondary mb-2" href="{{{courseviewurl}}}">{{#str}}backtostudents, block_programcurriculum{{/str}}</a>
-            </div>
-            <label for="curriculumid">{{#str}}choosecurriculum, block_programcurriculum{{/str}}</label>
-            <select name="curriculumid" id="curriculumid" onchange="this.form.submit()">
-                {{#curricula}}
-                    <option value="{{id}}" {{#selected}}selected{{/selected}}>{{name}}</option>
-                {{/curricula}}
-            </select>
-        </form>
+        <div class="mb-2">
+            <a class="btn btn-secondary mb-2" href="{{{courseviewurl}}}">{{#str}}backtostudents, block_programcurriculum{{/str}}</a>
+        </div>
         {{/showstudentlist}}
+
+        {{#showprogressview}}
+        <div class="row">
+            <div class="col-md-4 col-lg-3">
+                <div class="card mb-3">
+                    <div class="card-header">{{#str}}listofcourses, block_programcurriculum{{/str}}</div>
+                    <div class="card-body p-2">
+                        <p class="small text-muted mb-2">
+                            <span class="d-inline-block me-2 p-1 rounded bg-success bg-opacity-25">{{#str}}enrolled, block_programcurriculum{{/str}}</span>
+                            <span class="d-inline-block p-1 rounded bg-secondary bg-opacity-10">{{#str}}notenrolled, block_programcurriculum{{/str}}</span>
+                        </p>
+                        <ul class="list-unstyled mb-0">
+                        {{#sidebarcourses}}
+                            <li class="py-2 px-2 border-bottom programcurriculum-sidebar-course {{#enrolled}}bg-success bg-opacity-25{{/enrolled}}{{^enrolled}}bg-secondary bg-opacity-10{{/enrolled}}">
+                                {{name}}
+                            </li>
+                        {{/sidebarcourses}}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 col-lg-9">
+        {{/showprogressview}}
 
         {{#showstudentlist}}
             <h5 class="mt-3">{{#str}}listofstudents, block_programcurriculum{{/str}}</h5>
@@ -61,6 +74,11 @@
                 </tbody>
             </table>
         {{/progress}}
+
+        {{#showprogressview}}
+            </div>
+        </div>
+        {{/showprogressview}}
     {{/hascurricula}}
 
     {{^hascurricula}}
