@@ -37,8 +37,7 @@ class progress_calculator {
         $details = [];
         $completedcount = 0;
         foreach ($mappings as $mapping) {
-            $completion = $this->get_course_completion_state($userid, (int)$mapping->moodlecourseid);
-            $iscompleted = ($completion === COMPLETION_COMPLETE);
+            $iscompleted = $this->get_course_completion_state($userid, (int)$mapping->moodlecourseid);
             if ($iscompleted) {
                 $completedcount++;
             }
@@ -62,13 +61,13 @@ class progress_calculator {
         ];
     }
 
-    private function get_course_completion_state(int $userid, int $courseid): int {
+    private function get_course_completion_state(int $userid, int $courseid): bool {
         $course = get_course($courseid);
         $completion = new \completion_info($course);
         if (!$completion->is_enabled()) {
-            return COMPLETION_INCOMPLETE;
+            return false;
         }
 
-        return $completion->get_course_completion_state($userid);
+        return $completion->is_course_complete($userid);
     }
 }
