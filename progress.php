@@ -25,7 +25,7 @@ $userid = required_param('userid', PARAM_INT);
 $course = get_course($courseid);
 
 $context = context_course::instance($courseid);
-require_capability('block/programcurriculum:viewprogress', $context);
+require_capability('block/programcurriculum:viewownprogress', $context);
 
 $canviewall = has_capability('block/programcurriculum:viewallprogress', $context);
 if ($userid != $USER->id && !$canviewall) {
