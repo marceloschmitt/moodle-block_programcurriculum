@@ -53,7 +53,7 @@ $capabilities = [
     ],
     'block/programcurriculum:viewprogress' => [
         'captype' => 'read',
-        'contextlevel' => CONTEXT_BLOCK,
+        'contextlevel' => CONTEXT_COURSE,
         'archetypes' => [
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
@@ -62,7 +62,7 @@ $capabilities = [
     ],
     'block/programcurriculum:viewallprogress' => [
         'captype' => 'read',
-        'contextlevel' => CONTEXT_BLOCK,
+        'contextlevel' => CONTEXT_COURSE,
         'archetypes' => [
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,

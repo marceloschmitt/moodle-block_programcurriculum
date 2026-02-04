@@ -41,6 +41,10 @@ class block_programcurriculum extends block_base {
         $this->content->footer = '';
 
         $courseid = (int)($this->page->course->id ?? 0);
+
+var_dump($courseid);exit;
+
+
         $systemcontext = context_system::instance();
 
         $items = [];
