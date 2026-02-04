@@ -51,18 +51,19 @@ $capabilities = [
             'teacher' => CAP_PREVENT,
         ],
     ],
-    'block/programcurriculum:viewallprogress' => [
+    'block/programcurriculum:viewprogress' => [
         'captype' => 'read',
-        'contextlevel' => CONTEXT_BLOCK,
+        'contextlevel' => CONTEXT_COURSE,
         'archetypes' => [
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
+            'student' => CAP_ALLOW,
             'manager' => CAP_ALLOW,
         ],
     ],
-    'block/programcurriculum:viewprogress' => [
+    'block/programcurriculum:viewallprogress' => [
         'captype' => 'read',
-        'contextlevel' => CONTEXT_BLOCK,
+        'contextlevel' => CONTEXT_COURSE,
         'archetypes' => [
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
