@@ -129,7 +129,7 @@ $PAGE->set_url('/blocks/programcurriculum/progress.php', [
 $PAGE->set_title(get_string('viewtitle', 'block_programcurriculum'));
 $PAGE->set_heading(get_string('pageheading', 'block_programcurriculum'));
 $PAGE->navbar->add($course->fullname, new moodle_url('/course/view.php', ['id' => $courseid]));
-$PAGE->navbar->add(get_string('listofstudents', 'block_programcurriculum'), new moodle_url('/blocks/programcurriculum/view.php', ['courseid' => $courseid]));
+$PAGE->navbar->add(get_string('viewtitle', 'block_programcurriculum'), new moodle_url('/blocks/programcurriculum/view.php', ['courseid' => $courseid]));
 $PAGE->navbar->add(get_string('studentprogress', 'block_programcurriculum') . ' - ' . $studentname);
 
 echo $OUTPUT->header();
