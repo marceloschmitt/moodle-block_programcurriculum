@@ -15,30 +15,19 @@
     </div>
     {{/progress}}
 
-    <table class="generaltable">
-        <thead>
-            <tr>
-                <th>{{#str}}externalcourse, block_programcurriculum{{/str}}</th>
-                <th>{{#str}}completionstatus, block_programcurriculum{{/str}}</th>
-            </tr>
-        </thead>
-        <tbody>
-        {{#courserows}}
-            <tr class="{{#hasmoodle}}programcurriculum-row-enrolled{{/hasmoodle}}">
-                <td>
-                    {{#hasmoodle}}
-                    <strong>{{externalcoursename}}</strong>
-                    <button type="button" class="btn btn-sm btn-primary ms-1 programcurriculum-moodle-btn" data-external-name="{{externalcoursename}}" data-moodlecourses="{{moodlecoursesjson}}" aria-label="{{#str}}moodlecoursesforexternal, block_programcurriculum, {{externalcoursename}}{{/str}}">{{moodlecount}}</button>
-                    {{/hasmoodle}}
-                    {{^hasmoodle}}
-                    <strong>{{externalcoursename}}</strong>
-                    {{/hasmoodle}}
-                </td>
-                <td>{{#hasmoodle}}{{completedcount}}/{{moodlecount}}{{/hasmoodle}}{{^hasmoodle}}-{{/hasmoodle}}</td>
-            </tr>
-        {{/courserows}}
-        </tbody>
-    </table>
+    <ul class="list-unstyled mt-2">
+    {{#courserows}}
+        <li class="py-1 border-bottom {{#hasmoodle}}programcurriculum-row-enrolled{{/hasmoodle}} d-flex align-items-center flex-wrap gap-1">
+            <span class="flex-grow-1">
+                <strong>{{externalcoursename}}</strong>
+                {{#hasmoodle}}
+                <button type="button" class="btn btn-sm btn-primary ms-1 programcurriculum-moodle-btn" data-external-name="{{externalcoursename}}" data-moodlecourses="{{moodlecoursesjson}}" aria-label="{{#str}}moodlecoursesforexternal, block_programcurriculum, {{externalcoursename}}{{/str}}">{{moodlecount}}</button>
+                {{/hasmoodle}}
+            </span>
+            <span class="text-muted">{{#hasmoodle}}{{completedcount}}/{{moodlecount}}{{/hasmoodle}}{{^hasmoodle}}—{{/hasmoodle}}</span>
+        </li>
+    {{/courserows}}
+    </ul>
 
     <button class="d-none" type="button" id="programcurriculum-moodle-modal-trigger" data-bs-toggle="modal" data-bs-target="#programcurriculum-moodle-modal"></button>
     <div class="modal fade" id="programcurriculum-moodle-modal" tabindex="-1" aria-labelledby="programcurriculum-moodle-modal-title" aria-hidden="true">

@@ -1,3 +1,5 @@
-.programcurriculum-row-enrolled {
+.programcurriculum-progress .programcurriculum-row-enrolled {
     background-color: #fff9e6 !important;
+    padding-left: 0.5rem !important;
+    border-radius: 0.25rem;
 }
