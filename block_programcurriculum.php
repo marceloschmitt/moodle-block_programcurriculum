@@ -40,26 +40,11 @@ class block_programcurriculum extends block_base {
         $this->content->text = '';
         $this->content->footer = '';
 
-        global $USER;
         $courseid = (int)($this->page->course->id ?? 0);
         $systemcontext = context_system::instance();
 
-        $hasviewprogress = $courseid > 0 && has_capability('block/programcurriculum:viewprogress', $this->context);
-        $parentctx = $this->context->get_parent_context();
-        debugging(
-            'block_programcurriculum: userid=' . $USER->id .
-            ', courseid=' . $courseid .
-            ', block_ctx_id=' . $this->context->id .
-            ', block_ctx_level=' . $this->context->contextlevel .
-            ', parent_ctx_id=' . ($parentctx ? $parentctx->id : 'null') .
-            ', parent_ctx_level=' . ($parentctx ? $parentctx->contextlevel : 'null') .
-            ', has_viewprogress=' . ($hasviewprogress ? '1' : '0') .
-            ', page_context_level=' . (isset($this->page->context) ? $this->page->context->contextlevel : 'null'),
-            DEBUG_DEVELOPER
-        );
-
         $items = [];
-        if ($hasviewprogress) {
+        if ($courseid > 0 && has_capability('block/programcurriculum:viewprogress', $this->context)) {
             $items[] = [
                 'text' => get_string('viewprogress', 'block_programcurriculum'),
                 'url' => new moodle_url('/blocks/programcurriculum/view.php', ['courseid' => $courseid]),
