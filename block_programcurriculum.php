@@ -44,8 +44,6 @@ class block_programcurriculum extends block_base {
         $systemcontext = context_system::instance();
 
         $items = [];
-        var_dump(context_course::instance($courseid));
-        exit;
         if ($courseid > 0 && has_capability('block/programcurriculum:viewprogress', context_course::instance($courseid))) {
             $items[] = [
                 'text' => get_string('viewprogress', 'block_programcurriculum'),
