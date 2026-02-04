@@ -5,8 +5,12 @@
 }
 
 .programcurriculum-progress .programcurriculum-moodle-btn {
-    padding: 0.15rem 0.4rem;
-    font-size: 0.75rem;
+    padding-top: 0.05rem;
+    padding-bottom: 0.05rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-size: 0.8rem;
     line-height: 1.2;
+    min-height: 0;
     vertical-align: middle;
 }
