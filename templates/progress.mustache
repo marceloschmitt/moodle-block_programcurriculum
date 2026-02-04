@@ -37,7 +37,7 @@
             <span class="flex-grow-1">
                 <strong>{{externalcoursename}}</strong>
                 {{#hasmoodle}}
-                <button type="button" class="btn btn-sm btn-primary ms-1 programcurriculum-moodle-btn" data-external-name="{{externalcoursename}}" data-moodlecourses="{{moodlecoursesjson}}" aria-label="{{#str}}moodlecoursesforexternal, block_programcurriculum, {{externalcoursename}}{{/str}}">{{moodlecount}}</button>
+                <button type="button" class="btn btn-primary programcurriculum-moodle-btn ms-1" data-external-name="{{externalcoursename}}" data-moodlecourses="{{moodlecoursesjson}}" aria-label="{{#str}}moodlecoursesforexternal, block_programcurriculum, {{externalcoursename}}{{/str}}">{{moodlecount}}</button>
                 {{/hasmoodle}}
             </span>
             <span class="text-muted">{{#hasmoodle}}{{completedcount}}/{{moodlecount}}{{/hasmoodle}}{{^hasmoodle}}—{{/hasmoodle}}</span>
