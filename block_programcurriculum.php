@@ -40,26 +40,39 @@ class block_programcurriculum extends block_base {
         $this->content->text = '';
         $this->content->footer = '';
 
-        $context = $this->context;
         $courseid = (int)($this->page->course->id ?? 0);
+        $coursecontext = $courseid > 0 ? context_course::instance($courseid) : null;
+        $systemcontext = context_system::instance();
 
-        $links = [];
-        if ($courseid > 0 && has_capability('block/programcurriculum:viewprogress', $context)) {
-            $url = new moodle_url('/blocks/programcurriculum/view.php', ['courseid' => $courseid]);
-            $links[] = html_writer::link($url, get_string('viewprogress', 'block_programcurriculum'));
+        $items = [];
+        if ($coursecontext && has_capability('block/programcurriculum:viewprogress', $coursecontext)) {
+            $items[] = [
+                'text' => get_string('viewprogress', 'block_programcurriculum'),
+                'url' => new moodle_url('/blocks/programcurriculum/view.php', ['courseid' => $courseid]),
+            ];
         }
 
-        if (has_capability('block/programcurriculum:manage', context_system::instance())) {
-            $url = new moodle_url('/blocks/programcurriculum/manage.php');
-            $links[] = html_writer::link($url, get_string('managecurricula', 'block_programcurriculum'));
+        if (has_capability('block/programcurriculum:manage', $systemcontext)) {
+            $items[] = [
+                'text' => get_string('managecurricula', 'block_programcurriculum'),
+                'url' => new moodle_url('/blocks/programcurriculum/manage.php'),
+            ];
         }
 
-        if (has_capability('block/programcurriculum:import', context_system::instance())) {
-            $url = new moodle_url('/blocks/programcurriculum/import.php');
-            $links[] = html_writer::link($url, get_string('importcsv', 'block_programcurriculum'));
+        if (has_capability('block/programcurriculum:import', $systemcontext)) {
+            $items[] = [
+                'text' => get_string('importcsv', 'block_programcurriculum'),
+                'url' => new moodle_url('/blocks/programcurriculum/import.php'),
+            ];
         }
 
-        if (!empty($links)) {
+        if (!empty($items)) {
+            usort($items, function ($a, $b) {
+                return strcoll($a['text'], $b['text']);
+            });
+            $links = array_map(function ($item) {
+                return html_writer::link($item['url'], $item['text']);
+            }, $items);
             $this->content->text = html_writer::alist($links, ['class' => 'programcurriculum-links']);
         } else {
             $this->content->text = get_string('nocapability', 'block_programcurriculum');
