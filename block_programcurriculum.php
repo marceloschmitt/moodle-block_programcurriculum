@@ -42,10 +42,10 @@ class block_programcurriculum extends block_base {
 
         $courseid = (int)($this->page->course->id ?? 0);
 
-var_dump($courseid);exit;
-
-
         $systemcontext = context_system::instance();
+        $blockcontext = context_block::instance($this->instance->id);
+
+        var_dump($blockcontext);exit;
 
         $items = [];
         if ($courseid > 0 && has_capability('block/programcurriculum:viewprogress', context_course::instance($courseid))) {
