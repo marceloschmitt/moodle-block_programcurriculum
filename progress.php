@@ -50,9 +50,9 @@ $data = [
     'courseid' => $courseid,
     'userid' => $userid,
     'curriculumid' => $curriculumid,
-    'moodlecoursename' => $course->fullname,
+    'programname' => $firstmapping ? $firstmapping->programname : '',
     'studentname' => $studentname,
-    'hassubtitle' => !empty($course->fullname) && !empty($studentname),
+    'hasprogramname' => $firstmapping && !empty($firstmapping->programname),
     'courseviewurl' => (new moodle_url('/blocks/programcurriculum/view.php', [
         'courseid' => $courseid,
     ]))->out(false),

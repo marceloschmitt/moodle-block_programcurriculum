@@ -1,8 +1,8 @@
 <div class="programcurriculum-progress" data-completed-str="{{#str}}completed, block_programcurriculum{{/str}}" data-notcompleted-str="{{#str}}notcompleted, block_programcurriculum{{/str}}">
-    <h2 class="mb-2">{{#str}}studentprogress, block_programcurriculum{{/str}}</h2>
-    {{#hassubtitle}}
-        <h3 class="mb-3">{{moodlecoursename}} - {{studentname}}</h3>
-    {{/hassubtitle}}
+    <h2 class="mb-2">{{#str}}studentprogress, block_programcurriculum{{/str}} - {{studentname}}</h2>
+    {{#hasprogramname}}
+        <h3 class="mb-3">{{programname}}</h3>
+    {{/hasprogramname}}
 
     <div class="mb-2">
         <a class="btn btn-secondary mb-2" href="{{{courseviewurl}}}">{{#str}}backtostudents, block_programcurriculum{{/str}}</a>
