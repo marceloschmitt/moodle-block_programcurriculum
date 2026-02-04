@@ -9,8 +9,8 @@
 
     {{#progress}}
     <div class="mt-3 mb-3">
-        <strong>{{#str}}progresspercent, block_programcurriculum{{/str}}:</strong> {{percent}}%
-        ({{completed}}/{{total}})
+        <div><strong>{{#str}}progresspercent, block_programcurriculum{{/str}}</strong> {{#str}}progressbycompletion, block_programcurriculum{{/str}}: {{percent}}% ({{completed}}/{{total}})</div>
+        <div class="mt-1"><strong>{{#str}}progresspercent, block_programcurriculum{{/str}}</strong> {{#str}}progressbyenrollment, block_programcurriculum{{/str}}: {{enrollmentpercent}}% ({{enrolleddisciplines}}/{{totaldisciplines}})</div>
     </div>
     {{/progress}}
 
@@ -27,11 +27,10 @@
                 <td>
                     {{#hasmoodle}}
                     <strong>{{externalcoursename}}</strong>
-                    <button type="button" class="btn btn-sm btn-outline-secondary ms-1 programcurriculum-moodle-btn" data-external-name="{{externalcoursename}}" data-moodlecourses="{{moodlecoursesjson}}" aria-label="{{#str}}moodlecoursesforexternal, block_programcurriculum, {{externalcoursename}}{{/str}}">{{moodlecount}}</button>
+                    <button type="button" class="btn btn-sm btn-primary ms-1 programcurriculum-moodle-btn" data-external-name="{{externalcoursename}}" data-moodlecourses="{{moodlecoursesjson}}" aria-label="{{#str}}moodlecoursesforexternal, block_programcurriculum, {{externalcoursename}}{{/str}}">{{moodlecount}}</button>
                     {{/hasmoodle}}
                     {{^hasmoodle}}
                     <strong>{{externalcoursename}}</strong>
-                    <span class="text-muted ms-1">(0)</span>
                     {{/hasmoodle}}
                 </td>
                 <td>{{#hasmoodle}}{{completedcount}}/{{moodlecount}}{{/hasmoodle}}{{^hasmoodle}}-{{/hasmoodle}}</td>
