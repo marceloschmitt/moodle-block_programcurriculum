@@ -47,9 +47,9 @@ $data = [
     'hascurricula' => $curriculumid > 0,
     'courseid' => $courseid,
     'curriculumid' => $curriculumid,
-    'moodlecoursename' => $course->fullname,
+    'programname' => $firstmapping ? $firstmapping->programname : '',
     'externalcoursename' => $firstmapping ? $firstmapping->externalcoursename : '',
-    'hassubtitle' => $firstmapping && !empty($course->fullname) && !empty($firstmapping->externalcoursename),
+    'hassubtitle' => $firstmapping && !empty($firstmapping->programname) && !empty($firstmapping->externalcoursename),
     'students' => [],
     'hasstudents' => false,
 ];
