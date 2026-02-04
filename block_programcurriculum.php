@@ -41,8 +41,11 @@ class block_programcurriculum extends block_base {
         $this->content->footer = '';
 
         $courseid = (int)($this->page->course->id ?? 0);
-        $coursecontext = $courseid > 0 ? context_course::instance($courseid) : null;
         $systemcontext = context_system::instance();
+        $pagecontext = $this->page->context ?? null;
+        $coursecontext = ($courseid > 0 && $pagecontext && $pagecontext->contextlevel == CONTEXT_COURSE)
+            ? $pagecontext
+            : (($courseid > 0) ? context_course::instance($courseid) : null);
 
         $items = [];
         if ($coursecontext && has_capability('block/programcurriculum:viewprogress', $coursecontext)) {
