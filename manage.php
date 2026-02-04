@@ -26,7 +26,7 @@ $id = optional_param('id', 0, PARAM_INT);
 $PAGE->set_context($context);
 $PAGE->set_url('/blocks/programcurriculum/manage.php', $id ? ['id' => $id] : []);
 $PAGE->set_title(get_string('managecurricula', 'block_programcurriculum'));
-$PAGE->set_heading(get_string('pluginname', 'block_programcurriculum'));
+$PAGE->set_heading(get_string('pageheading', 'block_programcurriculum'));
 $PAGE->requires->js_call_amd('block_programcurriculum/manage_actions', 'init');
 
 $curriculumrepo = new \block_programcurriculum\curriculum_repository();

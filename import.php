@@ -24,7 +24,7 @@ require_capability('block/programcurriculum:import', $context);
 $PAGE->set_context($context);
 $PAGE->set_url('/blocks/programcurriculum/import.php');
 $PAGE->set_title(get_string('importtitle', 'block_programcurriculum'));
-$PAGE->set_heading(get_string('pluginname', 'block_programcurriculum'));
+$PAGE->set_heading(get_string('pageheading', 'block_programcurriculum'));
 
 $mform = new \block_programcurriculum\form\import_form();
 $errors = [];

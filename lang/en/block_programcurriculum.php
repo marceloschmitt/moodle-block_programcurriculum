@@ -17,6 +17,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Program curriculum';
+$string['pageheading'] = 'Program Curriculum';
+$string['studentprogress'] = 'Student progress';
 $string['blockconfiginfo'] = 'This block provides curriculum mapping and progress views.';
 $string['programcurriculum:addinstance'] = 'Add a program curriculum block';
 $string['programcurriculum:myaddinstance'] = 'Add a program curriculum block to Dashboard';

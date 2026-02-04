@@ -47,9 +47,9 @@ $data = [
     'hascurricula' => $curriculumid > 0,
     'courseid' => $courseid,
     'curriculumid' => $curriculumid,
-    'programname' => $firstmapping ? $firstmapping->programname : '',
+    'moodlecoursename' => $course->fullname,
     'externalcoursename' => $firstmapping ? $firstmapping->externalcoursename : '',
-    'hassubtitle' => $firstmapping && !empty($firstmapping->programname) && !empty($firstmapping->externalcoursename),
+    'hassubtitle' => $firstmapping && !empty($course->fullname) && !empty($firstmapping->externalcoursename),
     'students' => [],
     'hasstudents' => false,
 ];
@@ -79,7 +79,7 @@ $PAGE->set_pagelayout('incourse');
 $PAGE->set_secondary_navigation(false);
 $PAGE->set_url('/blocks/programcurriculum/view.php', ['courseid' => $courseid]);
 $PAGE->set_title(get_string('viewtitle', 'block_programcurriculum'));
-$PAGE->set_heading(get_string('progressview', 'block_programcurriculum'));
+$PAGE->set_heading(get_string('pageheading', 'block_programcurriculum'));
 $PAGE->navbar->add($course->fullname, new moodle_url('/course/view.php', ['id' => $courseid]));
 $PAGE->navbar->add(get_string('viewtitle', 'block_programcurriculum'));
 

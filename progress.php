@@ -43,13 +43,16 @@ $mappingrepo = new \block_programcurriculum\mapping_repository();
 $coursemappings = $mappingrepo->get_by_moodle_course($courseid);
 $firstmapping = !empty($coursemappings) ? reset($coursemappings) : null;
 
+$user = $DB->get_record('user', ['id' => $userid], 'id, firstname, lastname, firstnamephonetic, lastnamephonetic, middlename, alternatename');
+$studentname = $user ? fullname($user) : get_string('student', 'block_programcurriculum');
+
 $data = [
     'courseid' => $courseid,
     'userid' => $userid,
     'curriculumid' => $curriculumid,
-    'programname' => $firstmapping ? $firstmapping->programname : '',
-    'externalcoursename' => $firstmapping ? $firstmapping->externalcoursename : '',
-    'hassubtitle' => $firstmapping && !empty($firstmapping->programname) && !empty($firstmapping->externalcoursename),
+    'moodlecoursename' => $course->fullname,
+    'studentname' => $studentname,
+    'hassubtitle' => !empty($course->fullname) && !empty($studentname),
     'courseviewurl' => (new moodle_url('/blocks/programcurriculum/view.php', [
         'courseid' => $courseid,
     ]))->out(false),
@@ -123,11 +126,8 @@ $PAGE->set_url('/blocks/programcurriculum/progress.php', [
     'userid' => $userid,
     'curriculumid' => $curriculumid,
 ]);
-$user = $DB->get_record('user', ['id' => $userid], 'id, firstname, lastname, firstnamephonetic, lastnamephonetic, middlename, alternatename');
-$studentname = $user ? fullname($user) : get_string('student', 'block_programcurriculum');
-
 $PAGE->set_title(get_string('viewtitle', 'block_programcurriculum'));
-$PAGE->set_heading($studentname);
+$PAGE->set_heading(get_string('pageheading', 'block_programcurriculum'));
 $PAGE->navbar->add($course->fullname, new moodle_url('/course/view.php', ['id' => $courseid]));
 $PAGE->navbar->add(get_string('viewtitle', 'block_programcurriculum'));
 

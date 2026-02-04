@@ -1,9 +1,9 @@
 <div class="programcurriculum-students">
+    <h2 class="mb-2">{{#str}}listofstudents, block_programcurriculum{{/str}}</h2>
     {{#hassubtitle}}
-        <h3 class="mb-3">{{programname}} - {{externalcoursename}}</h3>
+        <h3 class="mb-3">{{moodlecoursename}} - {{externalcoursename}}</h3>
     {{/hassubtitle}}
     {{#hascurricula}}
-        <h5 class="mt-3">{{#str}}listofstudents, block_programcurriculum{{/str}}</h5>
         {{#hasstudents}}
         <ul class="list-unstyled mt-2">
         {{#students}}

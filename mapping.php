@@ -136,7 +136,7 @@ foreach ($mappingrepo->get_by_course($courseid) as $item) {
     ];
 }
 
-$PAGE->set_heading(get_string('pluginname', 'block_programcurriculum'));
+$PAGE->set_heading(get_string('pageheading', 'block_programcurriculum'));
 $PAGE->requires->js_call_amd('block_programcurriculum/mapping_actions', 'init');
 
 echo $OUTPUT->header();
