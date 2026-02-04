@@ -23,7 +23,7 @@ $courseid = required_param('courseid', PARAM_INT);
 $course = get_course($courseid);
 
 $context = context_course::instance($courseid);
-require_capability('block/programcurriculum:viewallprogress', $context);
+require_capability('block/programcurriculum:viewprogress', $context);
 
 $canviewall = has_capability('block/programcurriculum:viewallprogress', $context);
 
