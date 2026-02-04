@@ -6,20 +6,18 @@ define([], function() {
         var modalTitle = document.getElementById('programcurriculum-moodle-modal-title');
         var modalBody = document.getElementById('programcurriculum-moodle-modal-body');
         var modalTrigger = document.getElementById('programcurriculum-moodle-modal-trigger');
-        var buttons = document.querySelectorAll('.programcurriculum-moodle-btn');
+        var clickableRows = document.querySelectorAll('.programcurriculum-row-clickable');
 
-        if (!modalTitle || !modalBody || !modalTrigger || !buttons.length) {
+        if (!modalTitle || !modalBody || !modalTrigger) {
             return;
         }
 
         var completedStr = (container && container.getAttribute('data-completed-str')) || 'Completed';
         var notcompletedStr = (container && container.getAttribute('data-notcompleted-str')) || 'Not completed';
 
-        buttons.forEach(function(btn) {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                var externalName = btn.getAttribute('data-external-name') || '';
-                var moodlecoursesEncoded = btn.getAttribute('data-moodlecourses') || '';
+        function openModal(row) {
+                var externalName = row.getAttribute('data-external-name') || '';
+                var moodlecoursesEncoded = row.getAttribute('data-moodlecourses') || '';
                 var moodlecourses = [];
                 try {
                     var moodlecoursesJson = moodlecoursesEncoded ? atob(moodlecoursesEncoded) : '[]';
@@ -33,9 +31,9 @@ define([], function() {
                 var bodyHtml = '<ul class="list-unstyled mb-0">';
                 moodlecourses.forEach(function(mc) {
                     var nameEscaped = (mc.name || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                    var url = mc.url || '#';
+                    var courseUrl = mc.url || '#';
                     bodyHtml += '<li class="py-2 border-bottom d-flex justify-content-between align-items-center">';
-                    bodyHtml += '<a href="' + (url.replace(/"/g, '&quot;')) + '">' + nameEscaped + '</a>';
+                    bodyHtml += '<a href="' + (courseUrl.replace(/"/g, '&quot;')) + '">' + nameEscaped + '</a>';
                     bodyHtml += '<span class="badge ' + (mc.completed ? 'bg-success' : 'bg-secondary') + '">';
                     bodyHtml += mc.completed ? completedStr : notcompletedStr;
                     bodyHtml += '</span></li>';
@@ -44,6 +42,15 @@ define([], function() {
                 modalBody.innerHTML = bodyHtml;
 
                 modalTrigger.click();
+        }
+
+        clickableRows.forEach(function(row) {
+            row.addEventListener('click', function() { openModal(row); });
+            row.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openModal(row);
+                }
             });
         });
     };

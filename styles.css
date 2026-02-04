@@ -4,13 +4,6 @@
     border-radius: 0.25rem;
 }
 
-.programcurriculum-progress .programcurriculum-moodle-btn {
-    padding-top: 0.05rem;
-    padding-bottom: 0.05rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    font-size: 0.8rem;
-    line-height: 1.2;
-    min-height: 0;
-    vertical-align: middle;
+.programcurriculum-progress .programcurriculum-row-clickable {
+    cursor: pointer;
 }

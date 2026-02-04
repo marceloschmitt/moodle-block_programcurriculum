@@ -33,13 +33,8 @@
 
     <ul class="list-unstyled mt-2">
     {{#courserows}}
-        <li class="py-1 border-bottom {{#hasmoodle}}programcurriculum-row-enrolled{{/hasmoodle}} d-flex align-items-center flex-wrap gap-1">
-            <span class="flex-grow-1">
-                <strong>{{externalcoursename}}</strong>
-                {{#hasmoodle}}
-                <button type="button" class="btn btn-primary programcurriculum-moodle-btn ms-1" data-external-name="{{externalcoursename}}" data-moodlecourses="{{moodlecoursesjson}}" aria-label="{{#str}}moodlecoursesforexternal, block_programcurriculum, {{externalcoursename}}{{/str}}">{{moodlecount}}</button>
-                {{/hasmoodle}}
-            </span>
+        <li class="py-1 border-bottom d-flex align-items-center flex-wrap gap-1 {{#hasmoodle}}programcurriculum-row-enrolled programcurriculum-row-clickable{{/hasmoodle}}" {{#hasmoodle}}data-external-name="{{externalcoursename}}" data-moodlecourses="{{moodlecoursesjson}}" role="button" tabindex="0" aria-label="{{#str}}moodlecoursesforexternal, block_programcurriculum, {{externalcoursename}}{{/str}}"{{/hasmoodle}}>
+            <span class="flex-grow-1"><strong>{{externalcoursename}}</strong>{{#hasmoodle}} <span class="text-muted">({{moodlecount}})</span>{{/hasmoodle}}</span>
             <span class="text-muted">{{#hasmoodle}}{{completedcount}}/{{moodlecount}}{{/hasmoodle}}{{^hasmoodle}}—{{/hasmoodle}}</span>
         </li>
     {{/courserows}}
