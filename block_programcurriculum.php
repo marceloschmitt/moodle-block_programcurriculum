@@ -48,8 +48,7 @@ class block_programcurriculum extends block_base {
         $items = [];
         if ($courseid > 0 && has_capability(
             'block/programcurriculum:viewprogress',
-            $blockcontext
-        )) {
+            $this->context)) {
             $items[] = [
                 'text' => get_string('viewprogress', 'block_programcurriculum'),
                 'url' => new moodle_url('/blocks/programcurriculum/view.php', ['courseid' => $courseid]),
