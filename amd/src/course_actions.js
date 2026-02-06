@@ -1,5 +1,4 @@
-define(['core/ajax', 'core/notification', 'core/modal_delete_cancel', 'core/modal_events', 'core/str'], function(
-    Ajax,
+define(['core/notification', 'core/modal_delete_cancel', 'core/modal_events', 'core/str'], function(
     Notification,
     ModalDeleteCancel,
     ModalEvents,
@@ -60,6 +59,7 @@ define(['core/ajax', 'core/notification', 'core/modal_delete_cancel', 'core/moda
         if (container && !container.dataset.dragBound) {
             container.dataset.dragBound = '1';
             var curriculumId = parseInt(container.getAttribute('data-curriculum-id') || '0', 10);
+            var sesskey = container.getAttribute('data-sesskey') || '';
             var draggedItem = null;
             var dragOverItem = null;
 
@@ -103,6 +103,9 @@ define(['core/ajax', 'core/notification', 'core/modal_delete_cancel', 'core/moda
                 e.dataTransfer.dropEffect = 'move';
                 var item = e.target.closest('.programcurriculum-course-item');
                 if (item && item !== draggedItem) {
+                    if (dragOverItem && dragOverItem !== item) {
+                        dragOverItem.classList.remove('programcurriculum-drag-over');
+                    }
                     dragOverItem = item;
                     item.classList.add('programcurriculum-drag-over');
                 }
@@ -117,31 +120,29 @@ define(['core/ajax', 'core/notification', 'core/modal_delete_cancel', 'core/moda
 
             container.addEventListener('drop', function(e) {
                 e.preventDefault();
-                var item = e.target.closest('.programcurriculum-course-item');
-                if (item) {
-                    item.classList.remove('programcurriculum-drag-over');
+                e.stopPropagation();
+                var item = (e.target && e.target.closest) ? e.target.closest('.programcurriculum-course-item') : null;
+                if (!item && dragOverItem) {
+                    item = dragOverItem;
                 }
+                container.querySelectorAll('.programcurriculum-drag-over').forEach(function(el) {
+                    el.classList.remove('programcurriculum-drag-over');
+                });
                 if (!draggedItem || !item || item === draggedItem || !curriculumId) {
                     return;
                 }
                 var courseId = parseInt(draggedItem.getAttribute('data-course-id') || '0', 10);
                 var newPosition = getNewPosition(item);
 
-                var request = {
-                    methodname: 'block_programcurriculum_reorder_courses',
-                    args: {
-                        curriculumid: curriculumId,
-                        courseid: courseId,
-                        newposition: newPosition
-                    }
-                };
-                Ajax.call([request])[0]
-                    .done(function(response) {
-                        if (response && response.success) {
-                            window.location.reload();
-                        }
-                    })
-                    .fail(Notification.exception);
+                var url = new URL(window.location.href);
+                url.searchParams.set('curriculumid', curriculumId);
+                url.searchParams.set('id', courseId);
+                url.searchParams.set('action', 'move');
+                url.searchParams.set('position', newPosition);
+                if (sesskey) {
+                    url.searchParams.set('sesskey', sesskey);
+                }
+                window.location.href = url.toString();
             });
         }
 

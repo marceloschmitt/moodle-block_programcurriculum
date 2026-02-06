@@ -208,6 +208,7 @@ foreach ($termsmap as $termnum => $courses) {
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('block_programcurriculum/course', [
     'curriculumid' => $curriculumid,
+    'sesskey' => sesskey(),
     'curriculumname' => $curriculum->name,
     'backurl' => (new moodle_url('/blocks/programcurriculum/manage.php'))->out(false),
     'automaticurl' => (new moodle_url('/blocks/programcurriculum/course.php', [
