@@ -68,6 +68,7 @@ class importer {
                 'curriculumid' => $curriculumid,
                 'name' => $data['course_name'],
                 'externalcode' => $data['course_code'],
+                'equivalencecode' => $data['equivalence_code'] ?? '',
                 'term' => $term,
                 'sortorder' => (int)$data['sortorder'],
             ];
@@ -120,6 +121,7 @@ class importer {
             'curriculum_description' => trim((string)($row[6] ?? '')),
             'numterms' => trim((string)($row[7] ?? '')),
             'term' => trim((string)($row[8] ?? '')),
+            'equivalence_code' => trim((string)($row[9] ?? '')),
         ];
     }
 

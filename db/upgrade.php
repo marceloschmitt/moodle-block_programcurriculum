@@ -130,5 +130,15 @@ function xmldb_block_programcurriculum_upgrade(int $oldversion): bool {
         upgrade_block_savepoint(true, 2026020462, 'programcurriculum');
     }
 
+    if ($oldversion < 2026020470) {
+        $table = new xmldb_table('block_programcurriculum_course');
+        $field = new xmldb_field('equivalencecode', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+        if ($dbman->table_exists($table) && !$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_block_savepoint(true, 2026020470, 'programcurriculum');
+    }
+
     return true;
 }

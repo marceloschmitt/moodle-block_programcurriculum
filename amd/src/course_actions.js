@@ -195,6 +195,7 @@ define(['core/notification', 'core/modal_delete_cancel', 'core/modal_events', 'c
                 setFormValue('id', 0);
                 setFormValue('name', '');
                 setFormValue('externalcode', '');
+                setFormValue('equivalencecode', '');
                 setFormValue('sortorder', 0);
                 setFormValue('term', 1);
             });
@@ -214,6 +215,7 @@ define(['core/notification', 'core/modal_delete_cancel', 'core/modal_events', 'c
                 setFormValue('id', link.dataset.editId || 0);
                 setFormValue('name', link.dataset.editName || '');
                 setFormValue('externalcode', link.dataset.editCode || '');
+                setFormValue('equivalencecode', link.dataset.editEquivalencecode || '');
                 setFormValue('sortorder', link.dataset.editSortorder || 0);
                 setFormValue('term', link.dataset.editTerm || 1);
                 setFormValue('curriculumid', link.dataset.editCurriculum || 0);

@@ -54,7 +54,9 @@ if ($action === 'delete' && $id) {
 
 if ($action === 'automatic') {
     require_sesskey();
-    if (trim($course->externalcode ?? '') === '') {
+    $maincode = trim($course->externalcode ?? '');
+    $equivcode = trim($course->equivalencecode ?? '');
+    if ($maincode === '' && $equivcode === '') {
         redirect(
             new moodle_url('/blocks/programcurriculum/mapping.php', ['courseid' => $courseid]),
             get_string('automaticmappingnocode', 'block_programcurriculum'),
@@ -62,7 +64,13 @@ if ($action === 'automatic') {
             \core\output\notification::NOTIFY_ERROR
         );
     }
-    $created = $mappingrepo->run_automatic_mapping($courseid, $course->externalcode);
+    $created = 0;
+    if ($maincode !== '') {
+        $created += $mappingrepo->run_automatic_mapping($courseid, $maincode);
+    }
+    if ($equivcode !== '') {
+        $created += $mappingrepo->run_automatic_mapping($courseid, $equivcode);
+    }
     redirect(
         new moodle_url('/blocks/programcurriculum/mapping.php', ['courseid' => $courseid]),
         get_string('automaticmappingdone', 'block_programcurriculum', $created),

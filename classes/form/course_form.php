@@ -37,6 +37,10 @@ class course_form extends \moodleform {
         $mform->setType('externalcode', PARAM_ALPHANUMEXT);
         $mform->addRule('externalcode', null, 'required', null, 'client');
 
+        $mform->addElement('text', 'equivalencecode', get_string('equivalencecode', 'block_programcurriculum'), ['size' => 50]);
+        $mform->setType('equivalencecode', PARAM_ALPHANUMEXT);
+        $mform->addHelpButton('equivalencecode', 'equivalencecode', 'block_programcurriculum');
+
         $termoptions = [];
         for ($i = 1; $i <= $numterms; $i++) {
             $termoptions[$i] = $i;

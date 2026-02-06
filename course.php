@@ -71,6 +71,10 @@ if ($action === 'automatic') {
     $created = 0;
     foreach ($courselist as $item) {
         $created += $mappingrepo->run_automatic_mapping((int)$item->id, $item->externalcode ?? '');
+        $equiv = trim($item->equivalencecode ?? '');
+        if ($equiv !== '') {
+            $created += $mappingrepo->run_automatic_mapping((int)$item->id, $equiv);
+        }
     }
     redirect(
         new moodle_url('/blocks/programcurriculum/course.php', ['curriculumid' => $curriculumid]),
@@ -206,6 +210,7 @@ foreach ($courselist as $index => $item) {
         'id' => $item->id,
         'name' => $item->name,
         'externalcode' => $item->externalcode,
+        'equivalencecode' => $item->equivalencecode ?? '',
         'sortorder' => $item->sortorder,
         'curriculumid' => $curriculumid,
         'editurl' => (new moodle_url('/blocks/programcurriculum/course.php', [
@@ -226,6 +231,7 @@ foreach ($courselist as $index => $item) {
         'mappingcount' => $mappingcount,
         'editname' => $item->name,
         'editcode' => $item->externalcode,
+        'editequivalencecode' => $item->equivalencecode ?? '',
         'editsortorder' => $item->sortorder,
         'editterm' => $term,
         'candelete' => !$hasmappings,

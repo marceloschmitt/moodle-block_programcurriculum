@@ -27,6 +27,7 @@
         <FIELD NAME="curriculumid" TYPE="int" LENGTH="10" NOTNULL="true"/>
         <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT=""/>
         <FIELD NAME="externalcode" TYPE="char" LENGTH="100" NOTNULL="true" DEFAULT=""/>
+        <FIELD NAME="equivalencecode" TYPE="char" LENGTH="100" NOTNULL="false"/>
         <FIELD NAME="term" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="1"/>
         <FIELD NAME="sortorder" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
       </FIELDS>
