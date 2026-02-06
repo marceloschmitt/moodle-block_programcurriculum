@@ -27,6 +27,18 @@
     </div>
     {{/progress}}
 
+    <div class="mb-3 d-flex flex-wrap gap-3 align-items-center">
+        <span class="small text-muted">{{#str}}progresslegend, block_programcurriculum{{/str}}</span>
+        <span class="d-inline-flex align-items-center gap-1 small">
+            <span class="programcurriculum-legend-swatch programcurriculum-legend-active" aria-hidden="true"></span>
+            <span>{{#str}}progresslegend_active, block_programcurriculum{{/str}}</span>
+        </span>
+        <span class="d-inline-flex align-items-center gap-1 small">
+            <span class="programcurriculum-legend-swatch programcurriculum-legend-ended" aria-hidden="true"></span>
+            <span>{{#str}}progresslegend_ended, block_programcurriculum{{/str}}</span>
+        </span>
+    </div>
+
     {{#termsections}}
     <div class="mb-4">
         <h5 class="mb-2 text-secondary">{{#str}}term, block_programcurriculum{{/str}} {{term}}</h5>

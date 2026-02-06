@@ -34,3 +34,17 @@
 .programcurriculum-progress .programcurriculum-row-clickable {
     cursor: pointer;
 }
+
+.programcurriculum-progress .programcurriculum-legend-swatch {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 0.2rem;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+.programcurriculum-progress .programcurriculum-legend-active {
+    background-color: #e6f2ff;
+}
+.programcurriculum-progress .programcurriculum-legend-ended {
+    background-color: #fff9e6;
+}
