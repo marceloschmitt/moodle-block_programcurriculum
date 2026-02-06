@@ -23,7 +23,7 @@
                 {{#courses}}
                 <li class="d-flex align-items-center py-1 border-bottom programcurriculum-course-item" data-course-id="{{id}}" data-position="{{position}}" data-term="{{editterm}}">
                     <span class="text-muted me-2">{{position}}</span>
-                    <span class="flex-grow-1">{{externalcode}}{{#equivalencecode}} / {{equivalencecode}}{{/equivalencecode}} - {{name}} <span class="text-muted ms-2">({{mappingcount}})</span></span>
+                    <span class="flex-grow-1">{{externalcode}} - {{name}} <span class="text-muted ms-2">({{mappingcount}})</span></span>
                     <div class="dropdown">
                         <button class="btn btn-link p-0 text-decoration-none" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{#str}}actions{{/str}}">
                             {{#pix}}i/moremenu, core{{/pix}}
@@ -71,7 +71,7 @@
     {{/hascourses}}
 
     <div class="modal fade" id="programcurriculum-course-modal" tabindex="-1" aria-labelledby="programcurriculum-course-modal-title" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="programcurriculum-course-modal-title"

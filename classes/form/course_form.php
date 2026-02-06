@@ -33,7 +33,7 @@ class course_form extends \moodleform {
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', null, 'required', null, 'client');
 
-        $mform->addElement('text', 'externalcode', get_string('coursecode', 'block_programcurriculum'));
+        $mform->addElement('text', 'externalcode', get_string('coursecode', 'block_programcurriculum'), ['size' => 50]);
         $mform->setType('externalcode', PARAM_ALPHANUMEXT);
         $mform->addRule('externalcode', null, 'required', null, 'client');
 
