@@ -129,10 +129,13 @@ if ($validationerror) {
 
 $mappings = [];
 foreach ($mappingrepo->get_by_course($courseid) as $item) {
-    $moodlecourse = get_course($item->moodlecourseid);
+    $moodlecourse = $DB->get_record('course', ['id' => $item->moodlecourseid], 'id, fullname');
+    $coursename = $moodlecourse
+        ? format_string($moodlecourse->fullname, true, ['context' => context_course::instance($moodlecourse->id)])
+        : get_string('moodlecourse_deleted', 'block_programcurriculum', $item->moodlecourseid);
     $mappings[] = [
         'id' => $item->id,
-        'coursename' => format_string($moodlecourse->fullname, true, ['context' => context_course::instance($moodlecourse->id)]),
+        'coursename' => $coursename,
         'moodlecourseid' => $item->moodlecourseid,
         'deleteurl' => (new moodle_url('/blocks/programcurriculum/mapping.php', [
             'courseid' => $courseid,

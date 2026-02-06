@@ -125,4 +125,5 @@ $string['progressbyenrollment'] = 'by enrollment';
 $string['progressbycompletion'] = 'by completion';
 $string['notenrolled'] = 'Not enrolled';
 $string['moodlecoursesforexternal'] = 'Moodle courses for {$a}';
+$string['moodlecourse_deleted'] = 'Moodle course deleted (ID: {$a})';
 $string['close'] = 'Close';

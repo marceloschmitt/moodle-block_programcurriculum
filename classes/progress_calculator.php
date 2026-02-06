@@ -38,6 +38,10 @@ class progress_calculator {
         $completedcount = 0;
         foreach ($mappings as $mapping) {
             $moodlecourseid = (int)$mapping->moodlecourseid;
+            $course = $DB->get_record('course', ['id' => $moodlecourseid], 'id, fullname');
+            if (!$course) {
+                continue;
+            }
             $ctx = \context_course::instance($moodlecourseid);
             if (!is_enrolled($ctx, $userid)) {
                 continue;
@@ -48,7 +52,6 @@ class progress_calculator {
                 $completedcount++;
             }
 
-            $course = $DB->get_record('course', ['id' => $moodlecourseid], 'id, fullname', MUST_EXIST);
             $details[] = [
                 'courseid' => $course->id,
                 'coursename' => $course->fullname,
@@ -74,7 +77,11 @@ class progress_calculator {
     }
 
     private function get_course_completion_state(int $userid, int $courseid): bool {
-        $course = get_course($courseid);
+        try {
+            $course = get_course($courseid);
+        } catch (\Exception $e) {
+            return false;
+        }
         $completion = new \completion_info($course);
         if (!$completion->is_enabled()) {
             return false;
