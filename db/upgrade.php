@@ -114,5 +114,21 @@ function xmldb_block_programcurriculum_upgrade(int $oldversion): bool {
         upgrade_block_savepoint(true, 2026013002, 'programcurriculum');
     }
 
+    if ($oldversion < 2026020462) {
+        $table = new xmldb_table('block_programcurriculum_curriculum');
+        $field = new xmldb_field('numterms', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '1');
+        if ($dbman->table_exists($table) && !$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $table = new xmldb_table('block_programcurriculum_course');
+        $field = new xmldb_field('term', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '1');
+        if ($dbman->table_exists($table) && !$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_block_savepoint(true, 2026020462, 'programcurriculum');
+    }
+
     return true;
 }

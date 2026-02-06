@@ -146,6 +146,7 @@ define(['core/notification', 'core/modal_save_cancel', 'core/modal_delete_cancel
                 setFormValue('name', '');
                 setFormValue('externalcode', '');
                 setFormValue('sortorder', 0);
+                setFormValue('term', 1);
             });
         }
 
@@ -164,6 +165,7 @@ define(['core/notification', 'core/modal_save_cancel', 'core/modal_delete_cancel
                 setFormValue('name', link.dataset.editName || '');
                 setFormValue('externalcode', link.dataset.editCode || '');
                 setFormValue('sortorder', link.dataset.editSortorder || 0);
+                setFormValue('term', link.dataset.editTerm || 1);
                 setFormValue('curriculumid', link.dataset.editCurriculum || 0);
                 openModal();
             });

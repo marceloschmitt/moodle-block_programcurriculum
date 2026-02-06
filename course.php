@@ -101,11 +101,13 @@ if ($action === 'move' && $id) {
     redirect(new moodle_url('/blocks/programcurriculum/course.php', ['curriculumid' => $curriculumid]));
 }
 
-$mform = new \block_programcurriculum\form\course_form(null, []);
+$numterms = (int)($curriculum->numterms ?? 1);
+$numterms = max(1, $numterms);
+$mform = new \block_programcurriculum\form\course_form(null, ['numterms' => $numterms]);
 if ($course) {
     $mform->set_data($course);
 } else {
-    $mform->set_data((object)['curriculumid' => $curriculumid]);
+    $mform->set_data((object)['curriculumid' => $curriculumid, 'term' => 1]);
 }
 
 if ($mform->is_cancelled()) {
@@ -151,11 +153,13 @@ $mappingcounts = $mappingrepo->get_counts_by_course_ids($courseids);
 foreach ($courselist as $index => $item) {
     $mappingcount = (int)($mappingcounts[$item->id] ?? 0);
     $hasmappings = $mappingcount > 0;
+    $term = (int)($item->term ?? 1);
     $courses[] = [
         'id' => $item->id,
         'name' => $item->name,
         'externalcode' => $item->externalcode,
         'sortorder' => $item->sortorder,
+        'term' => $term,
         'curriculumid' => $curriculumid,
         'editurl' => (new moodle_url('/blocks/programcurriculum/course.php', [
             'curriculumid' => $curriculumid,
@@ -176,6 +180,7 @@ foreach ($courselist as $index => $item) {
         'editname' => $item->name,
         'editcode' => $item->externalcode,
         'editsortorder' => $item->sortorder,
+        'editterm' => $term,
         'candelete' => !$hasmappings,
         'deleteurl' => !$hasmappings ? (new moodle_url('/blocks/programcurriculum/course.php', [
             'curriculumid' => $curriculumid,

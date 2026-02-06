@@ -21,6 +21,7 @@
             {{#courses}}
                 <li class="d-flex align-items-center py-1 border-bottom">
                     <span class="text-muted me-2">{{position}}</span>
+                    <span class="badge bg-secondary me-2" title="{{#str}}term, block_programcurriculum{{/str}}">{{term}}</span>
                     <span class="flex-grow-1">{{externalcode}} - {{name}} <span class="text-muted ms-2">({{mappingcount}})</span></span>
                     <div class="dropdown">
                         <button class="btn btn-link p-0 text-decoration-none" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{#str}}actions{{/str}}">
@@ -35,6 +36,7 @@
                                    data-edit-name="{{editname}}"
                                    data-edit-code="{{editcode}}"
                                    data-edit-sortorder="{{editsortorder}}"
+                                   data-edit-term="{{editterm}}"
                                    data-edit-curriculum="{{curriculumid}}">
                                     {{#str}}edit{{/str}}
                                 </a>

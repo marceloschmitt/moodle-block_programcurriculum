@@ -63,7 +63,7 @@ class mapping_repository {
                   JOIN {block_programcurriculum_course} c ON c.id = m.courseid
                   JOIN {course} co ON co.id = m.moodlecourseid
                  WHERE c.curriculumid = :curriculumid
-              ORDER BY c.sortorder ASC, c.name ASC";
+              ORDER BY c.term ASC, c.sortorder ASC, c.name ASC";
         return array_values($DB->get_records_sql($sql, ['curriculumid' => $curriculumid]));
     }
 

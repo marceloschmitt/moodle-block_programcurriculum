@@ -46,11 +46,13 @@ class importer {
             }
 
             $curriculum = $curriculumrepo->get_by_externalcode($data['curriculum_code']);
+            $numterms = max(1, (int)($data['numterms'] ?? ($curriculum->numterms ?? 1)));
             $curriculumrecord = (object)[
                 'id' => $curriculum->id ?? 0,
                 'name' => $data['curriculum_name'],
                 'externalcode' => $data['curriculum_code'],
                 'description' => $data['curriculum_description'] ?? '',
+                'numterms' => $numterms,
             ];
             $curriculumid = $curriculumrepo->upsert($curriculumrecord);
 
@@ -60,11 +62,13 @@ class importer {
             }
 
             $course = $courserepo->get_by_externalcode($data['course_code']);
+            $term = max(1, min($numterms, (int)($data['term'] ?? ($course->term ?? 1))));
             $courserecord = (object)[
                 'id' => $course->id ?? 0,
                 'curriculumid' => $curriculumid,
                 'name' => $data['course_name'],
                 'externalcode' => $data['course_code'],
+                'term' => $term,
                 'sortorder' => (int)$data['sortorder'],
             ];
             $courseid = $courserepo->upsert($courserecord);
@@ -114,6 +118,8 @@ class importer {
             'moodle_course_id' => trim((string)($row[4] ?? '')),
             'sortorder' => trim((string)($row[5] ?? '0')),
             'curriculum_description' => trim((string)($row[6] ?? '')),
+            'numterms' => trim((string)($row[7] ?? '')),
+            'term' => trim((string)($row[8] ?? '')),
         ];
     }
 

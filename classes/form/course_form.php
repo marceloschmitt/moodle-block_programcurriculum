@@ -26,6 +26,9 @@ class course_form extends \moodleform {
         $mform->updateAttributes(['id' => 'programcurriculum-course-form']);
         $mform->setRequiredNote('');
 
+        $numterms = (int)($this->_customdata['numterms'] ?? 1);
+        $numterms = max(1, $numterms);
+
         $mform->addElement('text', 'name', get_string('coursename', 'block_programcurriculum'), ['size' => 50]);
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', null, 'required', null, 'client');
@@ -33,6 +36,16 @@ class course_form extends \moodleform {
         $mform->addElement('text', 'externalcode', get_string('coursecode', 'block_programcurriculum'));
         $mform->setType('externalcode', PARAM_ALPHANUMEXT);
         $mform->addRule('externalcode', null, 'required', null, 'client');
+
+        $termoptions = [];
+        for ($i = 1; $i <= $numterms; $i++) {
+            $termoptions[$i] = $i;
+        }
+        $mform->addElement('select', 'term', get_string('term', 'block_programcurriculum'), $termoptions);
+        $mform->setType('term', PARAM_INT);
+        $mform->addRule('term', null, 'required', null, 'client');
+        $mform->setDefault('term', 1);
+        $mform->addHelpButton('term', 'term', 'block_programcurriculum');
 
         $mform->addElement('hidden', 'sortorder');
         $mform->setType('sortorder', PARAM_INT);

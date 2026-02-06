@@ -38,6 +38,14 @@ class curriculum_form extends \moodleform {
         $mform->addElement('textarea', 'description', get_string('curriculumdescription', 'block_programcurriculum'));
         $mform->setType('description', PARAM_TEXT);
 
+        $mform->addElement('text', 'numterms', get_string('numterms', 'block_programcurriculum'), ['size' => 5]);
+        $mform->setType('numterms', PARAM_INT);
+        $mform->addRule('numterms', null, 'required', null, 'client');
+        $mform->addRule('numterms', null, 'numeric', null, 'client');
+        $mform->addRule('numterms', null, 'minlength', 1, 'client');
+        $mform->setDefault('numterms', 1);
+        $mform->addHelpButton('numterms', 'numterms', 'block_programcurriculum');
+
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
     }
@@ -57,6 +65,10 @@ class curriculum_form extends \moodleform {
             if ($existing && (int)$existing->id !== (int)($data['id'] ?? 0)) {
                 $errors['name'] = get_string('duplicatecurriculumname', 'block_programcurriculum');
             }
+        }
+
+        if (isset($data['numterms']) && ((int)$data['numterms']) < 1) {
+            $errors['numterms'] = get_string('invalidnumterms', 'block_programcurriculum');
         }
 
         if (!empty($data['externalcode'])) {
