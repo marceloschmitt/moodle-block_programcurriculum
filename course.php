@@ -88,38 +88,59 @@ if ($action === 'move' && $id) {
     foreach ($ordered as $r) {
         $orderedrecords[(int)$r->id] = $r;
     }
+    $orderedlist = array_values($ordered);
     $orderedids = array_map(function ($item) {
         return (int)$item->id;
-    }, $ordered);
-    $position = array_search((int)$id, $orderedids, true);
-    $newposition = optional_param('position', 0, PARAM_INT);
-    if ($position !== false && $newposition > 0) {
-        $target = max(0, min(count($orderedids) - 1, $newposition - 1));
-        if ($target !== $position) {
-            $movedid = $orderedids[$position];
-            array_splice($orderedids, $position, 1);
-            array_splice($orderedids, $target, 0, [$movedid]);
+    }, $orderedlist);
+    $movedid = (int)$id;
+    $movedidx = array_search($movedid, $orderedids, true);
+    if ($movedidx === false) {
+        redirect(new moodle_url('/blocks/programcurriculum/course.php', ['curriculumid' => $curriculumid]));
+    }
+    $beforeid = optional_param('before', 0, PARAM_INT);
+    $targetterm = optional_param('targetterm', 0, PARAM_INT);
+    $targetterm = max(1, min($targetterm, (int)($curriculum->numterms ?? 1)));
 
-            $neworder = [];
-            foreach ($orderedids as $cid) {
-                $neworder[] = $orderedrecords[$cid];
-            }
-            $movedrec = $orderedrecords[$movedid];
-            $newterm = (int)($movedrec->term ?? 1);
-            if ($target + 1 < count($neworder)) {
-                $newterm = (int)($neworder[$target + 1]->term ?? 1);
-            } elseif ($target > 0) {
-                $newterm = (int)($neworder[$target - 1]->term ?? 1);
-            } elseif (count($neworder) > 1) {
-                $newterm = (int)($neworder[1]->term ?? 1);
-            }
-            if ((int)($movedrec->term ?? 1) !== $newterm) {
-                $DB->set_field('block_programcurriculum_course', 'term', $newterm, ['id' => $movedid]);
+    // Build list without moved course.
+    $without = [];
+    foreach ($orderedlist as $r) {
+        if ((int)$r->id !== $movedid) {
+            $without[] = $r;
+        }
+    }
+
+    $insertidx = 0;
+    $newterm = $targetterm;
+    if ($beforeid > 0) {
+        for ($i = 0; $i < count($without); $i++) {
+            if ((int)$without[$i]->id === $beforeid) {
+                $insertidx = $i;
+                $newterm = (int)($without[$i]->term ?? 1);
+                break;
             }
         }
-        foreach ($orderedids as $index => $courseid) {
-            $coursesrepo->set_sortorder($courseid, $index + 1);
+    } else {
+        // Insert at end of targetterm: after last course of that term, or (if term empty) before first course of next period.
+        $lastidx = -1;
+        $firstnext = -1;
+        for ($i = 0; $i < count($without); $i++) {
+            $t = (int)($without[$i]->term ?? 1);
+            if ($t === $targetterm) {
+                $lastidx = $i;
+            }
+            if ($t > $targetterm && $firstnext < 0) {
+                $firstnext = $i;
+            }
         }
+        $insertidx = $lastidx >= 0 ? $lastidx + 1 : ($firstnext >= 0 ? $firstnext : count($without));
+    }
+
+    array_splice($without, $insertidx, 0, [$orderedrecords[$movedid]]);
+    foreach ($without as $index => $r) {
+        $coursesrepo->set_sortorder((int)$r->id, $index + 1);
+    }
+    if ((int)($orderedrecords[$movedid]->term ?? 1) !== $newterm) {
+        $DB->set_field('block_programcurriculum_course', 'term', $newterm, ['id' => $movedid]);
     }
     redirect(new moodle_url('/blocks/programcurriculum/course.php', ['curriculumid' => $curriculumid]));
 }

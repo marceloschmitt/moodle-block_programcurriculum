@@ -107,16 +107,17 @@ define(['core/notification', 'core/modal_delete_cancel', 'core/modal_events', 'c
                 }
 
                 var termSections = Array.from(container.querySelectorAll('.programcurriculum-term-section'));
-                var globalPosition = 1;
-                var createPlaceholder = function(pos) {
+                var createPlaceholder = function(beforeId, termNum, label) {
                     var ph = document.createElement('li');
                     ph.className = 'programcurriculum-move-placeholder';
-                    ph.setAttribute('data-position', String(pos));
+                    ph.setAttribute('data-before-id', String(beforeId || 0));
+                    ph.setAttribute('data-term', String(termNum || 1));
                     ph.setAttribute('role', 'button');
                     ph.setAttribute('tabindex', '0');
-                    ph.setAttribute('aria-label', 'Mover para posição ' + pos);
+                    ph.setAttribute('aria-label', label || 'Mover');
                     ph.addEventListener('click', function() {
-                        var url = moveBaseUrl + (moveBaseUrl.indexOf('?') >= 0 ? '&' : '?') + 'position=' + pos;
+                        var sep = moveBaseUrl.indexOf('?') >= 0 ? '&' : '?';
+                        var url = moveBaseUrl + sep + 'before=' + (beforeId || 0) + '&targetterm=' + (termNum || 1);
                         window.location.href = url;
                     });
                     ph.addEventListener('keydown', function(e) {
@@ -129,23 +130,22 @@ define(['core/notification', 'core/modal_delete_cancel', 'core/modal_events', 'c
                 };
                 termSections.forEach(function(section) {
                     var list = section.querySelector('.programcurriculum-term-list');
+                    var sectionTerm = parseInt(section.getAttribute('data-term') || '1', 10);
                     var items = section.querySelectorAll('.programcurriculum-course-item');
-                    if (items.length === 0) {
-                        var emptyPlaceholder = createPlaceholder(globalPosition);
-                        list.insertBefore(emptyPlaceholder, list.firstChild);
-                        placeholders.push(emptyPlaceholder);
-                        globalPosition += 1;
-                    } else {
+                    if (items.length > 0) {
                         items.forEach(function(item) {
-                            var ph = createPlaceholder(globalPosition);
+                            var beforeId = item.getAttribute('data-course-id');
+                            var ph = createPlaceholder(beforeId, sectionTerm, 'Mover para posição');
                             item.parentNode.insertBefore(ph, item);
                             placeholders.push(ph);
-                            globalPosition += 1;
                         });
-                        var lastPh = createPlaceholder(globalPosition);
+                        var lastPh = createPlaceholder(0, sectionTerm, 'Mover para final');
                         items[items.length - 1].parentNode.appendChild(lastPh);
                         placeholders.push(lastPh);
-                        globalPosition += 1;
+                    } else {
+                        var emptyPh = createPlaceholder(0, sectionTerm, 'Mover para este período');
+                        list.insertBefore(emptyPh, list.firstChild);
+                        placeholders.push(emptyPh);
                     }
                 });
             };
