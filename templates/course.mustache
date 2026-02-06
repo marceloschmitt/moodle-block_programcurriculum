@@ -16,11 +16,10 @@
         <button class="d-none" type="button" data-open-course-modal="1" data-bs-toggle="modal" data-bs-target="#programcurriculum-course-modal"></button>
     </div>
 
-    {{#hascourses}}
-        {{#termsections}}
-        <div class="mb-4">
+    {{#termsections}}
+        <div class="mb-4 programcurriculum-term-section" data-term="{{term}}">
             <h5 class="mb-2 text-secondary">{{#str}}term, block_programcurriculum{{/str}} {{term}}</h5>
-            <ul class="list-unstyled">
+            <ul class="list-unstyled programcurriculum-term-list">
                 {{#courses}}
                 <li class="d-flex align-items-center py-1 border-bottom programcurriculum-course-item" data-course-id="{{id}}" data-position="{{position}}">
                     <span class="text-muted me-2">{{position}}</span>
@@ -59,10 +58,12 @@
                     </div>
                 </li>
                 {{/courses}}
+                {{^courses}}
+                <li class="programcurriculum-term-empty py-2 text-muted small">{{#str}}nocourses, block_programcurriculum{{/str}}</li>
+                {{/courses}}
             </ul>
         </div>
-        {{/termsections}}
-    {{/hascourses}}
+    {{/termsections}}
 
     {{^hascourses}}
         <div class="alert alert-info">{{#str}}nocourses, block_programcurriculum{{/str}}</div>

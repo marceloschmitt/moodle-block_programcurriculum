@@ -12,6 +12,9 @@
 .programcurriculum-course.programcurriculum-move-mode .programcurriculum-course-item {
     opacity: 0.85;
 }
+.programcurriculum-course.programcurriculum-move-mode .programcurriculum-term-empty {
+    display: none;
+}
 .programcurriculum-course .programcurriculum-move-cancel {
     margin-bottom: 1rem;
 }

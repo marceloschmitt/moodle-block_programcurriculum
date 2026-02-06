@@ -106,49 +106,48 @@ define(['core/notification', 'core/modal_delete_cancel', 'core/modal_events', 'c
                     container.appendChild(cancelBar);
                 }
 
-                var items = Array.from(container.querySelectorAll('.programcurriculum-course-item'));
-                items.forEach(function(item, index) {
-                    var placeholder = document.createElement('li');
-                    placeholder.className = 'programcurriculum-move-placeholder';
-                    placeholder.setAttribute('data-position', String(index + 1));
-                    placeholder.setAttribute('role', 'button');
-                    placeholder.setAttribute('tabindex', '0');
-                    placeholder.setAttribute('aria-label', 'Mover para posição ' + (index + 1));
-                    placeholder.addEventListener('click', function() {
-                        var pos = parseInt(placeholder.getAttribute('data-position'), 10);
+                var termSections = Array.from(container.querySelectorAll('.programcurriculum-term-section'));
+                var globalPosition = 1;
+                var createPlaceholder = function(pos) {
+                    var ph = document.createElement('li');
+                    ph.className = 'programcurriculum-move-placeholder';
+                    ph.setAttribute('data-position', String(pos));
+                    ph.setAttribute('role', 'button');
+                    ph.setAttribute('tabindex', '0');
+                    ph.setAttribute('aria-label', 'Mover para posição ' + pos);
+                    ph.addEventListener('click', function() {
                         var url = moveBaseUrl + (moveBaseUrl.indexOf('?') >= 0 ? '&' : '?') + 'position=' + pos;
                         window.location.href = url;
                     });
-                    placeholder.addEventListener('keydown', function(e) {
+                    ph.addEventListener('keydown', function(e) {
                         if (e.key === 'Enter' || e.key === ' ') {
                             e.preventDefault();
-                            placeholder.click();
+                            ph.click();
                         }
                     });
-                    item.parentNode.insertBefore(placeholder, item);
-                    placeholders.push(placeholder);
+                    return ph;
+                };
+                termSections.forEach(function(section) {
+                    var list = section.querySelector('.programcurriculum-term-list');
+                    var items = section.querySelectorAll('.programcurriculum-course-item');
+                    if (items.length === 0) {
+                        var emptyPlaceholder = createPlaceholder(globalPosition);
+                        list.insertBefore(emptyPlaceholder, list.firstChild);
+                        placeholders.push(emptyPlaceholder);
+                        globalPosition += 1;
+                    } else {
+                        items.forEach(function(item) {
+                            var ph = createPlaceholder(globalPosition);
+                            item.parentNode.insertBefore(ph, item);
+                            placeholders.push(ph);
+                            globalPosition += 1;
+                        });
+                        var lastPh = createPlaceholder(globalPosition);
+                        items[items.length - 1].parentNode.appendChild(lastPh);
+                        placeholders.push(lastPh);
+                        globalPosition += 1;
+                    }
                 });
-                var lastItem = items[items.length - 1];
-                if (lastItem) {
-                    var lastPlaceholder = document.createElement('li');
-                    lastPlaceholder.className = 'programcurriculum-move-placeholder';
-                    lastPlaceholder.setAttribute('data-position', String(items.length + 1));
-                    lastPlaceholder.setAttribute('role', 'button');
-                    lastPlaceholder.setAttribute('tabindex', '0');
-                    lastPlaceholder.setAttribute('aria-label', 'Mover para posição ' + (items.length + 1));
-                    lastPlaceholder.addEventListener('click', function() {
-                        var url = moveBaseUrl + (moveBaseUrl.indexOf('?') >= 0 ? '&' : '?') + 'position=' + (items.length + 1);
-                        window.location.href = url;
-                    });
-                    lastPlaceholder.addEventListener('keydown', function(e) {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            lastPlaceholder.click();
-                        }
-                    });
-                    lastItem.parentNode.appendChild(lastPlaceholder);
-                    placeholders.push(lastPlaceholder);
-                }
             };
 
             container.addEventListener('click', function(e) {

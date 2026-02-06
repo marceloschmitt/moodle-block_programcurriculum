@@ -217,13 +217,15 @@ foreach ($courselist as $index => $item) {
         'deleteconfirm' => get_string('deletecourseconfirm', 'block_programcurriculum'),
     ];
 }
-ksort($termsmap, SORT_NUMERIC);
+$numterms = (int)($curriculum->numterms ?? 1);
+$numterms = max(1, $numterms);
 $termsections = [];
-foreach ($termsmap as $termnum => $courses) {
+for ($t = 1; $t <= $numterms; $t++) {
+    $termcourses = $termsmap[$t] ?? [];
     $termsections[] = [
-        'term' => $termnum,
-        'courses' => $courses,
-        'hascourses' => !empty($courses),
+        'term' => $t,
+        'courses' => $termcourses,
+        'hascourses' => !empty($termcourses),
     ];
 }
 
@@ -239,6 +241,7 @@ echo $OUTPUT->render_from_template('block_programcurriculum/course', [
         'sesskey' => sesskey(),
     ]))->out(false),
     'termsections' => $termsections,
+    'numterms' => $numterms,
     'hascourses' => !empty($courselist),
     'validationerror' => !empty($validationmessage),
     'validationmessage' => $validationmessage,
