@@ -19,7 +19,13 @@
     margin-bottom: 1rem;
 }
 
-.programcurriculum-progress .programcurriculum-row-enrolled {
+.programcurriculum-progress .programcurriculum-row-active {
+    background-color: #ffe4cc !important;
+    padding-left: 0.5rem !important;
+    border-radius: 0.25rem;
+}
+
+.programcurriculum-progress .programcurriculum-row-ended {
     background-color: #fff9e6 !important;
     padding-left: 0.5rem !important;
     border-radius: 0.25rem;

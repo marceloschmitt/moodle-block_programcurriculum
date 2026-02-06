@@ -64,6 +64,7 @@ $calculator = new \block_programcurriculum\progress_calculator();
 $progress = $calculator->calculate_for_user($userid, $curriculumid);
 
 $curriculumcourses = $mappingrepo->get_by_curriculum_with_details($curriculumid);
+$now = time();
 $grouped = [];
 foreach ($curriculumcourses as $row) {
     $key = (int)$row->externalcourseid;
@@ -72,12 +73,18 @@ foreach ($curriculumcourses as $row) {
             'term' => (int)($row->term ?? 1),
             'externalcoursename' => $row->externalcoursename,
             'moodlecourses' => [],
+            'has_active' => false,
         ];
     }
     $ctx = context_course::instance((int)$row->moodlecourseid);
     if (is_enrolled($ctx, $userid)) {
         $completed = $progress['details_by_course'][$row->moodlecourseid] ?? false;
         $courseurl = (new moodle_url('/course/view.php', ['id' => $row->moodlecourseid]))->out(false);
+        $enddate = (int)($row->enddate ?? 0);
+        $isactive = ($enddate === 0) || ($enddate > $now);
+        if ($isactive) {
+            $grouped[$key]['has_active'] = true;
+        }
         $grouped[$key]['moodlecourses'][] = [
             'name' => $row->moodlecoursename,
             'completed' => $completed,
@@ -96,13 +103,16 @@ foreach (array_values($grouped) as $item) {
     $completedcount = count(array_filter($item['moodlecourses'], function ($m) {
         return $m['completed'];
     }));
+    $hasmoodle = $moodlecount > 0;
     $row = [
         'externalcoursename' => $item['externalcoursename'],
         'moodlecourses' => $item['moodlecourses'],
         'moodlecount' => $moodlecount,
         'completedcount' => $completedcount,
         'moodlecoursesjson' => base64_encode(json_encode($item['moodlecourses'])),
-        'hasmoodle' => $moodlecount > 0,
+        'hasmoodle' => $hasmoodle,
+        'row_active' => $hasmoodle && !empty($item['has_active']),
+        'row_ended' => $hasmoodle && empty($item['has_active']),
     ];
     $t = (int)($item['term'] ?? 1);
     if (!isset($termrows[$t])) {
