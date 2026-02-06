@@ -29,6 +29,7 @@ $string['programcurriculum:viewallprogress'] = 'Ver progresso de todos os alunos
 $string['managecurricula'] = 'Gerenciar currículos';
 $string['importcsv'] = 'Importar CSV';
 $string['viewprogress'] = 'Ver progresso';
+$string['viewcurriculum'] = 'Ver currículo';
 $string['nocapability'] = 'Você não tem permissão para visualizar este bloco.';
 $string['curricula'] = 'Currículos';
 $string['listofprograms'] = 'Lista de programas';
