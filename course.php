@@ -106,7 +106,9 @@ if ($action === 'move' && $id) {
             }
             $movedrec = $orderedrecords[$movedid];
             $newterm = (int)($movedrec->term ?? 1);
-            if ($target > 0) {
+            if ($target + 1 < count($neworder)) {
+                $newterm = (int)($neworder[$target + 1]->term ?? 1);
+            } elseif ($target > 0) {
                 $newterm = (int)($neworder[$target - 1]->term ?? 1);
             } elseif (count($neworder) > 1) {
                 $newterm = (int)($neworder[1]->term ?? 1);
