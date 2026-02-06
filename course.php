@@ -82,18 +82,38 @@ if ($action === 'automatic') {
 
 if ($action === 'move' && $id) {
     require_sesskey();
+    global $DB;
     $ordered = array_values($coursesrepo->get_by_curriculum($curriculumid));
+    $orderedrecords = [];
+    foreach ($ordered as $r) {
+        $orderedrecords[(int)$r->id] = $r;
+    }
     $orderedids = array_map(function ($item) {
         return (int)$item->id;
     }, $ordered);
     $position = array_search((int)$id, $orderedids, true);
     $newposition = optional_param('position', 0, PARAM_INT);
     if ($position !== false && $newposition > 0) {
-        $target = max(1, min(count($orderedids), $newposition)) - 1;
+        $target = max(0, min(count($orderedids) - 1, $newposition - 1));
         if ($target !== $position) {
             $movedid = $orderedids[$position];
             array_splice($orderedids, $position, 1);
             array_splice($orderedids, $target, 0, [$movedid]);
+
+            $neworder = [];
+            foreach ($orderedids as $cid) {
+                $neworder[] = $orderedrecords[$cid];
+            }
+            $movedrec = $orderedrecords[$movedid];
+            $newterm = (int)($movedrec->term ?? 1);
+            if ($target > 0) {
+                $newterm = (int)($neworder[$target - 1]->term ?? 1);
+            } elseif (count($neworder) > 1) {
+                $newterm = (int)($neworder[1]->term ?? 1);
+            }
+            if ((int)($movedrec->term ?? 1) !== $newterm) {
+                $DB->set_field('block_programcurriculum_course', 'term', $newterm, ['id' => $movedid]);
+            }
         }
         foreach ($orderedids as $index => $courseid) {
             $coursesrepo->set_sortorder($courseid, $index + 1);
