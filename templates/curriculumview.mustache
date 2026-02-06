@@ -1,0 +1,20 @@
+<div class="programcurriculum-curriculumview">
+    <div class="d-flex align-items-center justify-content-between mb-2">
+        <h2 class="mb-0">{{#str}}viewcurriculum, block_programcurriculum{{/str}}</h2>
+        <a class="btn btn-secondary" href="{{backurl}}">{{#str}}back, block_programcurriculum{{/str}}</a>
+    </div>
+    <h3 class="mb-4 text-secondary">{{programname}}</h3>
+    {{#termsections}}
+    <div class="mb-4">
+        <h5 class="mb-2 text-secondary">{{#str}}term, block_programcurriculum{{/str}} {{term}}</h5>
+        <ul class="list-unstyled">
+        {{#courses}}
+            <li class="py-1 border-bottom">{{externalcode}} - {{name}}</li>
+        {{/courses}}
+        {{^courses}}
+            <li class="py-2 text-muted small">{{#str}}nocourses, block_programcurriculum{{/str}}</li>
+        {{/courses}}
+        </ul>
+    </div>
+    {{/termsections}}
+</div>

@@ -30,6 +30,7 @@ $string['managecurricula'] = 'Manage curricula';
 $string['importcsv'] = 'Import CSV';
 $string['viewprogress'] = 'View progress';
 $string['viewcurriculum'] = 'View curriculum';
+$string['curriculumview_noprogram'] = 'This course is not linked to any program.';
 $string['nocapability'] = 'You do not have permission to view this block.';
 $string['curricula'] = 'Curricula';
 $string['listofprograms'] = 'List of programs';
