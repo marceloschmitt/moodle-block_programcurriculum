@@ -143,23 +143,26 @@ if ($validationerror) {
     ]));
 }
 
-$courses = [];
 $courselist = array_values($coursesrepo->get_by_curriculum($curriculumid));
 $total = count($courselist);
 $courseids = array_map(function ($item) {
     return (int)$item->id;
 }, $courselist);
 $mappingcounts = $mappingrepo->get_counts_by_course_ids($courseids);
+
+$termsmap = [];
 foreach ($courselist as $index => $item) {
     $mappingcount = (int)($mappingcounts[$item->id] ?? 0);
     $hasmappings = $mappingcount > 0;
     $term = (int)($item->term ?? 1);
-    $courses[] = [
+    if (!isset($termsmap[$term])) {
+        $termsmap[$term] = [];
+    }
+    $termsmap[$term][] = [
         'id' => $item->id,
         'name' => $item->name,
         'externalcode' => $item->externalcode,
         'sortorder' => $item->sortorder,
-        'term' => $term,
         'curriculumid' => $curriculumid,
         'editurl' => (new moodle_url('/blocks/programcurriculum/course.php', [
             'curriculumid' => $curriculumid,
@@ -191,6 +194,15 @@ foreach ($courselist as $index => $item) {
         'deleteconfirm' => get_string('deletecourseconfirm', 'block_programcurriculum'),
     ];
 }
+ksort($termsmap, SORT_NUMERIC);
+$termsections = [];
+foreach ($termsmap as $termnum => $courses) {
+    $termsections[] = [
+        'term' => $termnum,
+        'courses' => $courses,
+        'hascourses' => !empty($courses),
+    ];
+}
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('block_programcurriculum/course', [
@@ -201,8 +213,8 @@ echo $OUTPUT->render_from_template('block_programcurriculum/course', [
         'action' => 'automatic',
         'sesskey' => sesskey(),
     ]))->out(false),
-    'courses' => $courses,
-    'hascourses' => !empty($courses),
+    'termsections' => $termsections,
+    'hascourses' => !empty($courselist),
     'validationerror' => !empty($validationmessage),
     'validationmessage' => $validationmessage,
     'formhtml' => (function () use ($mform): string {

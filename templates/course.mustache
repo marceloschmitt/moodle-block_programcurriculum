@@ -17,11 +17,13 @@
     </div>
 
     {{#hascourses}}
-        <ul class="list-unstyled">
-            {{#courses}}
+        {{#termsections}}
+        <div class="mb-4">
+            <h5 class="mb-2 text-secondary">{{#str}}term, block_programcurriculum{{/str}} {{term}}</h5>
+            <ul class="list-unstyled">
+                {{#courses}}
                 <li class="d-flex align-items-center py-1 border-bottom">
                     <span class="text-muted me-2">{{position}}</span>
-                    <span class="badge bg-secondary me-2" title="{{#str}}term, block_programcurriculum{{/str}}">{{term}}</span>
                     <span class="flex-grow-1">{{externalcode}} - {{name}} <span class="text-muted ms-2">({{mappingcount}})</span></span>
                     <div class="dropdown">
                         <button class="btn btn-link p-0 text-decoration-none" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{#str}}actions{{/str}}">
@@ -52,8 +54,10 @@
                         </ul>
                     </div>
                 </li>
-            {{/courses}}
-        </ul>
+                {{/courses}}
+            </ul>
+        </div>
+        {{/termsections}}
     {{/hascourses}}
 
     {{^hascourses}}
