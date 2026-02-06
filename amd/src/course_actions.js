@@ -157,7 +157,7 @@ define(['core/notification', 'core/modal_delete_cancel', 'core/modal_events', 'c
                     e.preventDefault();
                     e.stopPropagation();
                     var courseId = trigger.getAttribute('data-move-course-id');
-                    var moveUrl = trigger.getAttribute('data-move-url') || '';
+                    var moveUrl = trigger.getAttribute('data-move-target') || trigger.getAttribute('data-move-url') || '';
                     var courseName = trigger.getAttribute('data-move-name') || '';
                     if (courseId && moveUrl) {
                         enterMoveMode(courseId, moveUrl, courseName);
