@@ -27,14 +27,19 @@
     </div>
     {{/progress}}
 
-    <ul class="list-unstyled mt-2">
-    {{#courserows}}
-        <li class="py-1 border-bottom d-flex align-items-center flex-wrap gap-1 {{#hasmoodle}}programcurriculum-row-enrolled programcurriculum-row-clickable{{/hasmoodle}}" {{#hasmoodle}}data-external-name="{{externalcoursename}}" data-moodlecourses="{{moodlecoursesjson}}" role="button" tabindex="0" aria-label="{{#str}}moodlecoursesforexternal, block_programcurriculum, {{externalcoursename}}{{/str}}"{{/hasmoodle}}>
-            <span class="flex-grow-1">{{externalcoursename}}{{#hasmoodle}} <span class="text-muted">({{moodlecount}})</span>{{/hasmoodle}}</span>
-            <span class="text-muted">{{#hasmoodle}}{{completedcount}}/{{moodlecount}}{{/hasmoodle}}{{^hasmoodle}}—{{/hasmoodle}}</span>
-        </li>
-    {{/courserows}}
-    </ul>
+    {{#termsections}}
+    <div class="mb-4">
+        <h5 class="mb-2 text-secondary">{{#str}}term, block_programcurriculum{{/str}} {{term}}</h5>
+        <ul class="list-unstyled mt-2">
+        {{#courserows}}
+            <li class="py-1 border-bottom d-flex align-items-center flex-wrap gap-1 {{#hasmoodle}}programcurriculum-row-enrolled programcurriculum-row-clickable{{/hasmoodle}}" {{#hasmoodle}}data-external-name="{{externalcoursename}}" data-moodlecourses="{{moodlecoursesjson}}" role="button" tabindex="0" aria-label="{{#str}}moodlecoursesforexternal, block_programcurriculum, {{externalcoursename}}{{/str}}"{{/hasmoodle}}>
+                <span class="flex-grow-1">{{externalcoursename}}{{#hasmoodle}} <span class="text-muted">({{moodlecount}})</span>{{/hasmoodle}}</span>
+                <span class="text-muted">{{#hasmoodle}}{{completedcount}}/{{moodlecount}}{{/hasmoodle}}{{^hasmoodle}}—{{/hasmoodle}}</span>
+            </li>
+        {{/courserows}}
+        </ul>
+    </div>
+    {{/termsections}}
 
     <button class="d-none" type="button" id="programcurriculum-moodle-modal-trigger" data-bs-toggle="modal" data-bs-target="#programcurriculum-moodle-modal"></button>
     <div class="modal fade" id="programcurriculum-moodle-modal" tabindex="-1" aria-labelledby="programcurriculum-moodle-modal-title" aria-hidden="true">

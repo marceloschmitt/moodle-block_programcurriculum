@@ -69,6 +69,7 @@ foreach ($curriculumcourses as $row) {
     $key = (int)$row->externalcourseid;
     if (!isset($grouped[$key])) {
         $grouped[$key] = [
+            'term' => (int)($row->term ?? 1),
             'externalcoursename' => $row->externalcoursename,
             'moodlecourses' => [],
         ];
@@ -85,13 +86,17 @@ foreach ($curriculumcourses as $row) {
     }
 }
 
-$data['courserows'] = [];
+$numterms = max(1, (int)($curriculum->numterms ?? 1));
+$termrows = [];
+foreach (range(1, $numterms) as $t) {
+    $termrows[$t] = ['term' => $t, 'courserows' => []];
+}
 foreach (array_values($grouped) as $item) {
     $moodlecount = count($item['moodlecourses']);
     $completedcount = count(array_filter($item['moodlecourses'], function ($m) {
         return $m['completed'];
     }));
-    $data['courserows'][] = [
+    $row = [
         'externalcoursename' => $item['externalcoursename'],
         'moodlecourses' => $item['moodlecourses'],
         'moodlecount' => $moodlecount,
@@ -99,7 +104,13 @@ foreach (array_values($grouped) as $item) {
         'moodlecoursesjson' => base64_encode(json_encode($item['moodlecourses'])),
         'hasmoodle' => $moodlecount > 0,
     ];
+    $t = (int)($item['term'] ?? 1);
+    if (!isset($termrows[$t])) {
+        $termrows[$t] = ['term' => $t, 'courserows' => []];
+    }
+    $termrows[$t]['courserows'][] = $row;
 }
+$data['termsections'] = array_values($termrows);
 $totaldisciplines = count($grouped);
 $enrolleddisciplines = count(array_filter(array_values($grouped), function ($item) {
     return !empty($item['moodlecourses']);
