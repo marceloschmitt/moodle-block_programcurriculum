@@ -64,6 +64,7 @@ $string['moveto'] = 'Move to position';
 $string['movemodaltitle'] = 'Move course';
 $string['movemodaltitlewithname'] = 'Move course: {$a}';
 $string['movepositionhelp'] = 'Enter a position from 1 to {$a}.';
+$string['movepositionclick'] = 'Click on a dashed line to move to that position.';
 $string['movepositioninvalid'] = 'Position must be between 1 and the last item.';
 $string['listofcourses'] = 'List of courses';
 $string['backtoprograms'] = 'Back to programs';

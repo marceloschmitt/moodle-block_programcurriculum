@@ -22,8 +22,7 @@
             <h5 class="mb-2 text-secondary">{{#str}}term, block_programcurriculum{{/str}} {{term}}</h5>
             <ul class="list-unstyled">
                 {{#courses}}
-                <li class="d-flex align-items-center py-1 border-bottom programcurriculum-course-item" draggable="true" data-course-id="{{id}}" data-position="{{position}}" role="button" tabindex="0" aria-label="{{#str}}move, block_programcurriculum{{/str}}">
-                    <span class="programcurriculum-drag-handle me-2 text-muted" title="{{#str}}move, block_programcurriculum{{/str}}">{{#pix}}i/dragdrop, core{{/pix}}</span>
+                <li class="d-flex align-items-center py-1 border-bottom programcurriculum-course-item" data-course-id="{{id}}" data-position="{{position}}">
                     <span class="text-muted me-2">{{position}}</span>
                     <span class="flex-grow-1">{{externalcode}} - {{name}} <span class="text-muted ms-2">({{mappingcount}})</span></span>
                     <div class="dropdown">
@@ -45,6 +44,11 @@
                                 </a>
                             </li>
                             <li><a class="dropdown-item" href="{{mappingurl}}">{{#str}}mappings, block_programcurriculum{{/str}}</a></li>
+                            <li>
+                                <a class="dropdown-item programcurriculum-move-trigger" href="#" data-move-course-id="{{id}}" data-move-url="{{moveactionurl}}" data-move-name="{{name}}" data-current-position="{{position}}" data-max-position="{{totalpositions}}">
+                                    {{#str}}move, block_programcurriculum{{/str}}
+                                </a>
+                            </li>
                             {{#candelete}}
                                 <li><a class="dropdown-item" href="{{deleteurl}}" data-confirm-message="{{deleteconfirm}}" data-confirm-name="{{name}}">{{#str}}delete{{/str}}</a></li>
                             {{/candelete}}

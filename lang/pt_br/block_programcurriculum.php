@@ -64,6 +64,7 @@ $string['moveto'] = 'Mover para posição';
 $string['movemodaltitle'] = 'Mover disciplina';
 $string['movemodaltitlewithname'] = 'Mover disciplina: {$a}';
 $string['movepositionhelp'] = 'Informe uma posição de 1 a {$a}.';
+$string['movepositionclick'] = 'Clique em uma linha pontilhada para mover para essa posição.';
 $string['movepositioninvalid'] = 'A posição deve estar entre 1 e o último item.';
 $string['listofcourses'] = 'Lista de disciplinas';
 $string['backtoprograms'] = 'Voltar aos programas';

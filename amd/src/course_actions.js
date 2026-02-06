@@ -56,93 +56,113 @@ define(['core/notification', 'core/modal_delete_cancel', 'core/modal_events', 'c
         });
 
         var container = document.querySelector('.programcurriculum-course[data-curriculum-id]');
-        if (container && !container.dataset.dragBound) {
-            container.dataset.dragBound = '1';
+        if (container && !container.dataset.moveBound) {
+            container.dataset.moveBound = '1';
             var curriculumId = parseInt(container.getAttribute('data-curriculum-id') || '0', 10);
             var sesskey = container.getAttribute('data-sesskey') || '';
-            var draggedItem = null;
-            var dragOverItem = null;
+            var placeholders = [];
 
-            var getOrderedItems = function() {
-                return Array.from(container.querySelectorAll('.programcurriculum-course-item'));
-            };
-
-            var getNewPosition = function(targetItem) {
-                var items = getOrderedItems();
-                var idx = items.indexOf(targetItem);
-                return idx >= 0 ? idx + 1 : 1;
-            };
-
-            container.addEventListener('dragstart', function(e) {
-                var item = e.target.closest('.programcurriculum-course-item');
-                if (item) {
-                    draggedItem = item;
-                    item.classList.add('programcurriculum-dragging');
-                    e.dataTransfer.effectAllowed = 'move';
-                    e.dataTransfer.setData('text/plain', item.getAttribute('data-course-id') || '');
-                    e.dataTransfer.setData('application/json', JSON.stringify({
-                        courseId: item.getAttribute('data-course-id'),
-                        position: item.getAttribute('data-position')
-                    }));
-                }
-            });
-
-            container.addEventListener('dragend', function(e) {
-                if (draggedItem) {
-                    draggedItem.classList.remove('programcurriculum-dragging');
-                    container.querySelectorAll('.programcurriculum-drag-over').forEach(function(el) {
-                        el.classList.remove('programcurriculum-drag-over');
-                    });
-                    draggedItem = null;
-                    dragOverItem = null;
-                }
-            });
-
-            container.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                e.dataTransfer.dropEffect = 'move';
-                var item = e.target.closest('.programcurriculum-course-item');
-                if (item && item !== draggedItem) {
-                    if (dragOverItem && dragOverItem !== item) {
-                        dragOverItem.classList.remove('programcurriculum-drag-over');
+            var exitMoveMode = function() {
+                placeholders.forEach(function(p) {
+                    if (p.parentNode) {
+                        p.parentNode.removeChild(p);
                     }
-                    dragOverItem = item;
-                    item.classList.add('programcurriculum-drag-over');
-                }
-            });
-
-            container.addEventListener('dragleave', function(e) {
-                var item = e.target.closest('.programcurriculum-course-item');
-                if (item) {
-                    item.classList.remove('programcurriculum-drag-over');
-                }
-            });
-
-            container.addEventListener('drop', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                var item = (e.target && e.target.closest) ? e.target.closest('.programcurriculum-course-item') : null;
-                if (!item && dragOverItem) {
-                    item = dragOverItem;
-                }
-                container.querySelectorAll('.programcurriculum-drag-over').forEach(function(el) {
-                    el.classList.remove('programcurriculum-drag-over');
                 });
-                if (!draggedItem || !item || item === draggedItem || !curriculumId) {
-                    return;
+                placeholders = [];
+                container.classList.remove('programcurriculum-move-mode');
+                var cancelBar = container.querySelector('.programcurriculum-move-cancel');
+                if (cancelBar) {
+                    cancelBar.remove();
                 }
-                var courseId = parseInt(draggedItem.getAttribute('data-course-id') || '0', 10);
-                var newPosition = getNewPosition(item);
+            };
 
-                var url = new URL(window.location.href);
-                url.searchParams.set('curriculumid', curriculumId);
-                url.searchParams.set('id', courseId);
-                url.searchParams.set('action', 'move');
-                url.searchParams.set('position', newPosition);
-                if (sesskey) {
-                    url.searchParams.set('sesskey', sesskey);
+            var enterMoveMode = function(courseId, moveBaseUrl, courseName) {
+                exitMoveMode();
+                container.classList.add('programcurriculum-move-mode');
+
+                var cancelBar = document.createElement('div');
+                cancelBar.className = 'alert alert-info programcurriculum-move-cancel d-flex align-items-center justify-content-between';
+                var hintSpan = document.createElement('span');
+                var cancelBtn = document.createElement('button');
+                cancelBtn.type = 'button';
+                cancelBtn.className = 'btn btn-sm btn-outline-secondary';
+                cancelBtn.addEventListener('click', exitMoveMode);
+                Str.get_string('movepositionclick', 'block_programcurriculum').then(function(s) {
+                    hintSpan.textContent = s;
+                }).catch(function() {
+                    hintSpan.textContent = 'Click on a dashed line to move to that position.';
+                });
+                Str.get_string('cancel', 'moodle').then(function(s) {
+                    cancelBtn.textContent = s;
+                }).catch(function() {
+                    cancelBtn.textContent = 'Cancel';
+                });
+                cancelBar.appendChild(hintSpan);
+                cancelBar.appendChild(cancelBtn);
+                var termsContainer = container.querySelector('.mb-4');
+                if (termsContainer) {
+                    container.insertBefore(cancelBar, termsContainer);
+                } else {
+                    container.appendChild(cancelBar);
                 }
-                window.location.href = url.toString();
+
+                var items = Array.from(container.querySelectorAll('.programcurriculum-course-item'));
+                items.forEach(function(item, index) {
+                    var placeholder = document.createElement('li');
+                    placeholder.className = 'programcurriculum-move-placeholder';
+                    placeholder.setAttribute('data-position', String(index + 1));
+                    placeholder.setAttribute('role', 'button');
+                    placeholder.setAttribute('tabindex', '0');
+                    placeholder.setAttribute('aria-label', 'Mover para posição ' + (index + 1));
+                    placeholder.addEventListener('click', function() {
+                        var pos = parseInt(placeholder.getAttribute('data-position'), 10);
+                        var url = moveBaseUrl + (moveBaseUrl.indexOf('?') >= 0 ? '&' : '?') + 'position=' + pos;
+                        window.location.href = url;
+                    });
+                    placeholder.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            placeholder.click();
+                        }
+                    });
+                    item.parentNode.insertBefore(placeholder, item);
+                    placeholders.push(placeholder);
+                });
+                var lastItem = items[items.length - 1];
+                if (lastItem) {
+                    var lastPlaceholder = document.createElement('li');
+                    lastPlaceholder.className = 'programcurriculum-move-placeholder';
+                    lastPlaceholder.setAttribute('data-position', String(items.length + 1));
+                    lastPlaceholder.setAttribute('role', 'button');
+                    lastPlaceholder.setAttribute('tabindex', '0');
+                    lastPlaceholder.setAttribute('aria-label', 'Mover para posição ' + (items.length + 1));
+                    lastPlaceholder.addEventListener('click', function() {
+                        var url = moveBaseUrl + (moveBaseUrl.indexOf('?') >= 0 ? '&' : '?') + 'position=' + (items.length + 1);
+                        window.location.href = url;
+                    });
+                    lastPlaceholder.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            lastPlaceholder.click();
+                        }
+                    });
+                    lastItem.parentNode.appendChild(lastPlaceholder);
+                    placeholders.push(lastPlaceholder);
+                }
+            };
+
+            container.addEventListener('click', function(e) {
+                var trigger = e.target.closest('.programcurriculum-move-trigger');
+                if (trigger) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    var courseId = trigger.getAttribute('data-move-course-id');
+                    var moveUrl = trigger.getAttribute('data-move-url') || '';
+                    var courseName = trigger.getAttribute('data-move-name') || '';
+                    if (courseId && moveUrl) {
+                        enterMoveMode(courseId, moveUrl, courseName);
+                    }
+                }
             });
         }
 
