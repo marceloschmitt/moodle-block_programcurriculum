@@ -1,6 +1,6 @@
-define(['core/notification', 'core/modal_save_cancel', 'core/modal_delete_cancel', 'core/modal_events', 'core/str'], function(
+define(['core/ajax', 'core/notification', 'core/modal_delete_cancel', 'core/modal_events', 'core/str'], function(
+    Ajax,
     Notification,
-    ModalSaveCancel,
     ModalDeleteCancel,
     ModalEvents,
     Str
@@ -56,64 +56,94 @@ define(['core/notification', 'core/modal_save_cancel', 'core/modal_delete_cancel
             });
         });
 
-        var moveLinks = document.querySelectorAll('a[data-move-url]');
-        moveLinks.forEach(function(link) {
-            if (link.dataset.moveBound === '1') {
-                return;
-            }
-            link.dataset.moveBound = '1';
-            link.addEventListener('click', function(event) {
-                event.preventDefault();
+        var container = document.querySelector('.programcurriculum-course[data-curriculum-id]');
+        if (container && !container.dataset.dragBound) {
+            container.dataset.dragBound = '1';
+            var curriculumId = parseInt(container.getAttribute('data-curriculum-id') || '0', 10);
+            var draggedItem = null;
+            var dragOverItem = null;
 
-                var max = parseInt(link.getAttribute('data-max-position') || '1', 10);
-                var current = parseInt(link.getAttribute('data-current-position') || '1', 10);
-                var url = link.getAttribute('data-move-url') || link.href;
-                var courseName = link.getAttribute('data-move-name') || '';
+            var getOrderedItems = function() {
+                return Array.from(container.querySelectorAll('.programcurriculum-course-item'));
+            };
 
-                var stringRequests = [
-                    {key: 'movemodaltitle', component: 'block_programcurriculum'},
-                    {key: 'movemodaltitlewithname', component: 'block_programcurriculum', param: courseName},
-                    {key: 'move', component: 'block_programcurriculum'},
-                    {key: 'cancel', component: 'moodle'},
-                    {key: 'movepositioninvalid', component: 'block_programcurriculum'},
-                    {key: 'movepositionhelp', component: 'block_programcurriculum', param: max},
-                    {key: 'moveto', component: 'block_programcurriculum'}
-                ];
-                Str.get_strings(stringRequests).then(function(strings) {
-                    var title = courseName ? strings[1] : strings[0];
-                    var body = '<div class="block-programcurriculum-move">' +
-                        '<div class="d-flex align-items-center gap-2 flex-wrap">' +
-                        '<label class="form-label mb-0" for="block-programcurriculum-move-input">' + strings[6] + '</label>' +
-                        '<input id="block-programcurriculum-move-input" type="number" min="1" max="' + max +
-                        '" value="' + current + '" class="form-control form-control-sm w-auto" style="max-width: 90px;">' +
-                        '<span class="text-muted">' + strings[5] + '</span>' +
-                        '</div>' +
-                        '</div>';
-                    return ModalSaveCancel.create({
-                        title: title,
-                        body: body,
-                        buttons: {
-                            save: strings[2],
-                            cancel: strings[3]
-                        }
-                    }).then(function(modal) {
-                        modal.getRoot().on(ModalEvents.save, function(e) {
-                            var input = modal.getRoot().find('#block-programcurriculum-move-input').val();
-                            var position = parseInt(input, 10);
-                            if (isNaN(position) || position < 1 || position > max) {
-                                e.preventDefault();
-                                Notification.alert('', strings[4], '');
-                                return;
-                            }
-                            var separator = url.indexOf('?') === -1 ? '?' : '&';
-                            window.location.href = url + separator + 'position=' + position;
-                        });
-                        modal.show();
-                        return modal;
-                    });
-                }).catch(Notification.exception);
+            var getNewPosition = function(targetItem) {
+                var items = getOrderedItems();
+                var idx = items.indexOf(targetItem);
+                return idx >= 0 ? idx + 1 : 1;
+            };
+
+            container.addEventListener('dragstart', function(e) {
+                var item = e.target.closest('.programcurriculum-course-item');
+                if (item) {
+                    draggedItem = item;
+                    item.classList.add('programcurriculum-dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/plain', item.getAttribute('data-course-id') || '');
+                    e.dataTransfer.setData('application/json', JSON.stringify({
+                        courseId: item.getAttribute('data-course-id'),
+                        position: item.getAttribute('data-position')
+                    }));
+                }
             });
-        });
+
+            container.addEventListener('dragend', function(e) {
+                if (draggedItem) {
+                    draggedItem.classList.remove('programcurriculum-dragging');
+                    container.querySelectorAll('.programcurriculum-drag-over').forEach(function(el) {
+                        el.classList.remove('programcurriculum-drag-over');
+                    });
+                    draggedItem = null;
+                    dragOverItem = null;
+                }
+            });
+
+            container.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                var item = e.target.closest('.programcurriculum-course-item');
+                if (item && item !== draggedItem) {
+                    dragOverItem = item;
+                    item.classList.add('programcurriculum-drag-over');
+                }
+            });
+
+            container.addEventListener('dragleave', function(e) {
+                var item = e.target.closest('.programcurriculum-course-item');
+                if (item) {
+                    item.classList.remove('programcurriculum-drag-over');
+                }
+            });
+
+            container.addEventListener('drop', function(e) {
+                e.preventDefault();
+                var item = e.target.closest('.programcurriculum-course-item');
+                if (item) {
+                    item.classList.remove('programcurriculum-drag-over');
+                }
+                if (!draggedItem || !item || item === draggedItem || !curriculumId) {
+                    return;
+                }
+                var courseId = parseInt(draggedItem.getAttribute('data-course-id') || '0', 10);
+                var newPosition = getNewPosition(item);
+
+                var request = {
+                    methodname: 'block_programcurriculum_reorder_courses',
+                    args: {
+                        curriculumid: curriculumId,
+                        courseid: courseId,
+                        newposition: newPosition
+                    }
+                };
+                Ajax.call([request])[0]
+                    .done(function(response) {
+                        if (response && response.success) {
+                            window.location.reload();
+                        }
+                    })
+                    .fail(Notification.exception);
+            });
+        }
 
         var openModalButton = document.querySelector('[data-open-course-modal="1"]');
         var modalTitle = document.getElementById('programcurriculum-course-modal-title');

@@ -34,6 +34,7 @@ $PAGE->set_context($context);
 $PAGE->set_url('/blocks/programcurriculum/course.php', ['curriculumid' => $curriculumid, 'id' => $id]);
 $PAGE->set_title(get_string('courses', 'block_programcurriculum'));
 $PAGE->set_heading(get_string('pageheading', 'block_programcurriculum'));
+$PAGE->requires->css('/blocks/programcurriculum/styles.css');
 $PAGE->requires->js_call_amd('block_programcurriculum/course_actions', 'init');
 
 $coursesrepo = new \block_programcurriculum\course_repository();
@@ -206,6 +207,7 @@ foreach ($termsmap as $termnum => $courses) {
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('block_programcurriculum/course', [
+    'curriculumid' => $curriculumid,
     'curriculumname' => $curriculum->name,
     'backurl' => (new moodle_url('/blocks/programcurriculum/manage.php'))->out(false),
     'automaticurl' => (new moodle_url('/blocks/programcurriculum/course.php', [

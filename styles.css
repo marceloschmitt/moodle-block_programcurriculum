@@ -1,3 +1,19 @@
+.programcurriculum-course .programcurriculum-course-item {
+    cursor: grab;
+}
+.programcurriculum-course .programcurriculum-course-item:active {
+    cursor: grabbing;
+}
+.programcurriculum-course .programcurriculum-course-item.programcurriculum-dragging {
+    opacity: 0.5;
+}
+.programcurriculum-course .programcurriculum-course-item.programcurriculum-drag-over {
+    border-top: 2px solid var(--primary, #0d6efd);
+}
+.programcurriculum-course .programcurriculum-drag-handle {
+    cursor: grab;
+}
+
 .programcurriculum-progress .programcurriculum-row-enrolled {
     background-color: #fff9e6 !important;
     padding-left: 0.5rem !important;
