@@ -1,7 +1,59 @@
-define([], function() {
+define(['core/notification', 'core/modal_delete_cancel', 'core/modal_events', 'core/str'], function(
+    Notification,
+    ModalDeleteCancel,
+    ModalEvents,
+    Str
+) {
     'use strict';
 
     var attachHandlers = function() {
+        var links = document.querySelectorAll('a[data-confirm-message]');
+        links.forEach(function(link) {
+            if (link.dataset.confirmBound === '1') {
+                return;
+            }
+            link.dataset.confirmBound = '1';
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                var message = link.getAttribute('data-confirm-message') || '';
+                var name = link.getAttribute('data-confirm-name') || '';
+                if (name) {
+                    Str.get_strings([
+                        {key: 'deletecurriculumtitle', component: 'block_programcurriculum'},
+                        {key: 'deletecurriculumbody', component: 'block_programcurriculum', param: name}
+                    ]).then(function(strings) {
+                        return ModalDeleteCancel.create({
+                            title: strings[0],
+                            body: strings[1]
+                        }).then(function(modal) {
+                            var root = modal.getRoot();
+                            var navigate = function() {
+                                window.location.href = link.href;
+                            };
+                            root.on(ModalEvents.save, navigate);
+                            root.on(ModalEvents.delete, navigate);
+                            modal.show();
+                            return modal;
+                        });
+                    }).catch(Notification.exception);
+                    return;
+                }
+                ModalDeleteCancel.create({
+                    title: message,
+                    body: ''
+                }).then(function(modal) {
+                    var root = modal.getRoot();
+                    var navigate = function() {
+                        window.location.href = link.href;
+                    };
+                    root.on(ModalEvents.save, navigate);
+                    root.on(ModalEvents.delete, navigate);
+                    modal.show();
+                    return modal;
+                }).catch(Notification.exception);
+            });
+        });
+
         var openModalButton = document.querySelector('[data-open-curriculum-modal="1"]');
         var modalTitle = document.getElementById('programcurriculum-curriculum-modal-title');
         var form = document.getElementById('programcurriculum-curriculum-form');

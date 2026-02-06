@@ -37,6 +37,12 @@
                                 </a>
                             </li>
                             <li><a class="dropdown-item" href="{{coursesurl}}">{{#str}}courses, block_programcurriculum{{/str}}</a></li>
+                            {{#candelete}}
+                                <li><a class="dropdown-item" href="{{deleteurl}}" data-confirm-message="{{deleteconfirm}}" data-confirm-name="{{name}}">{{#str}}delete{{/str}}</a></li>
+                            {{/candelete}}
+                            {{^candelete}}
+                                <li><span class="dropdown-item disabled" aria-disabled="true">{{#str}}delete{{/str}}</span></li>
+                            {{/candelete}}
                         </ul>
                     </div>
                 </li>

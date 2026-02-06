@@ -51,4 +51,10 @@ class curriculum_repository {
         $record->timemodified = $now;
         return (int)$DB->insert_record('block_programcurriculum_curriculum', $record);
     }
+
+    public function delete(int $id): void {
+        global $DB;
+
+        $DB->delete_records('block_programcurriculum_curriculum', ['id' => $id]);
+    }
 }

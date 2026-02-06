@@ -32,6 +32,31 @@ $PAGE->requires->js_call_amd('block_programcurriculum/manage_actions', 'init');
 $curriculumrepo = new \block_programcurriculum\curriculum_repository();
 $record = $id ? $curriculumrepo->get($id) : null;
 
+$action = optional_param('action', '', PARAM_ALPHA);
+$deleteid = optional_param('deleteid', 0, PARAM_INT);
+if ($action === 'delete' && $deleteid && confirm_sesskey()) {
+    $todelete = $curriculumrepo->get($deleteid);
+    if ($todelete) {
+        $coursesql = "SELECT COUNT(*) FROM {block_programcurriculum_course} WHERE curriculumid = :cid";
+        $coursecount = (int)$DB->get_field_sql($coursesql, ['cid' => $deleteid]);
+        if ($coursecount === 0) {
+            $curriculumrepo->delete($deleteid);
+            redirect(
+                new moodle_url('/blocks/programcurriculum/manage.php'),
+                get_string('curriculumdeleted', 'block_programcurriculum'),
+                null,
+                \core\output\notification::NOTIFY_SUCCESS
+            );
+        }
+        redirect(
+            new moodle_url('/blocks/programcurriculum/manage.php'),
+            get_string('curriculumdeletecourses', 'block_programcurriculum'),
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    }
+}
+
 $mform = new \block_programcurriculum\form\curriculum_form(null, []);
 if ($record) {
     $mform->set_data($record);
@@ -78,17 +103,26 @@ $coursecounts = $DB->get_records_sql_menu($coursesql);
 $curricula = [];
 $all = array_values($curriculumrepo->get_all());
 foreach ($all as $index => $curriculum) {
+    $coursecount = (int)($coursecounts[$curriculum->id] ?? 0);
+    $candelete = $coursecount === 0;
     $curricula[] = [
         'id' => $curriculum->id,
         'name' => $curriculum->name,
         'externalcode' => $curriculum->externalcode,
-        'coursecount' => (int)($coursecounts[$curriculum->id] ?? 0),
+        'coursecount' => $coursecount,
         'position' => $index + 1,
         'editurl' => (new moodle_url('/blocks/programcurriculum/manage.php', ['id' => $curriculum->id]))->out(false),
         'coursesurl' => (new moodle_url('/blocks/programcurriculum/course.php', ['curriculumid' => $curriculum->id]))->out(false),
         'editname' => $curriculum->name,
         'editcode' => $curriculum->externalcode,
         'editdescription' => $curriculum->description ?? '',
+        'candelete' => $candelete,
+        'deleteurl' => $candelete ? (new moodle_url('/blocks/programcurriculum/manage.php', [
+            'action' => 'delete',
+            'deleteid' => $curriculum->id,
+            'sesskey' => sesskey(),
+        ]))->out(false) : null,
+        'deleteconfirm' => get_string('deletecurriculumconfirm', 'block_programcurriculum'),
     ];
 }
 
