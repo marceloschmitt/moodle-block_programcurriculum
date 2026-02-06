@@ -106,6 +106,7 @@ $string['completed'] = 'Concluído';
 $string['notcompleted'] = 'Não concluído';
 $string['choosecurriculum'] = 'Escolher currículo';
 $string['listofstudents'] = 'Lista de alunos';
+$string['clickstudentprogress'] = 'Clique em qualquer aluno para ver o progresso.';
 $string['backtostudents'] = 'Voltar à lista de alunos';
 $string['viewstudentprogress'] = 'Ver progresso';
 $string['nostudents'] = 'Nenhum aluno encontrado neste curso.';
