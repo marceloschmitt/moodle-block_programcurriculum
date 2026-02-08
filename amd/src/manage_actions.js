@@ -17,6 +17,23 @@ define(['core/notification', 'core/modal_delete_cancel', 'core/modal_events', 'c
                 event.preventDefault();
                 var message = link.getAttribute('data-confirm-message') || '';
                 var name = link.getAttribute('data-confirm-name') || '';
+                var customTitle = link.getAttribute('data-confirm-title') || '';
+                if (customTitle) {
+                    ModalDeleteCancel.create({
+                        title: customTitle,
+                        body: message
+                    }).then(function(modal) {
+                        var root = modal.getRoot();
+                        var navigate = function() {
+                            window.location.href = link.href;
+                        };
+                        root.on(ModalEvents.save, navigate);
+                        root.on(ModalEvents.delete, navigate);
+                        modal.show();
+                        return modal;
+                    }).catch(Notification.exception);
+                    return;
+                }
                 if (name) {
                     Str.get_strings([
                         {key: 'deletecurriculumtitle', component: 'block_programcurriculum'},

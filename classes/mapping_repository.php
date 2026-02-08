@@ -37,6 +37,21 @@ class mapping_repository {
         return $DB->record_exists('block_programcurriculum_mapping', ['courseid' => $courseid]);
     }
 
+    /**
+     * Delete all mappings for courses belonging to a curriculum.
+     */
+    public function delete_by_curriculum(int $curriculumid): void {
+        global $DB;
+
+        $courseids = $DB->get_fieldset_sql(
+            "SELECT id FROM {block_programcurriculum_course} WHERE curriculumid = :cid",
+            ['cid' => $curriculumid]
+        );
+        if (!empty($courseids)) {
+            $DB->delete_records_list('block_programcurriculum_mapping', 'courseid', $courseids);
+        }
+    }
+
     public function get_by_curriculum(int $curriculumid): array {
         global $DB;
 

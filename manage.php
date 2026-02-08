@@ -30,10 +30,49 @@ $PAGE->set_heading(get_string('pageheading', 'block_programcurriculum'));
 $PAGE->requires->js_call_amd('block_programcurriculum/manage_actions', 'init');
 
 $curriculumrepo = new \block_programcurriculum\curriculum_repository();
+$coursesrepo = new \block_programcurriculum\course_repository();
+$mappingrepo = new \block_programcurriculum\mapping_repository();
 $record = $id ? $curriculumrepo->get($id) : null;
 
 $action = optional_param('action', '', PARAM_ALPHA);
 $deleteid = optional_param('deleteid', 0, PARAM_INT);
+$deleteallcoursesid = optional_param('deleteallcoursesid', 0, PARAM_INT);
+
+if ($action === 'automatic' && confirm_sesskey()) {
+    $all = array_values($curriculumrepo->get_all());
+    $created = 0;
+    foreach ($all as $curriculum) {
+        $courselist = array_values($coursesrepo->get_by_curriculum($curriculum->id));
+        foreach ($courselist as $item) {
+            $created += $mappingrepo->run_automatic_mapping((int)$item->id, $item->externalcode ?? '');
+            $equiv = trim($item->equivalencecode ?? '');
+            if ($equiv !== '') {
+                $created += $mappingrepo->run_automatic_mapping((int)$item->id, $equiv);
+            }
+        }
+    }
+    redirect(
+        new moodle_url('/blocks/programcurriculum/manage.php'),
+        get_string('automaticmappingdonecurriculum', 'block_programcurriculum', $created),
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
+
+if ($action === 'deleteallcourses' && $deleteallcoursesid && confirm_sesskey()) {
+    $cur = $curriculumrepo->get($deleteallcoursesid);
+    if ($cur) {
+        $mappingrepo->delete_by_curriculum($deleteallcoursesid);
+        $coursesrepo->delete_by_curriculum($deleteallcoursesid);
+        redirect(
+            new moodle_url('/blocks/programcurriculum/manage.php'),
+            get_string('deleteallcoursesdone', 'block_programcurriculum'),
+            null,
+            \core\output\notification::NOTIFY_SUCCESS
+        );
+    }
+}
+
 if ($action === 'delete' && $deleteid && confirm_sesskey()) {
     $todelete = $curriculumrepo->get($deleteid);
     if ($todelete) {
@@ -123,6 +162,14 @@ foreach ($all as $index => $curriculum) {
             'sesskey' => sesskey(),
         ]))->out(false) : null,
         'deleteconfirm' => get_string('deletecurriculumconfirm', 'block_programcurriculum'),
+        'hascourses' => $coursecount > 0,
+        'deleteallcoursesurl' => (new moodle_url('/blocks/programcurriculum/manage.php', [
+            'action' => 'deleteallcourses',
+            'deleteallcoursesid' => $curriculum->id,
+            'sesskey' => sesskey(),
+        ]))->out(false),
+        'deleteallcoursestitle' => get_string('deleteallcoursestitle', 'block_programcurriculum'),
+        'deleteallcoursesconfirm' => get_string('deleteallcoursesconfirm', 'block_programcurriculum', $curriculum->name),
     ];
 }
 
@@ -130,6 +177,10 @@ echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('block_programcurriculum/manage', [
     'curricula' => $curricula,
     'hascurricula' => !empty($curricula),
+    'automaticmappingurl' => (new moodle_url('/blocks/programcurriculum/manage.php', [
+        'action' => 'automatic',
+        'sesskey' => sesskey(),
+    ]))->out(false),
     'validationerror' => !empty($validationmessage),
     'validationmessage' => $validationmessage,
     'formhtml' => (function () use ($mform): string {

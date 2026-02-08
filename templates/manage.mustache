@@ -7,10 +7,13 @@
         <div class="alert alert-danger">{{validationmessage}}</div>
     {{/validationerror}}
 
-    <div class="mb-2">
+    <div class="mb-2 d-flex flex-wrap gap-1">
         <button class="btn btn-primary" type="button" data-action="add-curriculum" data-bs-toggle="modal" data-bs-target="#programcurriculum-curriculum-modal">
             {{#str}}addcurriculum, block_programcurriculum{{/str}}
         </button>
+        {{#hascurricula}}
+            <a class="btn btn-secondary" href="{{automaticmappingurl}}">{{#str}}automaticmapping, block_programcurriculum{{/str}}</a>
+        {{/hascurricula}}
         <button class="d-none" type="button" data-open-curriculum-modal="1" data-bs-toggle="modal" data-bs-target="#programcurriculum-curriculum-modal"></button>
     </div>
 
@@ -37,6 +40,9 @@
                                 </a>
                             </li>
                             <li><a class="dropdown-item" href="{{coursesurl}}">{{#str}}courses, block_programcurriculum{{/str}}</a></li>
+                            {{#hascourses}}
+                                <li><a class="dropdown-item" href="{{deleteallcoursesurl}}" data-confirm-title="{{deleteallcoursestitle}}" data-confirm-message="{{deleteallcoursesconfirm}}">{{#str}}deleteallcourses, block_programcurriculum{{/str}}</a></li>
+                            {{/hascourses}}
                             {{#candelete}}
                                 <li><a class="dropdown-item" href="{{deleteurl}}" data-confirm-message="{{deleteconfirm}}" data-confirm-name="{{name}}">{{#str}}delete{{/str}}</a></li>
                             {{/candelete}}

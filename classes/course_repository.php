@@ -88,4 +88,13 @@ class course_repository {
 
         $DB->delete_records('block_programcurriculum_course', ['id' => $id]);
     }
+
+    /**
+     * Delete all courses of a curriculum. Call mapping_repository::delete_by_curriculum first.
+     */
+    public function delete_by_curriculum(int $curriculumid): void {
+        global $DB;
+
+        $DB->delete_records('block_programcurriculum_course', ['curriculumid' => $curriculumid]);
+    }
 }
