@@ -27,7 +27,8 @@ class importer {
      * Does not write to DB; returns structure for preview.
      *
      * @param string $content Raw file/content.
-     * Program code = program name (same value). Term number is not in the file; derived from order (1, 2, 3...).
+     * Program: name = before " - ", code = after " - ". Course: code = before " - ", name = after " - ".
+     * Term number derived from order (1, 2, 3...).
      *
      * @return array { programs: [ { programname, programcode, terms: [ { term, label, courses: [] } ] } ], errors: [] }
      */
@@ -72,9 +73,10 @@ class importer {
                 // After blank line(s), this non-empty line = new program name. Finish current program.
                 $this->push_current_term($currentterm, $currentcourses, $currentprogram);
                 $result['programs'][] = $currentprogram;
+                $parsed = $this->parse_program_line($line);
                 $currentprogram = [
-                    'programname' => $line,
-                    'programcode' => $line,
+                    'programname' => $parsed['name'],
+                    'programcode' => $parsed['code'],
                     'terms' => [],
                 ];
                 $currentterm = null;
@@ -96,10 +98,10 @@ class importer {
                 }
             } else {
                 if ($currentprogram === null) {
-                    // First line = program name. Code = name (same value). Term number derived from order (1, 2, 3...).
+                    $parsed = $this->parse_program_line($line);
                     $currentprogram = [
-                        'programname' => $line,
-                        'programcode' => $line,
+                        'programname' => $parsed['name'],
+                        'programcode' => $parsed['code'],
                         'terms' => [],
                     ];
                 } else if ($currentterm === null) {
@@ -121,6 +123,25 @@ class importer {
         }
 
         return $result;
+    }
+
+    /**
+     * Parses program line: part before " - " = name, part after = code.
+     *
+     * @param string $line
+     * @return array{name: string, code: string}
+     */
+    private function parse_program_line(string $line): array {
+        $line = trim($line);
+        $sep = ' - ';
+        $pos = strpos($line, $sep);
+        if ($pos !== false) {
+            return [
+                'name' => trim(substr($line, 0, $pos)),
+                'code' => trim(substr($line, $pos + strlen($sep))),
+            ];
+        }
+        return ['name' => $line, 'code' => $line];
     }
 
     /**
@@ -152,10 +173,13 @@ class importer {
     private function push_current_term(?string $currentterm, array $currentcourses, array &$currentprogram): void {
         if ($currentterm !== null) {
             $termnumber = count($currentprogram['terms']) + 1;
+            $courseswithterm = array_map(function ($c) use ($termnumber) {
+                return $c + ['term' => $termnumber];
+            }, $currentcourses);
             $currentprogram['terms'][] = [
                 'term' => $termnumber,
                 'label' => $currentterm,
-                'courses' => $currentcourses,
+                'courses' => $courseswithterm,
             ];
         }
     }
