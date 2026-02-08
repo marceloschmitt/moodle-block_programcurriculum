@@ -49,6 +49,17 @@
     background-color: #fff9e6;
 }
 
+/* Delete-all-courses confirmation modal: avoid title/body cut-off and text truncation. */
+.programcurriculum-confirm-modal .modal-header {
+    white-space: normal !important;
+    overflow: visible !important;
+    padding-top: 1rem;
+    padding-bottom: 0.5rem;
+}
+.programcurriculum-confirm-modal .modal-body {
+    overflow: visible !important;
+    padding-top: 0.5rem;
+}
 .programcurriculum-modal-body-wrap {
     white-space: normal !important;
     word-wrap: break-word !important;

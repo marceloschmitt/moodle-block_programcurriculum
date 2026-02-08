@@ -30,6 +30,7 @@ define(['core/notification', 'core/modal_delete_cancel', 'core/modal_events', 'c
                         body: wrappedBody
                     }).then(function(modal) {
                         var root = modal.getRoot();
+                        root.addClass('programcurriculum-confirm-modal');
                         var navigate = function() {
                             window.location.href = link.href;
                         };
