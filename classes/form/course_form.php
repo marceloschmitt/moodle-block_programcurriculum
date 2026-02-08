@@ -66,12 +66,13 @@ class course_form extends \moodleform {
 
         $errors = parent::validation($data, $files);
 
-        if (!empty($data['externalcode'])) {
+        if (!empty($data['externalcode']) && !empty($data['curriculumid'])) {
             $existing = $DB->get_record(
                 'block_programcurriculum_course',
-                ['externalcode' => $data['externalcode']],
-                'id',
-                IGNORE_MULTIPLE
+                [
+                    'externalcode' => $data['externalcode'],
+                    'curriculumid' => (int)$data['curriculumid'],
+                ]
             );
             if ($existing && (int)$existing->id !== (int)($data['id'] ?? 0)) {
                 $errors['externalcode'] = get_string('duplicatecoursecode', 'block_programcurriculum');

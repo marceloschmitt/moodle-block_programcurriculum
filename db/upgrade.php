@@ -140,5 +140,18 @@ function xmldb_block_programcurriculum_upgrade(int $oldversion): bool {
         upgrade_block_savepoint(true, 2026020470, 'programcurriculum');
     }
 
+    if ($oldversion < 2026020606) {
+        $table = new xmldb_table('block_programcurriculum_course');
+        $oldindex = new xmldb_index('externalcode', XMLDB_INDEX_UNIQUE, ['externalcode']);
+        if ($dbman->table_exists($table) && $dbman->index_exists($table, $oldindex)) {
+            $dbman->drop_index($table, $oldindex);
+        }
+        $newindex = new xmldb_index('externalcode_curriculumid', XMLDB_INDEX_UNIQUE, ['externalcode', 'curriculumid']);
+        if ($dbman->table_exists($table) && !$dbman->index_exists($table, $newindex)) {
+            $dbman->add_index($table, $newindex);
+        }
+        upgrade_block_savepoint(true, 2026020606, 'programcurriculum');
+    }
+
     return true;
 }

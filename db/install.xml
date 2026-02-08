@@ -37,7 +37,7 @@
       </KEYS>
       <INDEXES>
         <INDEX NAME="curriculumid" UNIQUE="false" FIELDS="curriculumid"/>
-        <INDEX NAME="externalcode" UNIQUE="true" FIELDS="externalcode"/>
+        <INDEX NAME="externalcode_curriculumid" UNIQUE="true" FIELDS="externalcode,curriculumid"/>
       </INDEXES>
     </TABLE>
     <TABLE NAME="block_programcurriculum_mapping" COMMENT="Course to Moodle course mapping">

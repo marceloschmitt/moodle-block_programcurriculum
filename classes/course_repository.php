@@ -35,7 +35,20 @@ class course_repository {
     public function get_by_externalcode(string $externalcode): ?\stdClass {
         global $DB;
 
-        $record = $DB->get_record('block_programcurriculum_course', ['externalcode' => $externalcode]);
+        $record = $DB->get_record('block_programcurriculum_course', ['externalcode' => $externalcode], 'id', IGNORE_MULTIPLE);
+        return $record ?: null;
+    }
+
+    /**
+     * Get course by external code within a curriculum. Used to detect if discipline is already in this program.
+     */
+    public function get_by_externalcode_and_curriculum(string $externalcode, int $curriculumid): ?\stdClass {
+        global $DB;
+
+        $record = $DB->get_record('block_programcurriculum_course', [
+            'externalcode' => $externalcode,
+            'curriculumid' => $curriculumid,
+        ]);
         return $record ?: null;
     }
 

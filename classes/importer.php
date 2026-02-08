@@ -220,19 +220,6 @@ class importer {
                 continue;
             }
 
-            $courseconflict = false;
-            foreach ($allcourses as $c) {
-                $coursecode = $c['code'] ?? '';
-                if ($coursecode !== '' && $courserepo->get_by_externalcode($coursecode)) {
-                    $errors[] = get_string('import_course_exists', 'block_programcurriculum', $coursecode);
-                    $courseconflict = true;
-                    break;
-                }
-            }
-            if ($courseconflict) {
-                continue;
-            }
-
             $curriculumrecord = (object)[
                 'id' => 0,
                 'name' => $name,
@@ -244,12 +231,16 @@ class importer {
 
             $sortorder = 0;
             foreach ($allcourses as $c) {
+                $coursecode = $c['code'] !== '' ? $c['code'] : 'c' . $curriculumid . '-' . ($sortorder + 1);
+                if ($courserepo->get_by_externalcode_and_curriculum($coursecode, $curriculumid)) {
+                    continue;
+                }
                 $sortorder++;
                 $courserecord = (object)[
                     'id' => 0,
                     'curriculumid' => $curriculumid,
                     'name' => $c['name'] ?? '',
-                    'externalcode' => $c['code'] !== '' ? $c['code'] : 'c' . $curriculumid . '-' . $sortorder,
+                    'externalcode' => $coursecode,
                     'equivalencecode' => null,
                     'term' => (int)($c['term'] ?? 1),
                     'sortorder' => $sortorder,
