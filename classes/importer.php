@@ -192,12 +192,13 @@ class importer {
      * If a course (discipline) with the same external code already exists, that program is skipped with an error message.
      *
      * @param array $parsed Result from parse_text_format (programs, errors).
-     * @return array{errors: string[], imported_count: int}
+     * @return array{errors: string[], imported_count: int, imported_programs: string[]}
      */
     public function import_from_parsed(array $parsed): array {
         $errors = $parsed['errors'] ?? [];
         $programs = $parsed['programs'] ?? [];
         $imported = 0;
+        $importedprograms = [];
 
         $curriculumrepo = new curriculum_repository();
         $courserepo = new course_repository();
@@ -249,9 +250,10 @@ class importer {
             }
 
             $imported++;
+            $importedprograms[] = $name;
         }
 
-        return ['errors' => $errors, 'imported_count' => $imported];
+        return ['errors' => $errors, 'imported_count' => $imported, 'imported_programs' => $importedprograms];
     }
 
     /**

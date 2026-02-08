@@ -36,6 +36,7 @@ if ($mform->is_cancelled()) {
 
 $doimport = false;
 $importedcount = 0;
+$importedprograms = [];
 
 if ($data = $mform->get_data()) {
     $filepath = $mform->save_temp_file('importfile');
@@ -59,6 +60,7 @@ if ($doimport && $preview !== null && !empty($preview['programs'])) {
     $result = $importer->import_from_parsed($preview);
     $errors = array_merge($errors, $result['errors']);
     $importedcount = (int) ($result['imported_count'] ?? 0);
+    $importedprograms = $result['imported_programs'] ?? [];
     if (empty($result['errors']) && $importedcount > 0) {
         redirect(new moodle_url('/blocks/programcurriculum/manage.php'), get_string('import_success', 'block_programcurriculum', $importedcount));
     }
@@ -82,6 +84,7 @@ $templatecontext = [
     'preview' => $preview,
     'showpreview' => $preview !== null && empty($errors),
     'importedcount' => $importedcount,
+    'importedprograms' => $importedprograms,
     'showimportedsuccess' => $importedcount > 0,
 ];
 

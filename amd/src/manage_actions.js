@@ -19,24 +19,17 @@ define(['core/notification', 'core/modal_delete_cancel', 'core/modal_events', 'c
                 var name = link.getAttribute('data-confirm-name') || '';
                 var customTitle = link.getAttribute('data-confirm-title') || '';
                 if (customTitle) {
+                    var escapeHtml = function(text) {
+                        var div = document.createElement('div');
+                        div.textContent = text;
+                        return div.innerHTML;
+                    };
+                    var wrappedBody = '<div class="programcurriculum-modal-body-wrap">' + escapeHtml(message) + '</div>';
                     ModalDeleteCancel.create({
                         title: customTitle,
-                        body: message
+                        body: wrappedBody
                     }).then(function(modal) {
                         var root = modal.getRoot();
-                        var bodyEl = root[0].querySelector('.modal-body');
-                        if (bodyEl) {
-                            bodyEl.style.whiteSpace = 'normal';
-                            bodyEl.style.overflow = 'visible';
-                            bodyEl.style.wordBreak = 'break-word';
-                            bodyEl.style.textOverflow = 'clip';
-                            var inner = bodyEl.firstElementChild;
-                            if (inner) {
-                                inner.style.whiteSpace = 'normal';
-                                inner.style.overflow = 'visible';
-                                inner.style.textOverflow = 'clip';
-                            }
-                        }
                         var navigate = function() {
                             window.location.href = link.href;
                         };

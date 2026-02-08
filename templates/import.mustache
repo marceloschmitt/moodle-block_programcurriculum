@@ -3,7 +3,12 @@
 
     {{#showimportedsuccess}}
         <div class="alert alert-success">
-            {{#str}}import_success, block_programcurriculum, {{importedcount}}{{/str}}
+            <p class="mb-1">{{#str}}import_success, block_programcurriculum, {{importedcount}}{{/str}}</p>
+            <ul class="mb-0 pl-3">
+                {{#importedprograms}}
+                    <li>{{.}}</li>
+                {{/importedprograms}}
+            </ul>
         </div>
     {{/showimportedsuccess}}
 

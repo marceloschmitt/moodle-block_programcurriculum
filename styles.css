@@ -48,3 +48,11 @@
 .programcurriculum-progress .programcurriculum-legend-ended {
     background-color: #fff9e6;
 }
+
+.programcurriculum-modal-body-wrap {
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+}

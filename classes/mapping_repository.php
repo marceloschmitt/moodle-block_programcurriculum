@@ -149,9 +149,6 @@ class mapping_repository {
             return 0;
         }
 
-        // Temporarily use only the last 6 characters of the code for matching.
-        $codeForMatch = (strlen($code) >= 6) ? substr($code, -6) : $code;
-
         $like = $DB->sql_like('c.fullname', ':like1', false, false) . ' OR ' .
                 $DB->sql_like('c.shortname', ':like2', false, false);
         $sql = "SELECT c.id
@@ -160,8 +157,8 @@ class mapping_repository {
                    AND ({$like})";
         $params = [
             'siteid' => SITEID,
-            'like1' => '%' . $DB->sql_like_escape($codeForMatch) . '%',
-            'like2' => '%' . $DB->sql_like_escape($codeForMatch) . '%',
+            'like1' => '%' . $DB->sql_like_escape($code) . '%',
+            'like2' => '%' . $DB->sql_like_escape($code) . '%',
         ];
         $matches = $DB->get_records_sql($sql, $params);
         $created = 0;
