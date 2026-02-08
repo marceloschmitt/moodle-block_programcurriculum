@@ -58,6 +58,11 @@ class importer {
         while ($i < $n) {
             $line = $trimmed[$i];
             if ($line === '') {
+                if ($currentprogram !== null) {
+                    $this->push_current_term($currentterm, $currentcourses, $currentprogram);
+                    $result['programs'][] = $currentprogram;
+                    break;
+                }
                 $afterblank = true;
                 $i++;
                 continue;
