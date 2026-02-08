@@ -28,13 +28,15 @@ class curriculum_repository {
     public function get(int $id): ?\stdClass {
         global $DB;
 
-        return $DB->get_record('block_programcurriculum_curriculum', ['id' => $id]);
+        $record = $DB->get_record('block_programcurriculum_curriculum', ['id' => $id]);
+        return $record ?: null;
     }
 
     public function get_by_externalcode(string $externalcode): ?\stdClass {
         global $DB;
 
-        return $DB->get_record('block_programcurriculum_curriculum', ['externalcode' => $externalcode]);
+        $record = $DB->get_record('block_programcurriculum_curriculum', ['externalcode' => $externalcode]);
+        return $record ?: null;
     }
 
     public function upsert(\stdClass $record): int {
