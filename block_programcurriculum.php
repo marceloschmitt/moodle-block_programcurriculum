@@ -22,13 +22,8 @@ class block_programcurriculum extends block_base {
     }
 
     public function applicable_formats(): array {
-        return [
-            'site-index' => true,
-            'course-view' => true,
-            'my' => true,
-            'mod' => false,
-            'admin' => false,
-        ];
+        // Allow the block to be added and shown on all pages (configurable per instance).
+        return ['all' => true];
     }
 
     public function get_content(): stdClass {
