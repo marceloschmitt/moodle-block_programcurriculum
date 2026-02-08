@@ -1,6 +1,12 @@
 <div class="programcurriculum-import">
     <div class="alert alert-info">{{helptext}}</div>
 
+    {{#showimportedsuccess}}
+        <div class="alert alert-success">
+            {{#str}}import_success, block_programcurriculum, {{importedcount}}{{/str}}
+        </div>
+    {{/showimportedsuccess}}
+
     {{#haserrors}}
         <div class="alert alert-danger">
             <strong>{{#str}}importerrors, block_programcurriculum{{/str}}</strong>
