@@ -26,17 +26,13 @@ class block_programcurriculum extends block_base {
         return ['all' => true];
     }
 
-    public function get_content(): stdClass {
+    public function get_content(): ?stdClass {
         if ($this->content !== null) {
             return $this->content;
         }
 
-        $this->content = new stdClass();
-        $this->content->text = '';
-        $this->content->footer = '';
-
         if (empty($this->instance)) {
-            return $this->content;
+            return null;
         }
 
         $courseid = (int)($this->page->course->id ?? 0);
@@ -69,18 +65,20 @@ class block_programcurriculum extends block_base {
             ];
         }
 
-        if (!empty($items)) {
-            usort($items, function ($a, $b) {
-                return strcoll($a['text'], $b['text']);
-            });
-            $links = array_map(function ($item) {
-                return html_writer::link($item['url'], $item['text']);
-            }, $items);
-            $this->content->text = html_writer::alist($links, ['class' => 'programcurriculum-links']);
-        } else {
-            $this->content->text = get_string('nocapability', 'block_programcurriculum');
+        if (empty($items)) {
+            return null;
         }
 
+        $this->content = new stdClass();
+        $this->content->text = '';
+        $this->content->footer = '';
+        usort($items, function ($a, $b) {
+            return strcoll($a['text'], $b['text']);
+        });
+        $links = array_map(function ($item) {
+            return html_writer::link($item['url'], $item['text']);
+        }, $items);
+        $this->content->text = html_writer::alist($links, ['class' => 'programcurriculum-links']);
         return $this->content;
     }
 }
