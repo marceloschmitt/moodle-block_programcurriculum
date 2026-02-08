@@ -35,35 +35,20 @@ if ($mform->is_cancelled()) {
 }
 
 if ($data = $mform->get_data()) {
-    $content = trim((string) ($data->importtext ?? ''));
-    if ($content === '') {
-        $filepath = $mform->save_temp_file('importfile');
-        if ($filepath && is_readable($filepath)) {
-            $content = file_get_contents($filepath);
-            if ($content === false) {
-                $content = '';
-            }
+    $filepath = $mform->save_temp_file('importfile');
+    if (!$filepath || !is_readable($filepath)) {
+        $errors[] = get_string('importtext_nofile', 'block_programcurriculum');
+    } else {
+        $content = file_get_contents($filepath);
+        $content = $content !== false ? trim($content) : '';
+        if ($content === '') {
+            $errors[] = get_string('importtext_empty', 'block_programcurriculum');
+        } else {
+            $importer = new \block_programcurriculum\importer();
+            $preview = $importer->parse_text_format($content);
+            $errors = $preview['errors'] ?? [];
         }
     }
-    $content = trim($content);
-
-    if ($content === '') {
-        $errors[] = get_string('importtext_empty', 'block_programcurriculum');
-    } else {
-        $importer = new \block_programcurriculum\importer();
-        $preview = $importer->parse_text_format($content);
-        $errors = $preview['errors'] ?? [];
-    }
-}
-
-if ($preview !== null && empty($errors) && !empty($preview['programs'])) {
-    $programs = $preview['programs'];
-    $lastindex = count($programs) - 1;
-    foreach ($programs as $idx => &$prog) {
-        $prog['termcount'] = count($prog['terms']);
-        $prog['last'] = ($idx === $lastindex);
-    }
-    unset($prog);
 }
 
 if ($preview !== null && empty($errors) && !empty($preview['programs'])) {

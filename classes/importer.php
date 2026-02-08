@@ -27,7 +27,9 @@ class importer {
      * Does not write to DB; returns structure for preview.
      *
      * @param string $content Raw file/content.
-     * @return array { programs: [ { programname, terms: [ { label, courses: [] } ] } ], errors: [] }
+     * Program code = program name (same value). Term number is not in the file; derived from order (1, 2, 3...).
+     *
+     * @return array { programs: [ { programname, programcode, terms: [ { term, label, courses: [] } ] } ], errors: [] }
      */
     public function parse_text_format(string $content): array {
         $lines = preg_split('/\r\n|\r|\n/', $content);
@@ -67,6 +69,7 @@ class importer {
                 $result['programs'][] = $currentprogram;
                 $currentprogram = [
                     'programname' => $line,
+                    'programcode' => $line,
                     'terms' => [],
                 ];
                 $currentterm = null;
@@ -88,15 +91,16 @@ class importer {
                 }
             } else {
                 if ($currentprogram === null) {
-                    // First line = program name.
+                    // First line = program name. Code = name (same value). Term number derived from order (1, 2, 3...).
                     $currentprogram = [
                         'programname' => $line,
+                        'programcode' => $line,
                         'terms' => [],
                     ];
                 } else if ($currentterm === null) {
                     $result['errors'][] = get_string('importtext_semester_first', 'block_programcurriculum', $i + 1);
                 } else {
-                    $currentcourses[] = $line;
+                    $currentcourses[] = $this->parse_course_line($line);
                 }
             }
             $i++;
@@ -115,6 +119,25 @@ class importer {
     }
 
     /**
+     * Parses a course line. If it contains " - ", part before = code, part after = name; else whole line = name.
+     *
+     * @param string $line
+     * @return array{name: string, code: string}
+     */
+    private function parse_course_line(string $line): array {
+        $line = trim($line);
+        $sep = ' - ';
+        $pos = strpos($line, $sep);
+        if ($pos !== false) {
+            return [
+                'code' => trim(substr($line, 0, $pos)),
+                'name' => trim(substr($line, $pos + strlen($sep))),
+            ];
+        }
+        return ['code' => '', 'name' => $line];
+    }
+
+    /**
      * Appends current term to program and resets term/courses (by reference).
      *
      * @param string|null $currentterm
@@ -123,7 +146,9 @@ class importer {
      */
     private function push_current_term(?string $currentterm, array $currentcourses, array &$currentprogram): void {
         if ($currentterm !== null) {
+            $termnumber = count($currentprogram['terms']) + 1;
             $currentprogram['terms'][] = [
+                'term' => $termnumber,
                 'label' => $currentterm,
                 'courses' => $currentcourses,
             ];
