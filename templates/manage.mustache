@@ -41,7 +41,7 @@
                             </li>
                             <li><a class="dropdown-item" href="{{coursesurl}}">{{#str}}courses, block_programcurriculum{{/str}}</a></li>
                             {{#hascourses}}
-                                <li><a class="dropdown-item" href="{{deleteallcoursesurl}}" data-confirm-title="{{deleteallcoursestitle}}" data-confirm-message="{{deleteallcoursesconfirm}}">{{#str}}deleteallcourses, block_programcurriculum{{/str}}</a></li>
+                                <li><a class="dropdown-item" href="{{deleteallcoursesurl}}" data-confirm-title="{{{deleteallcoursestitle_attr}}}" data-confirm-message="{{{deleteallcoursesconfirm_attr}}}">{{#str}}deleteallcourses, block_programcurriculum{{/str}}</a></li>
                             {{/hascourses}}
                             {{#candelete}}
                                 <li><a class="dropdown-item" href="{{deleteurl}}" data-confirm-message="{{deleteconfirm}}" data-confirm-name="{{name}}">{{#str}}delete{{/str}}</a></li>

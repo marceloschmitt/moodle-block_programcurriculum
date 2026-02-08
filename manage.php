@@ -170,6 +170,8 @@ foreach ($all as $index => $curriculum) {
         ]))->out(false),
         'deleteallcoursestitle' => get_string('deleteallcoursestitle', 'block_programcurriculum'),
         'deleteallcoursesconfirm' => get_string('deleteallcoursesconfirm', 'block_programcurriculum', $curriculum->name),
+        'deleteallcoursestitle_attr' => htmlspecialchars(get_string('deleteallcoursestitle', 'block_programcurriculum'), ENT_QUOTES, 'UTF-8'),
+        'deleteallcoursesconfirm_attr' => htmlspecialchars(get_string('deleteallcoursesconfirm', 'block_programcurriculum', $curriculum->name), ENT_QUOTES, 'UTF-8'),
     ];
 }
 
