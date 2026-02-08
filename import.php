@@ -34,6 +34,8 @@ if ($mform->is_cancelled()) {
     redirect(new moodle_url('/blocks/programcurriculum/manage.php'));
 }
 
+$doimport = false;
+
 if ($data = $mform->get_data()) {
     $filepath = $mform->save_temp_file('importfile');
     if (!$filepath || !is_readable($filepath)) {
@@ -47,11 +49,20 @@ if ($data = $mform->get_data()) {
             $importer = new \block_programcurriculum\importer();
             $preview = $importer->parse_text_format($content);
             $errors = $preview['errors'] ?? [];
+            $doimport = !empty($data->import) && empty($errors);
         }
     }
 }
 
-if ($preview !== null && empty($errors) && !empty($preview['programs'])) {
+if ($doimport && $preview !== null && !empty($preview['programs'])) {
+    $result = $importer->import_from_parsed($preview);
+    $errors = array_merge($errors, $result['errors']);
+    if (empty($result['errors']) && $result['imported_count'] > 0) {
+        redirect(new moodle_url('/blocks/programcurriculum/manage.php'), get_string('import_success', 'block_programcurriculum', $result['imported_count']));
+    }
+}
+
+if ($preview !== null && !empty($preview['programs'])) {
     $programs = $preview['programs'];
     $lastindex = count($programs) - 1;
     foreach ($programs as $idx => &$prog) {

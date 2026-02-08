@@ -30,6 +30,7 @@ class import_form extends \moodleform {
         $mform->addRule('importfile', null, 'required', null, 'client');
         $mform->addHelpButton('importfile', 'importtext_file', 'block_programcurriculum');
 
+        $mform->addElement('submit', 'import', get_string('import_do', 'block_programcurriculum'));
         $this->add_action_buttons(true, get_string('importtext_preview', 'block_programcurriculum'));
     }
 }

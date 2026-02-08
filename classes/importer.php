@@ -187,6 +187,83 @@ class importer {
     }
 
     /**
+     * Import parsed programs and courses to the database.
+     * If a curriculum with the same external code already exists, that program is skipped with an error message.
+     * If a course (discipline) with the same external code already exists, that program is skipped with an error message.
+     *
+     * @param array $parsed Result from parse_text_format (programs, errors).
+     * @return array{errors: string[], imported_count: int}
+     */
+    public function import_from_parsed(array $parsed): array {
+        $errors = $parsed['errors'] ?? [];
+        $programs = $parsed['programs'] ?? [];
+        $imported = 0;
+
+        $curriculumrepo = new curriculum_repository();
+        $courserepo = new course_repository();
+
+        foreach ($programs as $prog) {
+            $code = $prog['programcode'] ?? '';
+            $name = $prog['programname'] ?? '';
+            $numterms = 0;
+            $allcourses = [];
+            foreach ($prog['terms'] ?? [] as $t) {
+                $numterms = max($numterms, (int)($t['term'] ?? 0));
+                foreach ($t['courses'] ?? [] as $c) {
+                    $allcourses[] = $c;
+                }
+            }
+            $numterms = $numterms ?: 1;
+
+            if ($curriculumrepo->get_by_externalcode($code)) {
+                $errors[] = get_string('import_curriculum_exists', 'block_programcurriculum', $code);
+                continue;
+            }
+
+            $courseconflict = false;
+            foreach ($allcourses as $c) {
+                $coursecode = $c['code'] ?? '';
+                if ($coursecode !== '' && $courserepo->get_by_externalcode($coursecode)) {
+                    $errors[] = get_string('import_course_exists', 'block_programcurriculum', $coursecode);
+                    $courseconflict = true;
+                    break;
+                }
+            }
+            if ($courseconflict) {
+                continue;
+            }
+
+            $curriculumrecord = (object)[
+                'id' => 0,
+                'name' => $name,
+                'externalcode' => $code,
+                'description' => null,
+                'numterms' => $numterms,
+            ];
+            $curriculumid = $curriculumrepo->upsert($curriculumrecord);
+
+            $sortorder = 0;
+            foreach ($allcourses as $c) {
+                $sortorder++;
+                $courserecord = (object)[
+                    'id' => 0,
+                    'curriculumid' => $curriculumid,
+                    'name' => $c['name'] ?? '',
+                    'externalcode' => $c['code'] !== '' ? $c['code'] : 'c' . $curriculumid . '-' . $sortorder,
+                    'equivalencecode' => null,
+                    'term' => (int)($c['term'] ?? 1),
+                    'sortorder' => $sortorder,
+                ];
+                $courserepo->upsert($courserecord);
+            }
+
+            $imported++;
+        }
+
+        return ['errors' => $errors, 'imported_count' => $imported];
+    }
+
+    /**
      * Whether the line is a semester header (e.g. "1", "2", "1º SEMESTRE - ADMINISTRAÇÃO SUB 2020/1	330h").
      */
     private function is_semester_line(string $line): bool {
