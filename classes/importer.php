@@ -62,7 +62,9 @@ class importer {
                 if ($currentprogram !== null) {
                     $this->push_current_term($currentterm, $currentcourses, $currentprogram);
                     $result['programs'][] = $currentprogram;
-                    break;
+                    $currentprogram = null;
+                    $currentterm = null;
+                    $currentcourses = [];
                 }
                 $afterblank = true;
                 $i++;

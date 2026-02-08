@@ -53,10 +53,13 @@ if ($data = $mform->get_data()) {
 
 if ($preview !== null && empty($errors) && !empty($preview['programs'])) {
     $programs = $preview['programs'];
-    $first = $programs[0];
-    $first['termcount'] = count($first['terms']);
-    $first['last'] = true;
-    $preview['programs'] = [$first];
+    $lastindex = count($programs) - 1;
+    foreach ($programs as $idx => &$prog) {
+        $prog['termcount'] = count($prog['terms']);
+        $prog['last'] = ($idx === $lastindex);
+    }
+    unset($prog);
+    $preview['programs'] = $programs;
 }
 
 $templatecontext = [
