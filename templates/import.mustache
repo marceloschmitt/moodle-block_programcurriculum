@@ -20,19 +20,14 @@
             <div class="card-body">
                 {{#preview.programs}}
                     <div class="programcurriculum-import-program mb-4">
-                        <p class="mb-2"><strong>{{#str}}curriculumname, block_programcurriculum{{/str}}:</strong> {{programname}}</p>
-                        <p class="mb-2 small text-muted">{{#str}}curriculumcode, block_programcurriculum{{/str}}: {{programcode}}</p>
-                        <p class="mb-2 small text-muted">{{#str}}importtext_terms_count, block_programcurriculum{{/str}}: {{termcount}}</p>
-                        {{#terms}}
-                            <div class="programcurriculum-import-term mb-3 ml-2">
-                                <strong>{{#str}}term, block_programcurriculum{{/str}} {{term}} — {{label}}</strong>
-                                <ul class="list-unstyled ml-3 mt-1">
-                                    {{#courses}}
-                                        <li>{{#code}}{{code}} — {{/code}}{{name}} — {{term}}</li>
-                                    {{/courses}}
-                                </ul>
-                            </div>
-                        {{/terms}}
+                        <p class="mb-2"><strong>{{programname}} — {{programcode}} — {{termcount}}</strong></p>
+                        <ul class="list-unstyled ml-2 mt-1">
+                            {{#terms}}
+                                {{#courses}}
+                                    <li>{{#code}}{{code}} — {{/code}}{{name}} — {{term}}</li>
+                                {{/courses}}
+                            {{/terms}}
+                        </ul>
                     </div>
                     {{^last}}<hr class="my-3">{{/last}}
                 {{/preview.programs}}
