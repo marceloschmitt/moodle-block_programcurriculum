@@ -100,6 +100,56 @@ class mapping_repository {
         return array_values($DB->get_records_sql($sql, ['moodlecourseid' => $moodlecourseid]));
     }
 
+    /**
+     * Get Moodle courses whose fullname or shortname contains the external course name (or code),
+     * excluding courses already mapped to this external course.
+     *
+     * @param int $externalcourseid Block course id.
+     * @param string $name External course name (searched in Moodle fullname/shortname).
+     * @param string $code External course code (optional; also searched if non-empty).
+     * @return array List of stdClass with id, fullname, shortname.
+     */
+    public function get_suggested_moodle_courses(int $externalcourseid, string $name, string $code = ''): array {
+        global $DB;
+
+        $name = trim($name);
+        $code = trim($code);
+        if ($name === '' && $code === '') {
+            return [];
+        }
+
+        $conditions = [];
+        $params = ['siteid' => SITEID, 'courseid' => $externalcourseid];
+        $i = 0;
+        foreach (['name' => $name, 'code' => $code] as $key => $term) {
+            if ($term === '') {
+                continue;
+            }
+            $like1 = 'like' . $i . 'a';
+            $like2 = 'like' . $i . 'b';
+            $conditions[] = '(' . $DB->sql_like('c.fullname', ':' . $like1, false, false) . ' OR ' .
+                $DB->sql_like('c.shortname', ':' . $like2, false, false) . ')';
+            $params[$like1] = '%' . $DB->sql_like_escape($term) . '%';
+            $params[$like2] = '%' . $DB->sql_like_escape($term) . '%';
+            $i++;
+        }
+        if (empty($conditions)) {
+            return [];
+        }
+
+        $sql = "SELECT c.id, c.fullname, c.shortname
+                  FROM {course} c
+                 WHERE c.id <> :siteid
+                   AND (" . implode(' OR ', $conditions) . ")
+                   AND c.id NOT IN (
+                       SELECT m.moodlecourseid
+                         FROM {block_programcurriculum_mapping} m
+                        WHERE m.courseid = :courseid
+                   )
+              ORDER BY c.fullname ASC";
+        return array_values($DB->get_records_sql($sql, $params));
+    }
+
     public function get_counts_by_course_ids(array $courseids): array {
         global $DB;
 

@@ -267,6 +267,9 @@ echo $OUTPUT->render_from_template('block_programcurriculum/course', [
         'action' => 'automatic',
         'sesskey' => sesskey(),
     ]))->out(false),
+    'assistedmappingurl' => (new moodle_url('/blocks/programcurriculum/assisted_mapping.php', [
+        'curriculumid' => $curriculumid,
+    ]))->out(false),
     'termsections' => $termsections,
     'numterms' => $numterms,
     'hascourses' => !empty($courselist),

@@ -1,0 +1,44 @@
+<div class="programcurriculum-assisted-mapping">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h4 class="mb-0">{{#str}}assistedmapping, block_programcurriculum{{/str}} — {{curriculumname}}</h4>
+        <a class="btn btn-secondary" href="{{backurl}}">{{#str}}backtocourses, block_programcurriculum{{/str}}</a>
+    </div>
+
+    <p class="text-muted mb-3">{{#str}}assistedmapping_help, block_programcurriculum{{/str}}</p>
+
+    {{#hasrows}}
+        <form method="post" action="{{formurl}}" id="programcurriculum-assisted-mapping-form">
+            <input type="hidden" name="sesskey" value="{{sesskey}}">
+            {{#rows}}
+                <div class="card mb-3">
+                    <div class="card-header py-2">
+                        <strong>{{externalcode}} — {{externalname}}</strong>
+                    </div>
+                    <div class="card-body py-2">
+                        {{#hassuggestions}}
+                            <p class="small text-muted mb-2">{{#str}}assistedmapping_select, block_programcurriculum{{/str}}</p>
+                            <ul class="list-unstyled mb-0">
+                                {{#suggestions}}
+                                    <li class="py-1">
+                                        <label class="d-flex align-items-center gap-2 mb-0 cursor-pointer">
+                                            <input type="checkbox" name="mapping[]" value="{{value}}">
+                                            <span>{{fullname}} <span class="text-muted">({{shortname}})</span></span>
+                                        </label>
+                                    </li>
+                                {{/suggestions}}
+                            </ul>
+                        {{/hassuggestions}}
+                        {{^hassuggestions}}
+                            <p class="text-muted small mb-0">{{#str}}assistedmapping_nosuggestions, block_programcurriculum{{/str}}</p>
+                        {{/hassuggestions}}
+                    </div>
+                </div>
+            {{/rows}}
+            <button type="submit" class="btn btn-primary">{{#str}}assistedmapping_confirm, block_programcurriculum{{/str}}</button>
+        </form>
+    {{/hasrows}}
+
+    {{^hasrows}}
+        <div class="alert alert-info">{{#str}}nocourses, block_programcurriculum{{/str}}</div>
+    {{/hasrows}}
+</div>
