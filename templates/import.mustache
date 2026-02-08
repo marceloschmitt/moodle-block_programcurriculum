@@ -28,7 +28,7 @@
                                 <strong>{{#str}}term, block_programcurriculum{{/str}} {{term}} — {{label}}</strong>
                                 <ul class="list-unstyled ml-3 mt-1">
                                     {{#courses}}
-                                        <li>{{name}} — {{term}}</li>
+                                        <li>{{#code}}{{code}} — {{/code}}{{name}} — {{term}}</li>
                                     {{/courses}}
                                 </ul>
                             </div>
