@@ -24,11 +24,19 @@ class import_form extends \moodleform {
     protected function definition(): void {
         $mform = $this->_form;
 
-        $mform->addElement('filepicker', 'csvfile', get_string('csvfile', 'block_programcurriculum'), null, [
-            'accepted_types' => ['.csv'],
+        $mform->addElement('textarea', 'importtext', get_string('importtext_content', 'block_programcurriculum'), [
+            'rows' => 20,
+            'cols' => 80,
+            'class' => 'programcurriculum-import-text',
         ]);
-        $mform->addRule('csvfile', null, 'required', null, 'client');
+        $mform->setType('importtext', PARAM_RAW);
+        $mform->addHelpButton('importtext', 'importtext_format', 'block_programcurriculum');
 
-        $this->add_action_buttons(true, get_string('upload', 'block_programcurriculum'));
+        $mform->addElement('filepicker', 'importfile', get_string('importtext_file', 'block_programcurriculum'), null, [
+            'accepted_types' => ['.txt', '.csv'],
+        ]);
+        $mform->addHelpButton('importfile', 'importtext_file_help', 'block_programcurriculum');
+
+        $this->add_action_buttons(true, get_string('importtext_preview', 'block_programcurriculum'));
     }
 }

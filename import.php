@@ -28,31 +28,64 @@ $PAGE->set_heading(get_string('pageheading', 'block_programcurriculum'));
 
 $mform = new \block_programcurriculum\form\import_form();
 $errors = [];
+$preview = null;
 
 if ($mform->is_cancelled()) {
     redirect(new moodle_url('/blocks/programcurriculum/manage.php'));
 }
 
 if ($data = $mform->get_data()) {
-    $filepath = $mform->save_temp_file('csvfile');
-    if (!$filepath) {
-        $errors[] = get_string('invalidfile', 'error');
+    $content = trim((string) ($data->importtext ?? ''));
+    if ($content === '') {
+        $filepath = $mform->save_temp_file('importfile');
+        if ($filepath && is_readable($filepath)) {
+            $content = file_get_contents($filepath);
+            if ($content === false) {
+                $content = '';
+            }
+        }
+    }
+    $content = trim($content);
+
+    if ($content === '') {
+        $errors[] = get_string('importtext_empty', 'block_programcurriculum');
     } else {
         $importer = new \block_programcurriculum\importer();
-        $result = $importer->import_csv($filepath);
-        $errors = $result['errors'] ?? [];
-    }
-
-    if (empty($errors)) {
-        redirect(new moodle_url('/blocks/programcurriculum/manage.php'), get_string('importsuccess', 'block_programcurriculum'));
+        $preview = $importer->parse_text_format($content);
+        $errors = $preview['errors'] ?? [];
     }
 }
 
-echo $OUTPUT->header();
-echo $OUTPUT->render_from_template('block_programcurriculum/import', [
-    'helptext' => get_string('importhelp', 'block_programcurriculum'),
+if ($preview !== null && empty($errors) && !empty($preview['programs'])) {
+    $programs = $preview['programs'];
+    $lastindex = count($programs) - 1;
+    foreach ($programs as $idx => &$prog) {
+        $prog['termcount'] = count($prog['terms']);
+        $prog['last'] = ($idx === $lastindex);
+    }
+    unset($prog);
+}
+
+if ($preview !== null && empty($errors) && !empty($preview['programs'])) {
+    $programs = $preview['programs'];
+    $lastindex = count($programs) - 1;
+    foreach ($programs as $idx => &$prog) {
+        $prog['termcount'] = count($prog['terms']);
+        $prog['last'] = ($idx === $lastindex);
+    }
+    unset($prog);
+    $preview['programs'] = $programs;
+}
+
+$templatecontext = [
+    'helptext' => get_string('importtext_format_short', 'block_programcurriculum'),
     'errors' => $errors,
     'haserrors' => !empty($errors),
-]);
+    'preview' => $preview,
+    'showpreview' => $preview !== null && empty($errors),
+];
+
+echo $OUTPUT->header();
+echo $OUTPUT->render_from_template('block_programcurriculum/import', $templatecontext);
 $mform->display();
 echo $OUTPUT->footer();
