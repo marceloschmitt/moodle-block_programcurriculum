@@ -169,5 +169,20 @@ function xmldb_block_programcurriculum_upgrade(int $oldversion): bool {
         upgrade_block_savepoint(true, 2026020802, 'programcurriculum');
     }
 
+    if ($oldversion < 2026020809) {
+        // Ensure teachers cannot mark completion; only manager and the user themselves can.
+        require_once($GLOBALS['CFG']->libdir . '/role/lib.php');
+        $systemcontext = \context_system::instance();
+        $teacherrole = $DB->get_record('role', ['shortname' => 'teacher']);
+        $editingteacherrole = $DB->get_record('role', ['shortname' => 'editingteacher']);
+        if ($teacherrole) {
+            assign_capability('block/programcurriculum:markusercompletion', CAP_PREVENT, $teacherrole->id, $systemcontext->id, true);
+        }
+        if ($editingteacherrole) {
+            assign_capability('block/programcurriculum:markusercompletion', CAP_PREVENT, $editingteacherrole->id, $systemcontext->id, true);
+        }
+        upgrade_block_savepoint(true, 2026020809, 'programcurriculum');
+    }
+
     return true;
 }
