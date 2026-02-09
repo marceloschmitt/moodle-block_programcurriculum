@@ -28,7 +28,8 @@ $context = context_course::instance($courseid);
 require_capability('block/programcurriculum:viewownprogress', $context);
 
 $canviewall = has_capability('block/programcurriculum:viewallprogress', $context);
-if ($userid != $USER->id && !$canviewall) {
+$canmarkothers = has_capability('block/programcurriculum:markusercompletion', $context);
+if ($userid != $USER->id && !$canviewall && !$canmarkothers) {
     throw new required_capability_exception($context, 'block/programcurriculum:viewallprogress', 'nopermissions', '');
 }
 
@@ -65,7 +66,7 @@ $progress = $calculator->calculate_for_user($userid, $curriculumid);
 
 $usercompletionrepo = new \block_programcurriculum\user_completion_repository();
 $usercompletedids = $usercompletionrepo->get_completed_course_ids($userid, $curriculumid);
-$canmark = ($userid == $USER->id);
+$canmark = ($userid == $USER->id) || $canviewall || $canmarkothers;
 
 $courserepo = new \block_programcurriculum\course_repository();
 $allexternal = $courserepo->get_by_curriculum($curriculumid);

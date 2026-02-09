@@ -9,19 +9,24 @@ define(['core/ajax', 'core/notification'], function(Ajax, Notification) {
         var clickableRows = document.querySelectorAll('.programcurriculum-row-clickable');
 
         var courseid = container && container.getAttribute('data-course-id');
+        var targetUserId = container && container.getAttribute('data-user-id');
         if (courseid) {
             var checkboxes = container.querySelectorAll('.programcurriculum-user-completion');
             checkboxes.forEach(function(cb) {
                 cb.addEventListener('change', function() {
                     var externalcourseid = cb.getAttribute('data-external-course-id');
                     var completed = cb.checked;
+                    var args = {
+                        courseid: parseInt(courseid, 10),
+                        externalcourseid: parseInt(externalcourseid, 10),
+                        completed: completed
+                    };
+                    if (targetUserId) {
+                        args.userid = parseInt(targetUserId, 10);
+                    }
                     var request = {
                         methodname: 'block_programcurriculum_toggle_user_completion',
-                        args: {
-                            courseid: parseInt(courseid, 10),
-                            externalcourseid: parseInt(externalcourseid, 10),
-                            completed: completed
-                        }
+                        args: args
                     };
                     Ajax.call([request])[0].then(function() {
                         window.location.reload();
