@@ -37,13 +37,17 @@ class progress_calculator {
         $usercompletedset = array_flip($usercompletedids);
 
         // Completed external disciplines: marked by user OR completed in Moodle (user enrolled).
-        // Enrolled external disciplines: those where user is enrolled in at least one mapped Moodle course.
+        // Enrolled: those where user is enrolled in at least one mapped Moodle course.
+        // Enrolled active: same but only Moodle courses with enddate = 0 or enddate > now (as on progress screen).
         $completedexternalids = $usercompletedids;
         $enrolledexternalids = [];
+        $enrolledactiveexternalids = [];
+        $now = time();
         foreach ($mappings as $mapping) {
             $moodlecourseid = (int)$mapping->moodlecourseid;
             $externalcourseid = (int)$mapping->courseid;
-            if (!$DB->record_exists('course', ['id' => $moodlecourseid])) {
+            $course = $DB->get_record('course', ['id' => $moodlecourseid], 'id, enddate');
+            if (!$course) {
                 continue;
             }
             $ctx = \context_course::instance($moodlecourseid);
@@ -51,6 +55,10 @@ class progress_calculator {
                 continue;
             }
             $enrolledexternalids[] = $externalcourseid;
+            $enddate = (int)($course->enddate ?? 0);
+            if ($enddate === 0 || $enddate > $now) {
+                $enrolledactiveexternalids[] = $externalcourseid;
+            }
             if ($this->get_course_completion_state($userid, $moodlecourseid)) {
                 $completedexternalids[] = $externalcourseid;
             }
@@ -58,6 +66,7 @@ class progress_calculator {
         $completedexternalids = array_unique($completedexternalids);
         $completedcount = count(array_intersect($completedexternalids, $allexternalids));
         $enrolledcount = count(array_unique(array_intersect($enrolledexternalids, $allexternalids)));
+        $enrolledactivecount = count(array_unique(array_intersect($enrolledactiveexternalids, $allexternalids)));
 
         $percent = $total > 0 ? (int)round(($completedcount / $total) * 100) : 0;
 
@@ -94,6 +103,7 @@ class progress_calculator {
             'completed' => $completedcount,
             'percent' => $percent,
             'enrolled' => $enrolledcount,
+            'enrolled_active' => $enrolledactivecount,
             'details' => $details,
             'details_by_course' => $detailsbycourse,
         ];

@@ -73,7 +73,7 @@ foreach ($users as $u) {
         $student['progresspercent'] = $progress['percent'];
         $student['progresscompleted'] = $progress['completed'];
         $student['progresstotal'] = $progress['total'];
-        $student['enrolledcount'] = $progress['enrolled'];
+        $student['enrolledcount'] = $progress['enrolled_active'];
         $student['enrollmentpercent'] = $progress['total'] > 0
             ? (int)round(($progress['enrolled'] / $progress['total']) * 100) : 0;
     } else {
