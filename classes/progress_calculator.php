@@ -41,6 +41,9 @@ class progress_calculator {
         foreach ($mappings as $mapping) {
             $moodlecourseid = (int)$mapping->moodlecourseid;
             $externalcourseid = (int)$mapping->courseid;
+            if (!$DB->record_exists('course', ['id' => $moodlecourseid])) {
+                continue;
+            }
             $ctx = \context_course::instance($moodlecourseid);
             if (!is_enrolled($ctx, $userid)) {
                 continue;
