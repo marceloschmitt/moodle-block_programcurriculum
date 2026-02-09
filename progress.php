@@ -65,8 +65,7 @@ $progress = $calculator->calculate_for_user($userid, $curriculumid);
 
 $usercompletionrepo = new \block_programcurriculum\user_completion_repository();
 $usercompletedids = $usercompletionrepo->get_completed_course_ids($userid, $curriculumid);
-$canmarkothers = has_capability('block/programcurriculum:markusercompletion', $context);
-$canmark = ($userid == $USER->id) || $canmarkothers;
+$canmark = ($userid == $USER->id);
 
 $courserepo = new \block_programcurriculum\course_repository();
 $allexternal = $courserepo->get_by_curriculum($curriculumid);

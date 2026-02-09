@@ -26,7 +26,6 @@ $string['programcurriculum:manage'] = 'Manage curricula';
 $string['programcurriculum:import'] = 'Import curriculum CSV';
 $string['programcurriculum:viewownprogress'] = 'View own curriculum progress';
 $string['programcurriculum:viewallprogress'] = 'View all students\' curriculum progress';
-$string['programcurriculum:markusercompletion'] = 'Mark discipline as completed (own or for other users)';
 $string['managecurricula'] = 'Manage curricula';
 $string['importcsv'] = 'Import CSV';
 $string['viewprogress'] = 'View progress';

@@ -39,50 +39,41 @@ class toggle_user_completion extends \external_api {
             'courseid' => new \external_value(PARAM_INT, 'Moodle course ID (for context)'),
             'externalcourseid' => new \external_value(PARAM_INT, 'External course ID (block_programcurriculum_course)'),
             'completed' => new \external_value(PARAM_BOOL, 'True to mark as completed, false to unmark'),
-            'userid' => new \external_value(PARAM_INT, 'User ID to set completion for (optional; default current user; requires viewallprogress)', VALUE_OPTIONAL, null),
         ]);
     }
 
     /**
-     * Toggle completion for an external course (self or another user if has viewallprogress).
+     * Toggle the current user's self-declared completion for an external course.
      *
      * @param int $courseid Moodle course ID
      * @param int $externalcourseid External course ID
      * @param bool $completed New completed state
-     * @param int|null $userid User to set completion for (null = current user)
      * @return array New state and success
      */
-    public static function execute(int $courseid, int $externalcourseid, bool $completed, ?int $userid = null): array {
-        global $USER, $DB;
+    public static function execute(int $courseid, int $externalcourseid, bool $completed): array {
+        global $USER;
 
         $params = self::validate_parameters(self::execute_parameters(), [
             'courseid' => $courseid,
             'externalcourseid' => $externalcourseid,
             'completed' => $completed,
-            'userid' => $userid,
         ]);
         $courseid = $params['courseid'];
         $externalcourseid = $params['externalcourseid'];
         $completed = $params['completed'];
-        $userid = $params['userid'];
 
         $context = \context_course::instance($courseid);
         self::validate_context($context);
+        require_capability('block/programcurriculum:viewownprogress', $context);
 
-        $targetuserid = (int)($userid ?? $USER->id);
-        if ($targetuserid !== (int)$USER->id) {
-            require_capability('block/programcurriculum:markusercompletion', $context);
-        } else {
-            require_capability('block/programcurriculum:viewownprogress', $context);
-        }
-
+        global $DB;
         $course = $DB->get_record('block_programcurriculum_course', ['id' => $externalcourseid], 'id, curriculumid');
         if (!$course) {
             return ['success' => false, 'completed' => false];
         }
 
         $repo = new \block_programcurriculum\user_completion_repository();
-        $repo->set_completed($targetuserid, $externalcourseid, $completed);
+        $repo->set_completed((int)$USER->id, $externalcourseid, $completed);
 
         return [
             'success' => true,
