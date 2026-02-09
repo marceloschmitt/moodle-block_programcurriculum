@@ -63,6 +63,10 @@ $data = [
 $calculator = new \block_programcurriculum\progress_calculator();
 $progress = $calculator->calculate_for_user($userid, $curriculumid);
 
+$usercompletionrepo = new \block_programcurriculum\user_completion_repository();
+$usercompletedids = $usercompletionrepo->get_completed_course_ids($userid, $curriculumid);
+$canmark = ($userid == $USER->id);
+
 $curriculumcourses = $mappingrepo->get_by_curriculum_with_details($curriculumid);
 $now = time();
 $grouped = [];
@@ -72,6 +76,7 @@ foreach ($curriculumcourses as $row) {
         $grouped[$key] = [
             'term' => (int)($row->term ?? 1),
             'externalcoursename' => $row->externalcoursename,
+            'externalcourseid' => $key,
             'moodlecourses' => [],
             'has_active' => false,
         ];
@@ -104,8 +109,11 @@ foreach (array_values($grouped) as $item) {
         return $m['completed'];
     }));
     $hasmoodle = $moodlecount > 0;
+    $externalcourseid = (int)($item['externalcourseid'] ?? 0);
+    $usermarked = in_array($externalcourseid, $usercompletedids, true);
     $row = [
         'externalcoursename' => $item['externalcoursename'],
+        'externalcourseid' => $externalcourseid,
         'moodlecourses' => $item['moodlecourses'],
         'moodlecount' => $moodlecount,
         'completedcount' => $completedcount,
@@ -113,6 +121,8 @@ foreach (array_values($grouped) as $item) {
         'hasmoodle' => $hasmoodle,
         'row_active' => $hasmoodle && !empty($item['has_active']),
         'row_ended' => $hasmoodle && empty($item['has_active']),
+        'canmark' => $canmark,
+        'usermarked' => $usermarked,
     ];
     $t = (int)($item['term'] ?? 1);
     if (!isset($termrows[$t])) {

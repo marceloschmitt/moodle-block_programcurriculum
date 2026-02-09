@@ -23,7 +23,10 @@ class progress_calculator {
         global $DB;
 
         $mappingrepository = new mapping_repository();
+        $usercompletionrepo = new user_completion_repository();
         $mappings = $mappingrepository->get_by_curriculum($curriculumid);
+        $usercompletedids = $usercompletionrepo->get_completed_course_ids($userid, $curriculumid);
+        $usercompletedset = array_flip($usercompletedids);
 
         if (empty($mappings)) {
             return [
@@ -38,6 +41,7 @@ class progress_calculator {
         $completedcount = 0;
         foreach ($mappings as $mapping) {
             $moodlecourseid = (int)$mapping->moodlecourseid;
+            $externalcourseid = (int)$mapping->courseid;
             $course = $DB->get_record('course', ['id' => $moodlecourseid], 'id, fullname');
             if (!$course) {
                 continue;
@@ -47,7 +51,9 @@ class progress_calculator {
                 continue;
             }
 
-            $iscompleted = $this->get_course_completion_state($userid, $moodlecourseid);
+            $moodlecompleted = $this->get_course_completion_state($userid, $moodlecourseid);
+            $usermarked = isset($usercompletedset[$externalcourseid]);
+            $iscompleted = $moodlecompleted || $usermarked;
             if ($iscompleted) {
                 $completedcount++;
             }

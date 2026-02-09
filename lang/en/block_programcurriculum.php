@@ -163,4 +163,6 @@ $string['progressbycompletion'] = 'by completion';
 $string['notenrolled'] = 'Not enrolled';
 $string['moodlecoursesforexternal'] = 'Moodle courses for {$a}';
 $string['moodlecourse_deleted'] = 'Moodle course deleted (ID: {$a})';
+$string['markascompleted'] = 'Mark as completed by me';
+$string['markedcompleted'] = 'Completed by me';
 $string['close'] = 'Close';

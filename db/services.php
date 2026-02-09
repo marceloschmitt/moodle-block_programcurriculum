@@ -26,4 +26,13 @@ $functions = [
         'capabilities' => 'block/programcurriculum:manage',
         'services'    => [MOODLE_OFFICIAL_MOBILE_SERVICE],
     ],
+    'block_programcurriculum_toggle_user_completion' => [
+        'classname'   => 'block_programcurriculum\external\toggle_user_completion',
+        'methodname'  => 'execute',
+        'description' => 'Toggle student self-declared completion of an external course.',
+        'type'        => 'write',
+        'ajax'        => true,
+        'capabilities' => 'block/programcurriculum:viewownprogress',
+        'services'    => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+    ],
 ];

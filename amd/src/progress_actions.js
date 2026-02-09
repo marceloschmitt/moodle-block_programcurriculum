@@ -1,4 +1,4 @@
-define([], function() {
+define(['core/ajax', 'core/notification'], function(Ajax, Notification) {
     'use strict';
 
     var init = function() {
@@ -7,6 +7,28 @@ define([], function() {
         var modalBody = document.getElementById('programcurriculum-moodle-modal-body');
         var modalTrigger = document.getElementById('programcurriculum-moodle-modal-trigger');
         var clickableRows = document.querySelectorAll('.programcurriculum-row-clickable');
+
+        var courseid = container && container.getAttribute('data-course-id');
+        if (courseid) {
+            var checkboxes = container.querySelectorAll('.programcurriculum-user-completion');
+            checkboxes.forEach(function(cb) {
+                cb.addEventListener('change', function() {
+                    var externalcourseid = cb.getAttribute('data-external-course-id');
+                    var completed = cb.checked;
+                    var request = {
+                        methodname: 'block_programcurriculum_toggle_user_completion',
+                        args: {
+                            courseid: parseInt(courseid, 10),
+                            externalcourseid: parseInt(externalcourseid, 10),
+                            completed: completed
+                        }
+                    };
+                    Ajax.call([request])[0].then(function() {
+                        window.location.reload();
+                    }).catch(Notification.exception);
+                });
+            });
+        }
 
         if (!modalTitle || !modalBody || !modalTrigger) {
             return;
@@ -44,15 +66,23 @@ define([], function() {
                 modalTrigger.click();
         }
 
-        clickableRows.forEach(function(row) {
-            row.addEventListener('click', function() { openModal(row); });
-            row.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    openModal(row);
-                }
+        if (clickableRows.length) {
+            clickableRows.forEach(function(row) {
+                row.addEventListener('click', function(e) {
+                    if (!e.target.closest('.programcurriculum-user-completion, label')) {
+                        openModal(row);
+                    }
+                });
+                row.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        if (!e.target.closest('.programcurriculum-user-completion, label')) {
+                            e.preventDefault();
+                            openModal(row);
+                        }
+                    }
+                });
             });
-        });
+        }
     };
 
     return {
