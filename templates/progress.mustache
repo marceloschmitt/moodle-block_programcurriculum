@@ -10,14 +10,14 @@
             <div class="programcurriculum-progress-wheel-circle" style="--p: {{percent}};">
                 <span class="programcurriculum-progress-wheel-value">{{percent}}%</span>
             </div>
-            <div class="programcurriculum-progress-wheel-label small fw-bold mt-1">{{#str}}progressbycompletion, block_programcurriculum{{/str}}</div>
+            <div class="programcurriculum-progress-wheel-label small fw-bold mt-1">{{#str}}progressbycompletion_header, block_programcurriculum{{/str}}</div>
             <div class="programcurriculum-progress-wheel-detail small text-muted">{{completed}}/{{total}}</div>
         </div>
         <div class="programcurriculum-progress-wheel programcurriculum-progress-wheel--enrollment" role="progressbar" aria-valuenow="{{enrollmentpercent}}" aria-valuemin="0" aria-valuemax="100" title="{{#str}}progressbyenrollment, block_programcurriculum{{/str}}: {{enrollmentpercent}}% ({{enrolleddisciplines}}/{{totaldisciplines}})">
             <div class="programcurriculum-progress-wheel-circle" style="--p: {{enrollmentpercent}};">
                 <span class="programcurriculum-progress-wheel-value">{{enrollmentpercent}}%</span>
             </div>
-            <div class="programcurriculum-progress-wheel-label small fw-bold mt-1">{{#str}}progressbyenrollment, block_programcurriculum{{/str}}</div>
+            <div class="programcurriculum-progress-wheel-label small fw-bold mt-1">{{#str}}progressbyenrollment_header, block_programcurriculum{{/str}}</div>
             <div class="programcurriculum-progress-wheel-detail small text-muted">{{enrolleddisciplines}}/{{totaldisciplines}}</div>
         </div>
     </div>
