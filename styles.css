@@ -31,6 +31,13 @@
     border-radius: 0.25rem;
 }
 
+/* Completed (by teacher or student) overrides active/ended. */
+.programcurriculum-progress .programcurriculum-row-completed {
+    background-color: #d4edda !important;
+    padding-left: 0.5rem !important;
+    border-radius: 0.25rem;
+}
+
 .programcurriculum-progress .programcurriculum-row-clickable {
     cursor: pointer;
 }
@@ -41,6 +48,9 @@
     height: 1rem;
     border-radius: 0.2rem;
     border: 1px solid rgba(0, 0, 0, 0.15);
+}
+.programcurriculum-progress .programcurriculum-legend-completed {
+    background-color: #d4edda;
 }
 .programcurriculum-progress .programcurriculum-legend-active {
     background-color: #e6f2ff;

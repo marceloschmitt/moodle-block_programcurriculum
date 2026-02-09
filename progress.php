@@ -111,6 +111,7 @@ foreach (array_values($grouped) as $item) {
     $hasmoodle = $moodlecount > 0;
     $externalcourseid = (int)($item['externalcourseid'] ?? 0);
     $usermarked = in_array($externalcourseid, $usercompletedids, true);
+    $rowcompleted = ($hasmoodle && $completedcount > 0) || (!$hasmoodle && $usermarked);
     $row = [
         'externalcoursename' => $item['externalcoursename'],
         'externalcourseid' => $externalcourseid,
@@ -121,6 +122,7 @@ foreach (array_values($grouped) as $item) {
         'hasmoodle' => $hasmoodle,
         'row_active' => $hasmoodle && !empty($item['has_active']),
         'row_ended' => $hasmoodle && empty($item['has_active']),
+        'row_completed' => $rowcompleted,
         'canmark' => $canmark,
         'usermarked' => $usermarked,
     ];
