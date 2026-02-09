@@ -133,6 +133,7 @@ foreach (array_values($grouped) as $item) {
     $termrows[$t]['courserows'][] = $row;
 }
 $data['termsections'] = array_values($termrows);
+$data['canmark'] = $canmark;
 $totaldisciplines = count($grouped);
 $enrolleddisciplines = count(array_filter(array_values($grouped), function ($item) {
     return !empty($item['moodlecourses']);

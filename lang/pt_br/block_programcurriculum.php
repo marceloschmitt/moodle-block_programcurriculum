@@ -166,4 +166,5 @@ $string['moodlecoursesforexternal'] = 'Cursos Moodle para {$a}';
 $string['moodlecourse_deleted'] = 'Curso Moodle excluído (ID: {$a})';
 $string['markascompleted'] = 'Marcar como concluída';
 $string['markedcompleted'] = 'Concluída';
+$string['markdisciplinescompleted'] = 'Marque as disciplinas que você concluiu';
 $string['close'] = 'Fechar';

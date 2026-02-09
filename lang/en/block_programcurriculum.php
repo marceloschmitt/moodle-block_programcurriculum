@@ -166,4 +166,5 @@ $string['moodlecoursesforexternal'] = 'Moodle courses for {$a}';
 $string['moodlecourse_deleted'] = 'Moodle course deleted (ID: {$a})';
 $string['markascompleted'] = 'Mark as completed';
 $string['markedcompleted'] = 'Completed';
+$string['markdisciplinescompleted'] = 'Mark the disciplines you have completed';
 $string['close'] = 'Close';
