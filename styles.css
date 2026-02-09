@@ -19,6 +19,43 @@
     margin-bottom: 1rem;
 }
 
+/* Progress page: circular progress wheels (roda). */
+.programcurriculum-progress-wheels {
+    align-items: flex-start;
+}
+.programcurriculum-progress-wheel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.programcurriculum-progress-wheel-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: conic-gradient(#0d6efd 0deg calc(var(--p, 0) * 3.6deg), #e9ecef calc(var(--p, 0) * 3.6deg) 360deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.programcurriculum-progress-wheel-circle::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    background: #fff;
+}
+.programcurriculum-progress-wheel-value {
+    position: relative;
+    z-index: 1;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+.programcurriculum-progress-wheel--enrollment .programcurriculum-progress-wheel-circle {
+    background: conic-gradient(#0dcaf0 0deg calc(var(--p, 0) * 3.6deg), #e9ecef calc(var(--p, 0) * 3.6deg) 360deg);
+}
+
 .programcurriculum-progress .programcurriculum-row-active {
     background-color: #e6f2ff !important;
     padding-left: 0.5rem !important;
