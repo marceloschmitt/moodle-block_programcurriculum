@@ -5,30 +5,46 @@
     <p class="mb-3 text-muted">{{#str}}clickstudentprogress, block_programcurriculum{{/str}}</p>
     {{#hascurricula}}
         {{#hasstudents}}
-        <ul class="list-unstyled mt-2">
-        {{#students}}
-            <li class="py-2 border-bottom d-flex flex-wrap align-items-center gap-2">
-                <a href="{{viewurl}}" class="me-2">{{fullname}}</a>
-                <span class="d-inline-flex flex-wrap align-items-center gap-3 flex-grow-1">
-                    <span class="programcurriculum-student-progress-bar-wrap d-inline-flex align-items-center gap-1" style="min-width: 120px;">
-                        <span class="small text-muted me-1">{{#str}}progressbycompletion, block_programcurriculum{{/str}}:</span>
-                        <div class="progress flex-grow-1" style="height: 0.75rem; min-width: 60px;" role="progressbar" aria-valuenow="{{progresspercent}}" aria-valuemin="0" aria-valuemax="100" title="{{#str}}progressbycompletion, block_programcurriculum{{/str}}: {{progresspercent}}%">
-                            <div class="progress-bar" style="width: {{progresspercent}}%"></div>
-                        </div>
-                        <span class="small text-muted" style="min-width: 2.5rem;">{{progresspercent}}%</span>
-                    </span>
-                    <span class="programcurriculum-student-progress-bar-wrap d-inline-flex align-items-center gap-1" style="min-width: 120px;">
-                        <span class="small text-muted me-1">{{#str}}progressbyenrollment, block_programcurriculum{{/str}}:</span>
-                        <div class="progress flex-grow-1" style="height: 0.75rem; min-width: 60px;" role="progressbar" aria-valuenow="{{enrollmentpercent}}" aria-valuemin="0" aria-valuemax="100" title="{{#str}}progressbyenrollment, block_programcurriculum{{/str}}: {{enrollmentpercent}}%">
-                            <div class="progress-bar bg-info" style="width: {{enrollmentpercent}}%"></div>
-                        </div>
-                        <span class="small text-muted" style="min-width: 2.5rem;">{{enrollmentpercent}}%</span>
-                    </span>
-                    <span class="small text-muted">{{#str}}currentsubscriptions, block_programcurriculum{{/str}} {{enrolledcount}}</span>
-                </span>
-            </li>
-        {{/students}}
-        </ul>
+        <div class="programcurriculum-students-table-wrap table-responsive mt-2">
+            <table class="table table-hover table-sm programcurriculum-students-table mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col" class="programcurriculum-col-name">{{#str}}student, block_programcurriculum{{/str}}</th>
+                        <th scope="col" class="programcurriculum-col-completion text-nowrap">{{#str}}progressbycompletion, block_programcurriculum{{/str}}</th>
+                        <th scope="col" class="programcurriculum-col-enrollment text-nowrap">{{#str}}progressbyenrollment, block_programcurriculum{{/str}}</th>
+                        <th scope="col" class="programcurriculum-col-subscriptions text-nowrap">{{#str}}currentsubscriptions, block_programcurriculum{{/str}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{#students}}
+                    <tr>
+                        <td class="programcurriculum-col-name align-middle">
+                            <a href="{{viewurl}}">{{fullname}}</a>
+                        </td>
+                        <td class="programcurriculum-col-completion align-middle">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="progress programcurriculum-student-progress" style="height: 0.75rem; min-width: 80px;" role="progressbar" aria-valuenow="{{progresspercent}}" aria-valuemin="0" aria-valuemax="100" title="{{progresspercent}}%">
+                                    <div class="progress-bar" style="width: {{progresspercent}}%"></div>
+                                </div>
+                                <span class="text-muted small" style="min-width: 2.25rem;">{{progresspercent}}%</span>
+                            </div>
+                        </td>
+                        <td class="programcurriculum-col-enrollment align-middle">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="progress programcurriculum-student-progress" style="height: 0.75rem; min-width: 80px;" role="progressbar" aria-valuenow="{{enrollmentpercent}}" aria-valuemin="0" aria-valuemax="100" title="{{enrollmentpercent}}%">
+                                    <div class="progress-bar bg-info" style="width: {{enrollmentpercent}}%"></div>
+                                </div>
+                                <span class="text-muted small" style="min-width: 2.25rem;">{{enrollmentpercent}}%</span>
+                            </div>
+                        </td>
+                        <td class="programcurriculum-col-subscriptions align-middle text-muted">
+                            {{enrolledcount}}
+                        </td>
+                    </tr>
+                {{/students}}
+                </tbody>
+            </table>
+        </div>
         {{/hasstudents}}
         {{^hasstudents}}
         <div class="alert alert-info mt-3">{{#str}}nostudents, block_programcurriculum{{/str}}</div>

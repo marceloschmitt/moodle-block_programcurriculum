@@ -93,6 +93,7 @@ $data['hasstudents'] = !empty($data['students']);
 $PAGE->set_context($context);
 $PAGE->set_course($course);
 $PAGE->set_pagelayout('incourse');
+$PAGE->requires->css('/blocks/programcurriculum/styles.css');
 $PAGE->set_secondary_navigation(false);
 $PAGE->set_url('/blocks/programcurriculum/view.php', ['courseid' => $courseid]);
 $PAGE->set_title(get_string('viewtitle', 'block_programcurriculum'));

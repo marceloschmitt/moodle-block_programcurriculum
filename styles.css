@@ -77,3 +77,38 @@
     overflow: visible !important;
     text-overflow: clip !important;
 }
+
+/* Students list table: aligned columns and spacing. */
+.programcurriculum-students-table-wrap {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 0.25rem;
+    overflow: hidden;
+}
+.programcurriculum-students-table thead th {
+    font-weight: 600;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.programcurriculum-students-table tbody td {
+    padding: 0.5rem 0.75rem;
+    vertical-align: middle;
+}
+.programcurriculum-students-table .programcurriculum-col-name {
+    min-width: 12rem;
+}
+.programcurriculum-students-table .programcurriculum-col-completion,
+.programcurriculum-students-table .programcurriculum-col-enrollment {
+    width: 1%;
+    white-space: nowrap;
+}
+.programcurriculum-students-table .programcurriculum-col-subscriptions {
+    width: 1%;
+    text-align: center;
+    min-width: 3rem;
+}
+.programcurriculum-students-table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+.programcurriculum-students-table .programcurriculum-student-progress {
+    max-width: 120px;
+}
