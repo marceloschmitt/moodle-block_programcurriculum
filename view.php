@@ -26,15 +26,13 @@ $context = context_course::instance($courseid);
 require_capability('block/programcurriculum:viewownprogress', $context);
 
 $canviewall = has_capability('block/programcurriculum:viewallprogress', $context);
-$canmarkothers = has_capability('block/programcurriculum:markusercompletion', $context);
-$canviewlist = $canviewall || $canmarkothers;
 
 $mappingrepo = new \block_programcurriculum\mapping_repository();
 $coursemappings = $mappingrepo->get_by_moodle_course($courseid);
 $firstmapping = !empty($coursemappings) ? reset($coursemappings) : null;
 $curriculumid = $firstmapping ? (int)$firstmapping->curriculumid : 0;
 
-if (!$canviewlist) {
+if (!$canviewall) {
     if ($curriculumid <= 0) {
         redirect(new moodle_url('/course/view.php', ['id' => $courseid]));
     }

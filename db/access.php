@@ -65,8 +65,8 @@ $capabilities = [
         'captype' => 'read',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => [
-            'teacher' => CAP_PREVENT,
-            'editingteacher' => CAP_PREVENT,
+            'teacher' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW,
         ],
     ],
@@ -74,8 +74,8 @@ $capabilities = [
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => [
-            'teacher' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
+            'teacher' => CAP_PREVENT,
+            'editingteacher' => CAP_PREVENT,
             'manager' => CAP_ALLOW,
         ],
     ],

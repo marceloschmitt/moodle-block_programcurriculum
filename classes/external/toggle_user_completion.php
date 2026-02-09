@@ -71,10 +71,7 @@ class toggle_user_completion extends \external_api {
 
         $targetuserid = (int)($userid ?? $USER->id);
         if ($targetuserid !== (int)$USER->id) {
-            if (!has_capability('block/programcurriculum:viewallprogress', $context)
-                    && !has_capability('block/programcurriculum:markusercompletion', $context)) {
-                throw new \required_capability_exception($context, 'block/programcurriculum:markusercompletion', 'nopermissions', '');
-            }
+            require_capability('block/programcurriculum:markusercompletion', $context);
         } else {
             require_capability('block/programcurriculum:viewownprogress', $context);
         }
