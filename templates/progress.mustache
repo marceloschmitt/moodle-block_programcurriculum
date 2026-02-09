@@ -55,7 +55,6 @@
                     <input type="checkbox" class="programcurriculum-user-completion" data-external-course-id="{{externalcourseid}}" {{#usermarked}}checked{{/usermarked}} aria-label="{{#str}}markascompleted, block_programcurriculum{{/str}}">
                 </label>
                 {{/canmark}}
-                <span class="text-muted">{{#hasmoodle}}{{completedcount}}/{{moodlecount}}{{/hasmoodle}}{{^hasmoodle}}—{{/hasmoodle}}</span>
             </li>
         {{/courserows}}
         </ul>
