@@ -54,6 +54,7 @@ $data = [
     'hasstudents' => false,
 ];
 
+$calculator = $curriculumid > 0 ? new \block_programcurriculum\progress_calculator() : null;
 $namefields = 'u.id, u.firstname, u.lastname, u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename';
 $users = get_enrolled_users($context, 'moodle/course:isincompletionreports', 0, $namefields, 'u.lastname ASC, u.firstname ASC');
 foreach ($users as $u) {
@@ -62,11 +63,24 @@ foreach ($users as $u) {
         'userid' => $u->id,
         'curriculumid' => $curriculumid,
     ]);
-    $data['students'][] = [
+    $student = [
         'id' => $u->id,
         'fullname' => fullname($u),
         'viewurl' => $url->out(false),
     ];
+    if ($calculator && $curriculumid > 0) {
+        $progress = $calculator->calculate_for_user((int)$u->id, $curriculumid);
+        $student['progresspercent'] = $progress['percent'];
+        $student['progresscompleted'] = $progress['completed'];
+        $student['progresstotal'] = $progress['total'];
+        $student['enrolledcount'] = $progress['enrolled'];
+    } else {
+        $student['progresspercent'] = 0;
+        $student['progresscompleted'] = 0;
+        $student['progresstotal'] = 0;
+        $student['enrolledcount'] = 0;
+    }
+    $data['students'][] = $student;
 }
 usort($data['students'], function ($a, $b) {
     return strcoll($a['fullname'], $b['fullname']);

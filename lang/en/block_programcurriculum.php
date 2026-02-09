@@ -159,6 +159,7 @@ $string['mappedcourse'] = 'Mapped course';
 $string['externalcourse'] = 'External course';
 $string['program'] = 'Program';
 $string['enrolled'] = 'Enrolled';
+$string['enrolleddisciplinescount'] = '{$a} discipline(s)';
 $string['progressbyenrollment'] = 'by enrollment';
 $string['progressbycompletion'] = 'by completion';
 $string['notenrolled'] = 'Not enrolled';

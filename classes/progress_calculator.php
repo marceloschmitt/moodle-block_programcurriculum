@@ -37,7 +37,9 @@ class progress_calculator {
         $usercompletedset = array_flip($usercompletedids);
 
         // Completed external disciplines: marked by user OR completed in Moodle (user enrolled).
+        // Enrolled external disciplines: those where user is enrolled in at least one mapped Moodle course.
         $completedexternalids = $usercompletedids;
+        $enrolledexternalids = [];
         foreach ($mappings as $mapping) {
             $moodlecourseid = (int)$mapping->moodlecourseid;
             $externalcourseid = (int)$mapping->courseid;
@@ -48,12 +50,14 @@ class progress_calculator {
             if (!is_enrolled($ctx, $userid)) {
                 continue;
             }
+            $enrolledexternalids[] = $externalcourseid;
             if ($this->get_course_completion_state($userid, $moodlecourseid)) {
                 $completedexternalids[] = $externalcourseid;
             }
         }
         $completedexternalids = array_unique($completedexternalids);
         $completedcount = count(array_intersect($completedexternalids, $allexternalids));
+        $enrolledcount = count(array_unique(array_intersect($enrolledexternalids, $allexternalids)));
 
         $percent = $total > 0 ? (int)round(($completedcount / $total) * 100) : 0;
 
@@ -89,6 +93,7 @@ class progress_calculator {
             'total' => $total,
             'completed' => $completedcount,
             'percent' => $percent,
+            'enrolled' => $enrolledcount,
             'details' => $details,
             'details_by_course' => $detailsbycourse,
         ];
