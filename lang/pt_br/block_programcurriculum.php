@@ -161,6 +161,7 @@ $string['program'] = 'Programa';
 $string['enrolled'] = 'Inscrito';
 $string['enrolleddisciplinescount'] = '{$a} disciplina(s)';
 $string['currentdisciplinescount'] = 'Número de disciplinas correntes:';
+$string['currentsubscriptions'] = 'Inscrições correntes';
 $string['progressbyenrollment'] = 'por inscrição';
 $string['progressbycompletion'] = 'por conclusão';
 $string['notenrolled'] = 'Não inscrito';
