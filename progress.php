@@ -67,19 +67,26 @@ $usercompletionrepo = new \block_programcurriculum\user_completion_repository();
 $usercompletedids = $usercompletionrepo->get_completed_course_ids($userid, $curriculumid);
 $canmark = ($userid == $USER->id);
 
+$courserepo = new \block_programcurriculum\course_repository();
+$allexternal = $courserepo->get_by_curriculum($curriculumid);
+$grouped = [];
+foreach ($allexternal as $ext) {
+    $key = (int)$ext->id;
+    $grouped[$key] = [
+        'term' => (int)($ext->term ?? 1),
+        'externalcoursename' => $ext->name,
+        'externalcourseid' => $key,
+        'moodlecourses' => [],
+        'has_active' => false,
+    ];
+}
+
 $curriculumcourses = $mappingrepo->get_by_curriculum_with_details($curriculumid);
 $now = time();
-$grouped = [];
 foreach ($curriculumcourses as $row) {
     $key = (int)$row->externalcourseid;
     if (!isset($grouped[$key])) {
-        $grouped[$key] = [
-            'term' => (int)($row->term ?? 1),
-            'externalcoursename' => $row->externalcoursename,
-            'externalcourseid' => $key,
-            'moodlecourses' => [],
-            'has_active' => false,
-        ];
+        continue;
     }
     $ctx = context_course::instance((int)$row->moodlecourseid);
     if (is_enrolled($ctx, $userid)) {

@@ -22,23 +22,40 @@ class progress_calculator {
     public function calculate_for_user(int $userid, int $curriculumid): array {
         global $DB;
 
+        $courserepo = new course_repository();
         $mappingrepository = new mapping_repository();
         $usercompletionrepo = new user_completion_repository();
+
+        $allexternal = $courserepo->get_by_curriculum($curriculumid);
+        $allexternalids = array_map(function ($c) {
+            return (int)$c->id;
+        }, $allexternal);
+        $total = count($allexternalids);
+
         $mappings = $mappingrepository->get_by_curriculum($curriculumid);
         $usercompletedids = $usercompletionrepo->get_completed_course_ids($userid, $curriculumid);
         $usercompletedset = array_flip($usercompletedids);
 
-        if (empty($mappings)) {
-            return [
-                'total' => 0,
-                'completed' => 0,
-                'percent' => 0,
-                'details' => [],
-            ];
+        // Completed external disciplines: marked by user OR completed in Moodle (user enrolled).
+        $completedexternalids = $usercompletedids;
+        foreach ($mappings as $mapping) {
+            $moodlecourseid = (int)$mapping->moodlecourseid;
+            $externalcourseid = (int)$mapping->courseid;
+            $ctx = \context_course::instance($moodlecourseid);
+            if (!is_enrolled($ctx, $userid)) {
+                continue;
+            }
+            if ($this->get_course_completion_state($userid, $moodlecourseid)) {
+                $completedexternalids[] = $externalcourseid;
+            }
         }
+        $completedexternalids = array_unique($completedexternalids);
+        $completedcount = count(array_intersect($completedexternalids, $allexternalids));
 
+        $percent = $total > 0 ? (int)round(($completedcount / $total) * 100) : 0;
+
+        // details / details_by_course: per Moodle course (for UI list/modal).
         $details = [];
-        $completedcount = 0;
         foreach ($mappings as $mapping) {
             $moodlecourseid = (int)$mapping->moodlecourseid;
             $externalcourseid = (int)$mapping->courseid;
@@ -50,13 +67,9 @@ class progress_calculator {
             if (!is_enrolled($ctx, $userid)) {
                 continue;
             }
-
             $moodlecompleted = $this->get_course_completion_state($userid, $moodlecourseid);
             $usermarked = isset($usercompletedset[$externalcourseid]);
             $iscompleted = $moodlecompleted || $usermarked;
-            if ($iscompleted) {
-                $completedcount++;
-            }
 
             $details[] = [
                 'courseid' => $course->id,
@@ -64,10 +77,6 @@ class progress_calculator {
                 'completed' => $iscompleted,
             ];
         }
-
-        $total = count($details);
-        $percent = $total > 0 ? (int)round(($completedcount / $total) * 100) : 0;
-
         $detailsbycourse = [];
         foreach ($details as $d) {
             $detailsbycourse[$d['courseid']] = $d['completed'];
