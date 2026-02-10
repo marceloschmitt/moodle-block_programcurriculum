@@ -74,7 +74,7 @@ class block_programcurriculum extends block_base {
         $this->content->footer = '';
 
         $wheelshtml = '';
-        if ($courseid > 0 && has_capability('block/programcurriculum:viewownprogress', $coursecontext)) {
+        if ($courseid > 0 && has_capability('block/programcurriculum:viewownprogress', $coursecontext) && !has_capability('block/programcurriculum:viewallprogress', $coursecontext)) {
             $mappingrepo = new \block_programcurriculum\mapping_repository();
             $coursemappings = $mappingrepo->get_by_moodle_course($courseid);
             $firstmapping = !empty($coursemappings) ? reset($coursemappings) : null;
