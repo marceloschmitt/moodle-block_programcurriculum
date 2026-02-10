@@ -72,13 +72,44 @@ class block_programcurriculum extends block_base {
         $this->content = new stdClass();
         $this->content->text = '';
         $this->content->footer = '';
+
+        $wheelshtml = '';
+        if ($courseid > 0 && has_capability('block/programcurriculum:viewownprogress', $coursecontext)) {
+            $mappingrepo = new \block_programcurriculum\mapping_repository();
+            $coursemappings = $mappingrepo->get_by_moodle_course($courseid);
+            $firstmapping = !empty($coursemappings) ? reset($coursemappings) : null;
+            $curriculumid = $firstmapping ? (int)$firstmapping->curriculumid : 0;
+            if ($curriculumid > 0) {
+                global $USER;
+                $calculator = new \block_programcurriculum\progress_calculator();
+                $progress = $calculator->calculate_for_user((int)$USER->id, $curriculumid);
+                $enrollmentpercent = $progress['total'] > 0
+                    ? (int)round(($progress['enrolled'] / $progress['total']) * 100) : 0;
+                $percent = $progress['percent'];
+                $total = $progress['total'];
+                $completed = $progress['completed'];
+                $enrolleddisciplines = $progress['enrolled'];
+                $this->page->requires->css('/blocks/programcurriculum/styles.css');
+                $wheelshtml = '<div class="programcurriculum-block-wheels programcurriculum-progress-wheels d-flex flex-wrap gap-2 mb-2">';
+                $wheelshtml .= '<div class="programcurriculum-progress-wheel" role="progressbar" aria-valuenow="' . (int)$percent . '" aria-valuemin="0" aria-valuemax="100" title="' . s(get_string('progressbycompletion', 'block_programcurriculum') . ': ' . $percent . '% (' . $completed . '/' . $total . ')') . '">';
+                $wheelshtml .= '<div class="programcurriculum-progress-wheel-circle" style="--p: ' . (int)$percent . ';"><span class="programcurriculum-progress-wheel-value">' . (int)$percent . '%</span></div>';
+                $wheelshtml .= '<div class="programcurriculum-progress-wheel-label small fw-bold mt-1">' . s(get_string('progressbycompletion_header', 'block_programcurriculum')) . '</div>';
+                $wheelshtml .= '<div class="programcurriculum-progress-wheel-detail small text-muted">' . (int)$completed . '/' . (int)$total . '</div></div>';
+                $wheelshtml .= '<div class="programcurriculum-progress-wheel programcurriculum-progress-wheel--enrollment" role="progressbar" aria-valuenow="' . (int)$enrollmentpercent . '" aria-valuemin="0" aria-valuemax="100" title="' . s(get_string('progressbyenrollment', 'block_programcurriculum') . ': ' . $enrollmentpercent . '% (' . $enrolleddisciplines . '/' . $total . ')') . '">';
+                $wheelshtml .= '<div class="programcurriculum-progress-wheel-circle" style="--p: ' . (int)$enrollmentpercent . ';"><span class="programcurriculum-progress-wheel-value">' . (int)$enrollmentpercent . '%</span></div>';
+                $wheelshtml .= '<div class="programcurriculum-progress-wheel-label small fw-bold mt-1">' . s(get_string('progressbyenrollment_header', 'block_programcurriculum')) . '</div>';
+                $wheelshtml .= '<div class="programcurriculum-progress-wheel-detail small text-muted">' . (int)$enrolleddisciplines . '/' . (int)$total . '</div></div>';
+                $wheelshtml .= '</div>';
+            }
+        }
+
         usort($items, function ($a, $b) {
             return strcoll($a['text'], $b['text']);
         });
         $links = array_map(function ($item) {
             return html_writer::link($item['url'], $item['text']);
         }, $items);
-        $this->content->text = html_writer::alist($links, ['class' => 'programcurriculum-links']);
+        $this->content->text = $wheelshtml . html_writer::alist($links, ['class' => 'programcurriculum-links']);
         return $this->content;
     }
 }

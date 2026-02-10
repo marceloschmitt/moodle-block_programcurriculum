@@ -56,6 +56,22 @@
     background: conic-gradient(#0dcaf0 0deg calc(var(--p, 0) * 3.6deg), #e9ecef calc(var(--p, 0) * 3.6deg) 360deg);
 }
 
+/* Block sidebar: smaller wheels. */
+.programcurriculum-block-wheels .programcurriculum-progress-wheel-circle {
+    width: 72px;
+    height: 72px;
+}
+.programcurriculum-block-wheels .programcurriculum-progress-wheel-circle::before {
+    inset: 6px;
+}
+.programcurriculum-block-wheels .programcurriculum-progress-wheel-value {
+    font-size: 0.85rem;
+}
+.programcurriculum-block-wheels .programcurriculum-progress-wheel-label,
+.programcurriculum-block-wheels .programcurriculum-progress-wheel-detail {
+    font-size: 0.7rem;
+}
+
 .programcurriculum-progress .programcurriculum-row-active {
     background-color: #e6f2ff !important;
     padding-left: 0.5rem !important;
