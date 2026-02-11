@@ -107,7 +107,9 @@ $string['importerrors'] = 'Erros de importação';
 $string['viewtitle'] = 'Progresso do currículo';
 $string['progressview'] = 'Visualização de progresso';
 $string['progresspercent'] = 'Progresso';
-$string['progress_intro'] = 'Esta página mostra o seu progresso no currículo do programa. Abaixo você verá os indicadores de progresso e a lista de disciplinas por período. O status de conclusão aparece nos círculos acima e na cor de cada disciplina.';
+$string['progress_intro'] = 'Esta página mostra o seu progresso no curso {$a}. Abaixo há dois indicadores de progresso e a lista de disciplinas por período. O primeiro indicador de progresso apresenta o percentual de disciplinas concluídas. Ele só funciona se você marcar as disciplinas que já concluiu. O segundo indicador é automático. Ele mostra as disciplinas das quais você já participou.
+
+A lista de disciplinas usa um esquema de cores para distinguir as disciplinas em que você está atualmente inscrito, as disciplinas em que você esteve inscrito em período anterior e as disciplinas que você já concluiu com aproveitamento (controladas por você). O status de conclusão aparece nos círculos acima e na cor de cada disciplina.';
 $string['progress_markexplanation'] = 'Você pode marcar disciplinas como concluídas usando a caixa de seleção ao lado de cada uma. Isso ajuda a acompanhar quais disciplinas você já concluiu, principalmente aquelas que ainda não possuem curso Moodle vinculado ou que você concluiu fora desta plataforma.';
 $string['progresslegend'] = 'Legenda:';
 $string['progresslegend_completed'] = 'Concluída';
@@ -161,6 +163,7 @@ $string['courseidrequired'] = 'O ID do curso é obrigatório para visualizar o p
 $string['mappedcourse'] = 'Disciplina mapeada';
 $string['externalcourse'] = 'Disciplina externa';
 $string['program'] = 'Programa';
+$string['thisprogram'] = 'deste programa';
 $string['enrolled'] = 'Inscrito';
 $string['enrolleddisciplinescount'] = '{$a} disciplina(s)';
 $string['currentdisciplinescount'] = 'Número de disciplinas correntes:';

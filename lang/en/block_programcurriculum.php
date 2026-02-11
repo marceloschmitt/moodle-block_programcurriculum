@@ -107,7 +107,9 @@ $string['importerrors'] = 'Import errors';
 $string['viewtitle'] = 'Curriculum progress';
 $string['progressview'] = 'Progress View';
 $string['progresspercent'] = 'Progress';
-$string['progress_intro'] = 'This page shows your progress in the program curriculum. Below you will see the progress indicators and the list of disciplines by term. Your completion status is reflected in the circles above and in the color of each discipline.';
+$string['progress_intro'] = 'This page shows your progress in the course {$a}. Below there are two progress indicators and the list of disciplines by term. The first progress indicator shows the percentage of completed disciplines. It only works if you mark the disciplines you have completed. The second indicator is automatic. It shows the disciplines in which you have participated.
+
+The list of disciplines uses a color scheme to distinguish disciplines you are currently enrolled in, disciplines you were enrolled in during a previous term, and disciplines you have completed with approval (controlled by you). The completion status appears in the circles above and in the color of each discipline.';
 $string['progress_markexplanation'] = 'You can mark disciplines as completed using the checkbox next to each one. This helps you keep track of which disciplines you have already completed, especially those that do not yet have a Moodle course linked or those you completed outside this platform.';
 $string['progresslegend'] = 'Legend:';
 $string['progresslegend_completed'] = 'Completed';
@@ -161,6 +163,7 @@ $string['courseidrequired'] = 'Course ID is required to view progress.';
 $string['mappedcourse'] = 'Mapped course';
 $string['externalcourse'] = 'External course';
 $string['program'] = 'Program';
+$string['thisprogram'] = 'this program';
 $string['enrolled'] = 'Enrolled';
 $string['enrolleddisciplinescount'] = '{$a} discipline(s)';
 $string['currentdisciplinescount'] = 'Number of current disciplines:';

@@ -46,11 +46,12 @@ $firstmapping = !empty($coursemappings) ? reset($coursemappings) : null;
 $user = $DB->get_record('user', ['id' => $userid], 'id, firstname, lastname, firstnamephonetic, lastnamephonetic, middlename, alternatename');
 $studentname = $user ? fullname($user) : get_string('student', 'block_programcurriculum');
 
+$programname = $firstmapping && !empty($firstmapping->programname) ? $firstmapping->programname : get_string('thisprogram', 'block_programcurriculum');
 $data = [
     'courseid' => $courseid,
     'userid' => $userid,
     'curriculumid' => $curriculumid,
-    'programname' => $firstmapping ? $firstmapping->programname : '',
+    'programname' => $programname,
     'studentname' => $studentname,
     'hasprogramname' => $firstmapping && !empty($firstmapping->programname),
     'courseviewurl' => (new moodle_url('/blocks/programcurriculum/view.php', [
