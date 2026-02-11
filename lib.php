@@ -35,54 +35,17 @@ function block_programcurriculum_extend_navigation_course(
         return;
     }
 
-    global $USER;
-
     $courseid = (int) $course->id;
-    $canviewall = has_capability('block/programcurriculum:viewallprogress', $context);
+    $url = new moodle_url('/blocks/programcurriculum/view.php', ['courseid' => $courseid]);
 
-    $mappingrepo = new \block_programcurriculum\mapping_repository();
-    $coursemappings = $mappingrepo->get_by_moodle_course($courseid);
-    $firstmapping = !empty($coursemappings) ? reset($coursemappings) : null;
-    $curriculumid = $firstmapping ? (int) $firstmapping->curriculumid : 0;
-
-    // Create parent "Currículo" with children, so it appears as a section in the nav.
     $curriculumnode = $parentnode->add(
         get_string('curriculumnav', 'block_programcurriculum'),
-        null,
-        navigation_node::TYPE_CONTAINER,
+        $url,
+        navigation_node::TYPE_CUSTOM,
         null,
         'programcurriculum',
         new pix_icon('i/report', '')
     );
     $curriculumnode->showinflatnavigation = true;
-
-    // Progress link: for students view.php redirects; for teachers link to own progress.
-    if ($canviewall && $curriculumid > 0) {
-        $progressurl = new moodle_url('/blocks/programcurriculum/progress.php', [
-            'courseid' => $courseid,
-            'userid' => $USER->id,
-            'curriculumid' => $curriculumid,
-        ]);
-    } else {
-        $progressurl = new moodle_url('/blocks/programcurriculum/view.php', ['courseid' => $courseid]);
-    }
-    $curriculumnode->add(
-        get_string('viewprogress', 'block_programcurriculum'),
-        $progressurl,
-        navigation_node::TYPE_SETTING,
-        null,
-        'programcurriculumprogress',
-        new pix_icon('i/report', '')
-    );
-
-    if ($canviewall) {
-        $curriculumnode->add(
-            get_string('listofstudents', 'block_programcurriculum'),
-            new moodle_url('/blocks/programcurriculum/view.php', ['courseid' => $courseid]),
-            navigation_node::TYPE_SETTING,
-            null,
-            'programcurriculumstudents',
-            new pix_icon('i/group', '')
-        );
-    }
+    $curriculumnode->mainnavonly = true;
 }
