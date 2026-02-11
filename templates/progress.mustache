@@ -41,12 +41,6 @@
         </span>
     </div>
 
-    {{#canmark}}
-    <div class="programcurriculum-progress-mark-explanation alert alert-info mb-4" role="note">
-        {{#str}}progress_markexplanation, block_programcurriculum{{/str}}
-    </div>
-    {{/canmark}}
-
     {{#termsections}}
     <div class="mb-4">
         <h5 class="mb-2 text-secondary">{{#str}}term, block_programcurriculum{{/str}} {{term}}{{#canmark}} <span class="fw-normal text-muted small">({{#str}}markdisciplinescompleted, block_programcurriculum{{/str}})</span>{{/canmark}}</h5>

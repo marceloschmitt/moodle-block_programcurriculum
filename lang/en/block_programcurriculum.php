@@ -108,7 +108,6 @@ $string['viewtitle'] = 'Curriculum progress';
 $string['progressview'] = 'Progress View';
 $string['progresspercent'] = 'Progress';
 $string['progress_intro'] = 'This page shows your progress in {$a}. The first indicator depends on the disciplines you mark as completed; the second is automatic (disciplines you have taken). The colors indicate: enrolled in active course, took in a previous term, or completed. Remember to mark the disciplines you have completed to track your progress.';
-$string['progress_markexplanation'] = 'You can mark disciplines as completed using the checkbox next to each one. This helps you keep track of which disciplines you have already completed, especially those that do not yet have a Moodle course linked or those you completed outside this platform.';
 $string['progresslegend'] = 'Legend:';
 $string['progresslegend_completed'] = 'Completed';
 $string['progresslegend_active'] = 'Enrolled in active course';

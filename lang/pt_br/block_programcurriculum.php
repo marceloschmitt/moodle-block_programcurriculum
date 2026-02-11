@@ -108,7 +108,6 @@ $string['viewtitle'] = 'Progresso do currículo';
 $string['progressview'] = 'Visualização de progresso';
 $string['progresspercent'] = 'Progresso';
 $string['progress_intro'] = 'Esta página mostra seu progresso no {$a}. O primeiro indicador depende das disciplinas que você marcar como concluídas; o segundo é automático (disciplinas que você já cursou). As cores na lista indicam: inscrito em curso ativo, cursou em período anterior ou concluído. Lembre-se de marcar as disciplinas que já concluiu para acompanhar seu progresso.';
-$string['progress_markexplanation'] = 'Você pode marcar disciplinas como concluídas usando a caixa de seleção ao lado de cada uma. Isso ajuda a acompanhar quais disciplinas você já concluiu, principalmente aquelas que ainda não possuem curso Moodle vinculado ou que você concluiu fora desta plataforma.';
 $string['progresslegend'] = 'Legenda:';
 $string['progresslegend_completed'] = 'Concluída';
 $string['progresslegend_active'] = 'Inscrito em curso ativo';
