@@ -4,6 +4,8 @@
         <h3 class="mb-3">{{programname}}</h3>
     {{/hasprogramname}}
 
+    <p class="programcurriculum-progress-intro text-muted mb-4">{{#str}}progress_intro, block_programcurriculum{{/str}}</p>
+
     {{#progress}}
     <div class="programcurriculum-progress-wheels d-flex flex-wrap gap-4 mt-3 mb-3">
         <div class="programcurriculum-progress-wheel" role="progressbar" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100" title="{{#str}}progressbycompletion, block_programcurriculum{{/str}}: {{percent}}% ({{completed}}/{{total}})">
@@ -23,21 +25,27 @@
     </div>
     {{/progress}}
 
-    <div class="mb-3 d-flex flex-wrap gap-3 align-items-center">
-        <span class="small text-muted">{{#str}}progresslegend, block_programcurriculum{{/str}}</span>
-        <span class="d-inline-flex align-items-center gap-1 small">
-            <span class="programcurriculum-legend-swatch programcurriculum-legend-completed" aria-hidden="true"></span>
+    <div class="programcurriculum-progress-legend mb-4 p-3 bg-light rounded d-flex flex-wrap gap-4 align-items-center">
+        <span class="programcurriculum-progress-legend-title fw-semibold">{{#str}}progresslegend, block_programcurriculum{{/str}}</span>
+        <span class="d-inline-flex align-items-center gap-2">
+            <span class="programcurriculum-legend-swatch programcurriculum-legend-completed programcurriculum-legend-swatch-lg" aria-hidden="true"></span>
             <span>{{#str}}progresslegend_completed, block_programcurriculum{{/str}}</span>
         </span>
-        <span class="d-inline-flex align-items-center gap-1 small">
-            <span class="programcurriculum-legend-swatch programcurriculum-legend-active" aria-hidden="true"></span>
+        <span class="d-inline-flex align-items-center gap-2">
+            <span class="programcurriculum-legend-swatch programcurriculum-legend-active programcurriculum-legend-swatch-lg" aria-hidden="true"></span>
             <span>{{#str}}progresslegend_active, block_programcurriculum{{/str}}</span>
         </span>
-        <span class="d-inline-flex align-items-center gap-1 small">
-            <span class="programcurriculum-legend-swatch programcurriculum-legend-ended" aria-hidden="true"></span>
+        <span class="d-inline-flex align-items-center gap-2">
+            <span class="programcurriculum-legend-swatch programcurriculum-legend-ended programcurriculum-legend-swatch-lg" aria-hidden="true"></span>
             <span>{{#str}}progresslegend_ended, block_programcurriculum{{/str}}</span>
         </span>
     </div>
+
+    {{#canmark}}
+    <div class="programcurriculum-progress-mark-explanation alert alert-info mb-4" role="note">
+        {{#str}}progress_markexplanation, block_programcurriculum{{/str}}
+    </div>
+    {{/canmark}}
 
     {{#termsections}}
     <div class="mb-4">

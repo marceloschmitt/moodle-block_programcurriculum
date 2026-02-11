@@ -102,6 +102,22 @@
     border-radius: 0.2rem;
     border: 1px solid rgba(0, 0, 0, 0.15);
 }
+.programcurriculum-progress .programcurriculum-legend-swatch-lg {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 0.25rem;
+}
+.programcurriculum-progress .programcurriculum-progress-intro {
+    font-size: 1.05rem;
+    line-height: 1.5;
+}
+.programcurriculum-progress .programcurriculum-progress-legend .programcurriculum-progress-legend-title {
+    flex-basis: 100%;
+    font-size: 1.1rem;
+}
+.programcurriculum-progress .programcurriculum-progress-legend span:not(.programcurriculum-progress-legend-title) {
+    font-size: 1rem;
+}
 .programcurriculum-progress .programcurriculum-legend-completed {
     background-color: #d4edda;
 }
