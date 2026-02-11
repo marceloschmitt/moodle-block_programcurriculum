@@ -47,5 +47,6 @@ function block_programcurriculum_extend_navigation_course(
         new pix_icon('i/report', '')
     );
     $curriculumnode->showinflatnavigation = true;
-    $curriculumnode->mainnavonly = true;
+    $curriculumnode->showinsecondarynavigation = true;
+    $curriculumnode->set_force_into_more_menu(false);
 }
