@@ -312,8 +312,8 @@ class importer {
                 continue;
             }
 
-            $course = $courserepo->get_by_externalcode($data['course_code']);
-            $term = max(1, min($numterms, (int)($data['term'] ?? ($course->term ?? 1))));
+            $course = $courserepo->get_by_externalcode_and_curriculum($data['course_code'], $curriculumid);
+            $term = max(1, min($numterms, (int)(!empty($data['term']) ? $data['term'] : ($course ? $course->term : 1))));
             $courserecord = (object)[
                 'id' => $course->id ?? 0,
                 'curriculumid' => $curriculumid,

@@ -107,6 +107,7 @@ $string['viewtitle'] = 'Progresso do currículo';
 $string['progressview'] = 'Visualização de progresso';
 $string['progresspercent'] = 'Progresso';
 $string['progress_intro'] = 'Esta página mostra seu progresso no {$a}. O primeiro indicador depende das disciplinas que você marcar como concluídas; o segundo é automático (disciplinas que você já cursou). As cores na lista indicam: inscrito em curso ativo, cursou em período anterior ou concluído. Lembre-se de marcar as disciplinas que já concluiu para acompanhar seu progresso.';
+$string['progress_optional_notincluded'] = 'Disciplinas opcionais e atividades complementares não são consideradas no cálculo do progresso.';
 $string['progresslegend'] = 'Legenda:';
 $string['progresslegend_completed'] = 'Concluída';
 $string['progresslegend_active'] = 'Inscrito em curso ativo';

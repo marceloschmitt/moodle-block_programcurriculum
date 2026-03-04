@@ -65,6 +65,11 @@ class progress_calculator {
         }
         $completedexternalids = array_unique($completedexternalids);
         $completedcount = count(array_intersect($completedexternalids, $allexternalids));
+        // Progress by enrolment: enrolled in Moodle course OR marked as completed.
+        $enrolledexternalids = array_unique(array_merge(
+            $enrolledexternalids,
+            $usercompletedids
+        ));
         $enrolledcount = count(array_unique(array_intersect($enrolledexternalids, $allexternalids)));
         $enrolledactivecount = count(array_unique(array_intersect($enrolledactiveexternalids, $allexternalids)));
 

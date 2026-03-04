@@ -143,8 +143,9 @@ foreach (array_values($grouped) as $item) {
 $data['termsections'] = array_values($termrows);
 $data['canmark'] = $canmark;
 $totaldisciplines = count($grouped);
-$enrolleddisciplines = count(array_filter(array_values($grouped), function ($item) {
-    return !empty($item['moodlecourses']);
+$enrolleddisciplines = count(array_filter(array_values($grouped), function ($item) use ($usercompletedids) {
+    $extid = (int)($item['externalcourseid'] ?? 0);
+    return !empty($item['moodlecourses']) || in_array($extid, $usercompletedids, true);
 }));
 $enrollmentpercent = $totaldisciplines > 0 ? (int)round(($enrolleddisciplines / $totaldisciplines) * 100) : 0;
 

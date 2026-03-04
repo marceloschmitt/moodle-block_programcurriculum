@@ -107,6 +107,7 @@ $string['viewtitle'] = 'Curriculum progress';
 $string['progressview'] = 'Progress View';
 $string['progresspercent'] = 'Progress';
 $string['progress_intro'] = 'This page shows your progress in {$a}. The first indicator depends on the courses you mark as completed; the second is automatic (courses you have taken). The colors indicate: enrolled in active course, took in a previous term, or completed. Remember to mark the courses you have completed to track your progress.';
+$string['progress_optional_notincluded'] = 'Optional courses and complementary activities are not included in the progress calculation.';
 $string['progresslegend'] = 'Legend:';
 $string['progresslegend_completed'] = 'Completed';
 $string['progresslegend_active'] = 'Enrolled in active course';
