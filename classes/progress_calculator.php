@@ -36,10 +36,10 @@ class progress_calculator {
         $usercompletedids = $usercompletionrepo->get_completed_course_ids($userid, $curriculumid);
         $usercompletedset = array_flip($usercompletedids);
 
-        // Completed external disciplines: marked by user OR completed in Moodle (user enrolled).
+        // Progress by completion: only disciplines marked as completed by the user.
         // Enrolled: those where user is enrolled in at least one mapped Moodle course.
         // Enrolled active: same but only Moodle courses with enddate = 0 or enddate > now (as on progress screen).
-        $completedexternalids = $usercompletedids;
+        $completedcount = count(array_intersect($usercompletedids, $allexternalids));
         $enrolledexternalids = [];
         $enrolledactiveexternalids = [];
         $now = time();
@@ -59,12 +59,7 @@ class progress_calculator {
             if ($enddate === 0 || $enddate > $now) {
                 $enrolledactiveexternalids[] = $externalcourseid;
             }
-            if ($this->get_course_completion_state($userid, $moodlecourseid)) {
-                $completedexternalids[] = $externalcourseid;
-            }
         }
-        $completedexternalids = array_unique($completedexternalids);
-        $completedcount = count(array_intersect($completedexternalids, $allexternalids));
         // Progress by enrolment: enrolled in Moodle course OR marked as completed.
         $enrolledexternalids = array_unique(array_merge(
             $enrolledexternalids,
