@@ -119,7 +119,7 @@ foreach (array_values($grouped) as $item) {
     $hasmoodle = $moodlecount > 0;
     $externalcourseid = (int)($item['externalcourseid'] ?? 0);
     $usermarked = in_array($externalcourseid, $usercompletedids, true);
-    $rowcompleted = ($hasmoodle && $completedcount > 0) || (!$hasmoodle && $usermarked);
+    $rowcompleted = $usermarked;
     $row = [
         'externalcoursename' => $item['externalcoursename'],
         'externalcourseid' => $externalcourseid,

@@ -72,6 +72,10 @@
     font-size: 0.7rem;
 }
 
+/* No background when neither active, ended, nor completed. */
+.programcurriculum-progress ul.list-unstyled li {
+    background-color: transparent;
+}
 .programcurriculum-progress .programcurriculum-row-active {
     background-color: #e6f2ff !important;
     padding-left: 0.5rem !important;
