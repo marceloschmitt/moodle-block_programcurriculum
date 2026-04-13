@@ -61,7 +61,9 @@ $string['editcourse'] = 'Editar disciplina';
 $string['coursename'] = 'Nome da disciplina';
 $string['coursecode'] = 'Código da disciplina';
 $string['equivalencecode'] = 'Código de equivalência';
-$string['equivalencecode_help'] = 'Código alternativo para esta disciplina. O mapeamento automático pode usar tanto o código original quanto o código de equivalência para encontrar cursos Moodle. Opcional.';
+$string['equivalencecode_help'] = 'Código alternativo para esta disciplina. O mapeamento automático ' .
+    'pode usar tanto o código original quanto o código de equivalência para encontrar cursos ' .
+    'Moodle. Opcional.';
 $string['duplicatecoursecode'] = 'Este código de disciplina já está em uso.';
 $string['deletecoursebody'] = 'Isso excluirá "{$a}".';
 $string['deletecoursetitle'] = 'Excluir disciplina?';
@@ -88,7 +90,9 @@ $string['automaticmappingdone'] = 'Mapeamento automático concluído. {$a} mapea
 $string['automaticmappingnocode'] = 'A disciplina externa não possui código. Não é possível executar o mapeamento automático.';
 $string['automaticmappingdonecurriculum'] = 'Mapeamento automático concluído. {$a} mapeamento(s) criado(s) para as disciplinas do currículo.';
 $string['assistedmapping'] = 'Mapeamento assistido';
-$string['assistedmapping_help'] = 'Para cada disciplina externa, são listados cursos do Moodle cujo nome contém o nome ou código da disciplina. Selecione os mapeamentos que deseja criar e clique em Confirmar. Cursos já mapeados não aparecem.';
+$string['assistedmapping_help'] = 'Para cada disciplina externa, são listados cursos do Moodle cujo ' .
+    'nome contém o nome ou código da disciplina. Selecione os mapeamentos que deseja criar e ' .
+    'clique em Confirmar. Cursos já mapeados não aparecem.';
 $string['assistedmapping_select'] = 'Selecione os cursos Moodle para mapear:';
 $string['assistedmapping_nosuggestions'] = 'Nenhum curso Moodle encontrado contendo este nome ou código, ou todas as correspondências já estão mapeadas.';
 $string['assistedmapping_confirm'] = 'Confirmar mapeamentos selecionados';
@@ -108,13 +112,18 @@ $string['mappingformerror'] = 'Por favor, corrija os erros no formulário de map
 $string['duplicatemapping'] = 'Este curso Moodle já está mapeado para esta disciplina externa.';
 $string['courseplaceholder'] = 'Digite para buscar uma disciplina';
 $string['importtitle'] = 'Importar CSV de currículo';
-$string['importhelp'] = 'Colunas do CSV: curriculum_code, curriculum_name, course_code, course_name, moodle_course_id, sortorder, curriculum_description. Opcionais: numterms, term, equivalence_code';
+$string['importhelp'] = 'Colunas do CSV: curriculum_code, curriculum_name, course_code, course_name, ' .
+    'moodle_course_id, sortorder, curriculum_description. Opcionais: numterms, term, ' .
+    'equivalence_code';
 $string['importsuccess'] = 'Importação CSV concluída.';
 $string['importerrors'] = 'Erros de importação';
 $string['viewtitle'] = 'Progresso do currículo';
 $string['progressview'] = 'Visualização de progresso';
 $string['progresspercent'] = 'Progresso';
-$string['progress_intro'] = 'Esta página mostra seu progresso no {$a}. O primeiro indicador depende das disciplinas que você marcar como concluídas; o segundo é automático (disciplinas que você já cursou). As cores na lista indicam: inscrito em curso ativo, cursou em período anterior ou concluído. Lembre-se de marcar as disciplinas que já concluiu para acompanhar seu progresso.';
+$string['progress_intro'] = 'Esta página mostra seu progresso no {$a}. O primeiro indicador depende ' .
+    'das disciplinas que você marcar como concluídas; o segundo é automático (disciplinas que você ' .
+    'já cursou). As cores na lista indicam: inscrito em curso ativo, cursou em período anterior ou ' .
+    'concluído. Lembre-se de marcar as disciplinas que já concluiu para acompanhar seu progresso.';
 $string['progress_optional_notincluded'] = 'Disciplinas opcionais e atividades complementares não são consideradas no cálculo do progresso.';
 $string['progresslegend'] = 'Legenda:';
 $string['progresslegend_completed'] = 'Concluída';
@@ -145,8 +154,12 @@ $string['csvfile'] = 'Arquivo CSV';
 $string['upload'] = 'Enviar';
 $string['importtext_content'] = 'Conteúdo do arquivo';
 $string['importtext_format'] = 'Formato do arquivo de importação';
-$string['importtext_format_help'] = 'Uma linha com o nome do programa; em seguida, para cada período: uma linha com o semestre (ex.: 1 ou 1º Semestre) e as linhas seguintes com o nome de cada disciplina do período. Repita o semestre e as disciplinas para os próximos períodos.';
-$string['importtext_format_short'] = 'Formato: primeira linha = nome do programa; depois, para cada período: uma linha com o semestre (ex.: 1 ou 1º Semestre) e as próximas linhas com as disciplinas do período.';
+$string['importtext_format_help'] = 'Uma linha com o nome do programa; em seguida, para cada período: ' .
+    'uma linha com o semestre (ex.: 1 ou 1º Semestre) e as linhas seguintes com o nome de cada ' .
+    'disciplina do período. Repita o semestre e as disciplinas para os próximos períodos.';
+$string['importtext_format_short'] = 'Formato: primeira linha = nome do programa; depois, para cada ' .
+    'período: uma linha com o semestre (ex.: 1 ou 1º Semestre) e as próximas linhas com as ' .
+    'disciplinas do período.';
 $string['importtext_file'] = 'Ou envie um arquivo';
 $string['importtext_file_help'] = 'Envie um arquivo .txt (ou .csv) no mesmo formato: nome do programa, depois semestre e disciplinas por período.';
 $string['importtext_preview'] = 'Visualizar';

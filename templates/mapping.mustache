@@ -9,7 +9,12 @@
     {{/validationerror}}
 
     <div class="mb-2">
-        <button class="btn btn-primary" type="button" data-action="add-mapping" data-course-id="{{courseid}}" data-bs-toggle="modal" data-bs-target="#programcurriculum-mapping-modal">
+        <button class="btn btn-primary"
+            type="button"
+            data-action="add-mapping"
+            data-course-id="{{courseid}}"
+            data-bs-toggle="modal"
+            data-bs-target="#programcurriculum-mapping-modal">
             {{#str}}manualmapping, block_programcurriculum{{/str}}
         </button>
         <a class="btn btn-secondary" href="{{automaticurl}}">{{#str}}automaticmapping, block_programcurriculum{{/str}}</a>
@@ -21,7 +26,11 @@
             {{#mappings}}
                 <li class="d-flex align-items-center py-1 border-bottom">
                     <span>{{coursename}}</span>
-                    <a class="btn btn-link p-0 text-decoration-none ms-2" href="{{deleteurl}}" data-confirm-message="{{deleteconfirm}}" data-confirm-name="{{coursename}}" aria-label="{{#str}}delete{{/str}}">
+                    <a class="btn btn-link p-0 text-decoration-none ms-2"
+                        href="{{deleteurl}}"
+                        data-confirm-message="{{deleteconfirm}}"
+                        data-confirm-name="{{coursename}}"
+                        aria-label="{{#str}}delete{{/str}}">
                         {{#pix}}t/delete, core{{/pix}}
                     </a>
                 </li>
