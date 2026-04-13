@@ -24,6 +24,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Handles xmldb_block_programcurriculum_upgrade.
+ *
+ * @param int $oldversion Parameter.
+ * @return bool Return value.
+ */
 function xmldb_block_programcurriculum_upgrade(int $oldversion): bool {
     global $DB;
 

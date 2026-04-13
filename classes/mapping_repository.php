@@ -27,18 +27,36 @@ namespace block_programcurriculum;
 defined('MOODLE_INTERNAL') || die();
 
 class mapping_repository {
+    /**
+     * Handles get.
+     *
+     * @param int $id Parameter.
+     * @return ?\\stdClass Return value.
+     */
     public function get(int $id): ?\stdClass {
         global $DB;
 
         return $DB->get_record('block_programcurriculum_mapping', ['id' => $id]);
     }
 
+    /**
+     * Handles get_by_course.
+     *
+     * @param int $courseid Parameter.
+     * @return array Return value.
+     */
     public function get_by_course(int $courseid): array {
         global $DB;
 
         return $DB->get_records('block_programcurriculum_mapping', ['courseid' => $courseid], 'id ASC');
     }
 
+    /**
+     * Handles has_for_course.
+     *
+     * @param int $courseid Parameter.
+     * @return bool Return value.
+     */
     public function has_for_course(int $courseid): bool {
         global $DB;
 
@@ -60,6 +78,12 @@ class mapping_repository {
         }
     }
 
+    /**
+     * Handles get_by_curriculum.
+     *
+     * @param int $curriculumid Parameter.
+     * @return array Return value.
+     */
     public function get_by_curriculum(int $curriculumid): array {
         global $DB;
 
@@ -158,6 +182,12 @@ class mapping_repository {
         return array_values($DB->get_records_sql($sql, $params));
     }
 
+    /**
+     * Handles get_counts_by_course_ids.
+     *
+     * @param array $courseids Parameter.
+     * @return array Return value.
+     */
     public function get_counts_by_course_ids(array $courseids): array {
         global $DB;
 
@@ -174,6 +204,12 @@ class mapping_repository {
         return $DB->get_records_sql_menu($sql, $params);
     }
 
+    /**
+     * Handles upsert.
+     *
+     * @param \\stdClass $record Parameter.
+     * @return int Return value.
+     */
     public function upsert(\stdClass $record): int {
         global $DB;
 
@@ -186,6 +222,12 @@ class mapping_repository {
     }
 
 
+    /**
+     * Handles delete.
+     *
+     * @param int $id Parameter.
+     * @return void Return value.
+     */
     public function delete(int $id): void {
         global $DB;
 

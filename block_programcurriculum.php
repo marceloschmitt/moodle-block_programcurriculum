@@ -25,15 +25,30 @@
 defined('MOODLE_INTERNAL') || die();
 
 class block_programcurriculum extends block_base {
+    /**
+     * Handles init.
+     *
+     * @return void Return value.
+     */
     public function init(): void {
         $this->title = get_string('pluginname', 'block_programcurriculum');
     }
 
+    /**
+     * Handles applicable_formats.
+     *
+     * @return array Return value.
+     */
     public function applicable_formats(): array {
         // Allow the block to be added and shown on all pages (configurable per instance).
         return ['all' => true];
     }
 
+    /**
+     * Handles get_content.
+     *
+     * @return ?stdClass Return value.
+     */
     public function get_content(): ?stdClass {
         if ($this->content !== null) {
             return $this->content;

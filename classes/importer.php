@@ -278,6 +278,12 @@ class importer {
         return (bool) preg_match('/semestre/i', $line);
     }
 
+    /**
+     * Handles import_csv.
+     *
+     * @param string $filepath Parameter.
+     * @return array Return value.
+     */
     public function import_csv(string $filepath): array {
         $errors = [];
         $handle = fopen($filepath, 'r');
@@ -345,6 +351,12 @@ class importer {
         return ['errors' => $errors];
     }
 
+    /**
+     * Handles is_valid_header.
+     *
+     * @param ?array $header Parameter.
+     * @return bool Return value.
+     */
     private function is_valid_header(?array $header): bool {
         if (empty($header)) {
             return false;
@@ -369,6 +381,12 @@ class importer {
         return true;
     }
 
+    /**
+     * Handles map_row.
+     *
+     * @param array $row Parameter.
+     * @return array Return value.
+     */
     private function map_row(array $row): array {
         return [
             'curriculum_code' => trim((string)($row[0] ?? '')),
@@ -384,6 +402,12 @@ class importer {
         ];
     }
 
+    /**
+     * Handles normalize_bool.
+     *
+     * @param mixed $value Parameter.
+     * @return int Return value.
+     */
     private function normalize_bool($value): int {
         if (is_numeric($value)) {
             return (int)$value ? 1 : 0;

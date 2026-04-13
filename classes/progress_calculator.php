@@ -27,6 +27,13 @@ namespace block_programcurriculum;
 defined('MOODLE_INTERNAL') || die();
 
 class progress_calculator {
+    /**
+     * Handles calculate_for_user.
+     *
+     * @param int $userid Parameter.
+     * @param int $curriculumid Parameter.
+     * @return array Return value.
+     */
     public function calculate_for_user(int $userid, int $curriculumid): array {
         global $DB;
 
@@ -117,6 +124,13 @@ class progress_calculator {
         ];
     }
 
+    /**
+     * Handles get_course_completion_state.
+     *
+     * @param int $userid Parameter.
+     * @param int $courseid Parameter.
+     * @return bool Return value.
+     */
     private function get_course_completion_state(int $userid, int $courseid): bool {
         try {
             $course = get_course($courseid);

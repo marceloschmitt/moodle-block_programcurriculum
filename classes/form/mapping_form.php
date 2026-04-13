@@ -29,6 +29,11 @@ defined('MOODLE_INTERNAL') || die();
 require_once($GLOBALS['CFG']->libdir . '/formslib.php');
 
 class mapping_form extends \moodleform {
+    /**
+     * Handles definition.
+     *
+     * @return void Return value.
+     */
     protected function definition(): void {
         $mform = $this->_form;
         $customdata = $this->_customdata ?? [];
@@ -57,6 +62,13 @@ class mapping_form extends \moodleform {
 
     }
 
+    /**
+     * Handles validation.
+     *
+     * @param mixed $data Parameter.
+     * @param mixed $files Parameter.
+     * @return array Return value.
+     */
     public function validation($data, $files): array {
         global $DB;
 

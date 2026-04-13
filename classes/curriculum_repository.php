@@ -27,12 +27,23 @@ namespace block_programcurriculum;
 defined('MOODLE_INTERNAL') || die();
 
 class curriculum_repository {
+    /**
+     * Handles get_all.
+     *
+     * @return array Return value.
+     */
     public function get_all(): array {
         global $DB;
 
         return $DB->get_records('block_programcurriculum_curriculum', [], 'name ASC');
     }
 
+    /**
+     * Handles get.
+     *
+     * @param int $id Parameter.
+     * @return ?\\stdClass Return value.
+     */
     public function get(int $id): ?\stdClass {
         global $DB;
 
@@ -40,6 +51,12 @@ class curriculum_repository {
         return $record ?: null;
     }
 
+    /**
+     * Handles get_by_externalcode.
+     *
+     * @param string $externalcode Parameter.
+     * @return ?\\stdClass Return value.
+     */
     public function get_by_externalcode(string $externalcode): ?\stdClass {
         global $DB;
 
@@ -47,6 +64,12 @@ class curriculum_repository {
         return $record ?: null;
     }
 
+    /**
+     * Handles upsert.
+     *
+     * @param \\stdClass $record Parameter.
+     * @return int Return value.
+     */
     public function upsert(\stdClass $record): int {
         global $DB;
 
@@ -62,6 +85,12 @@ class curriculum_repository {
         return (int)$DB->insert_record('block_programcurriculum_curriculum', $record);
     }
 
+    /**
+     * Handles delete.
+     *
+     * @param int $id Parameter.
+     * @return void Return value.
+     */
     public function delete(int $id): void {
         global $DB;
 

@@ -27,6 +27,12 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/blocks/edit_form.php');
 
 class block_programcurriculum_edit_form extends block_edit_form {
+    /**
+     * Handles specific_definition.
+     *
+     * @param mixed $mform Parameter.
+     * @return void Return value.
+     */
     protected function specific_definition($mform): void {
         $mform->addElement('header', 'config_header', get_string('blocksettings', 'block'));
         $mform->addElement('static', 'info', '', get_string('blockconfiginfo', 'block_programcurriculum'));

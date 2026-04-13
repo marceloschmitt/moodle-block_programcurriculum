@@ -29,6 +29,11 @@ defined('MOODLE_INTERNAL') || die();
 require_once($GLOBALS['CFG']->libdir . '/formslib.php');
 
 class course_form extends \moodleform {
+    /**
+     * Handles definition.
+     *
+     * @return void Return value.
+     */
     protected function definition(): void {
         $mform = $this->_form;
         $mform->updateAttributes(['id' => 'programcurriculum-course-form']);
@@ -69,6 +74,13 @@ class course_form extends \moodleform {
         $mform->setType('id', PARAM_INT);
     }
 
+    /**
+     * Handles validation.
+     *
+     * @param mixed $data Parameter.
+     * @param mixed $files Parameter.
+     * @return array Return value.
+     */
     public function validation($data, $files): array {
         global $DB;
 

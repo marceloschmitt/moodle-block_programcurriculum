@@ -27,12 +27,24 @@ namespace block_programcurriculum;
 defined('MOODLE_INTERNAL') || die();
 
 class course_repository {
+    /**
+     * Handles get_by_curriculum.
+     *
+     * @param int $curriculumid Parameter.
+     * @return array Return value.
+     */
     public function get_by_curriculum(int $curriculumid): array {
         global $DB;
 
         return $DB->get_records('block_programcurriculum_course', ['curriculumid' => $curriculumid], 'term ASC, sortorder ASC, name ASC');
     }
 
+    /**
+     * Handles get.
+     *
+     * @param int $id Parameter.
+     * @return ?\\stdClass Return value.
+     */
     public function get(int $id): ?\stdClass {
         global $DB;
 
@@ -40,6 +52,12 @@ class course_repository {
         return $record ?: null;
     }
 
+    /**
+     * Handles get_by_externalcode.
+     *
+     * @param string $externalcode Parameter.
+     * @return ?\\stdClass Return value.
+     */
     public function get_by_externalcode(string $externalcode): ?\stdClass {
         global $DB;
 
@@ -60,6 +78,12 @@ class course_repository {
         return $record ?: null;
     }
 
+    /**
+     * Handles upsert.
+     *
+     * @param \\stdClass $record Parameter.
+     * @return int Return value.
+     */
     public function upsert(\stdClass $record): int {
         global $DB;
 
@@ -75,6 +99,12 @@ class course_repository {
         return (int)$DB->insert_record('block_programcurriculum_course', $record);
     }
 
+    /**
+     * Handles get_next_sortorder.
+     *
+     * @param int $curriculumid Parameter.
+     * @return int Return value.
+     */
     private function get_next_sortorder(int $curriculumid): int {
         global $DB;
 
@@ -85,12 +115,25 @@ class course_repository {
         return (int)$DB->get_field_sql($sql, ['curriculumid' => $curriculumid]);
     }
 
+    /**
+     * Handles set_sortorder.
+     *
+     * @param int $id Parameter.
+     * @param int $sortorder Parameter.
+     * @return void Return value.
+     */
     public function set_sortorder(int $id, int $sortorder): void {
         global $DB;
 
         $DB->set_field('block_programcurriculum_course', 'sortorder', $sortorder, ['id' => $id]);
     }
 
+    /**
+     * Handles delete.
+     *
+     * @param int $id Parameter.
+     * @return void Return value.
+     */
     public function delete(int $id): void {
         global $DB;
 

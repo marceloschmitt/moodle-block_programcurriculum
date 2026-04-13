@@ -29,6 +29,11 @@ defined('MOODLE_INTERNAL') || die();
 require_once($GLOBALS['CFG']->libdir . '/formslib.php');
 
 class import_form extends \moodleform {
+    /**
+     * Handles definition.
+     *
+     * @return void Return value.
+     */
     protected function definition(): void {
         $mform = $this->_form;
 
