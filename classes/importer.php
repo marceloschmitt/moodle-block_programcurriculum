@@ -26,6 +26,9 @@ namespace block_programcurriculum;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Import utilities for curriculum data.
+ */
 class importer {
 
     /**
@@ -265,7 +268,7 @@ class importer {
     }
 
     /**
-     * Whether the line is a semester header (e.g. "1", "2", "1º SEMESTRE - ADMINISTRAÇÃO SUB 2020/1	330h").
+     * Whether the line is a semester header (e.g. "1", "2", "1º SEMESTRE - ADMINISTRAÇÃO SUB 2020/1 330h").
      */
     private function is_semester_line(string $line): bool {
         $line = trim($line);

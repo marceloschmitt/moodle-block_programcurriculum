@@ -26,6 +26,9 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/blocks/edit_form.php');
 
+/**
+ * Block instance configuration form.
+ */
 class block_programcurriculum_edit_form extends block_edit_form {
     /**
      * Handles specific_definition.

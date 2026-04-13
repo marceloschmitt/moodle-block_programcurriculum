@@ -129,7 +129,7 @@ if ($validationerror) {
     $submitteddata = $mform->get_submitted_data();
     $files = [];
     $errors = $mform->validation((array)$submitteddata, $files);
-    
+
     $hasduplicatename = !empty($errors['name']);
     $hasduplicatecode = !empty($errors['externalcode']);
     if ($hasduplicatename || $hasduplicatecode) {
@@ -137,7 +137,7 @@ if ($validationerror) {
     } else {
         $validationmessage = get_string('curriculumformerror', 'block_programcurriculum');
     }
-    
+
     // Redirect to clear the form and show only the error message.
     redirect(new moodle_url('/blocks/programcurriculum/manage.php', ['validationmessage' => $validationmessage]));
 }

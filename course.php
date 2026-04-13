@@ -184,18 +184,18 @@ if ($validationerror) {
     $submitteddata = $mform->get_submitted_data();
     $files = [];
     $errors = $mform->validation((array)$submitteddata, $files);
-    
+
     $hasduplicatecode = !empty($errors['externalcode']);
     if ($hasduplicatecode) {
         $validationmessage = get_string('duplicatecoursecode', 'block_programcurriculum');
     } else {
         $validationmessage = get_string('courseformerror', 'block_programcurriculum');
     }
-    
+
     // Redirect to clear the form and show only the error message.
     redirect(new moodle_url('/blocks/programcurriculum/course.php', [
         'curriculumid' => $curriculumid,
-        'validationmessage' => $validationmessage
+        'validationmessage' => $validationmessage,
     ]));
 }
 

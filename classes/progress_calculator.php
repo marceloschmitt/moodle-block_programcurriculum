@@ -26,6 +26,9 @@ namespace block_programcurriculum;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Calculates curriculum progress metrics.
+ */
 class progress_calculator {
     /**
      * Handles calculate_for_user.

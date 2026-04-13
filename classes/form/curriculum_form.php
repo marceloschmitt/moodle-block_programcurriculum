@@ -26,8 +26,11 @@ namespace block_programcurriculum\form;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($GLOBALS['CFG']->libdir . '/formslib.php');
+require_once($CFG->libdir . '/formslib.php');
 
+/**
+ * Form for creating and editing curricula.
+ */
 class curriculum_form extends \moodleform {
     /**
      * Handles definition.

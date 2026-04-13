@@ -18,7 +18,7 @@ namespace block_programcurriculum\external;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($GLOBALS['CFG']->libdir . '/externallib.php');
+require_once($CFG->libdir . '/externallib.php');
 
 /**
  * External API for reordering curriculum courses.

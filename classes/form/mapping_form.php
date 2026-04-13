@@ -26,8 +26,11 @@ namespace block_programcurriculum\form;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($GLOBALS['CFG']->libdir . '/formslib.php');
+require_once($CFG->libdir . '/formslib.php');
 
+/**
+ * Form for mapping external courses to Moodle courses.
+ */
 class mapping_form extends \moodleform {
     /**
      * Handles definition.
@@ -38,7 +41,7 @@ class mapping_form extends \moodleform {
         $mform = $this->_form;
         $customdata = $this->_customdata ?? [];
         $courses = $customdata['courses'] ?? [];
-        $freezeCourse = !empty($customdata['freeze_course']);
+        $freezecourse = !empty($customdata['freeze_course']);
         $courseid = (int)($customdata['courseid'] ?? 0);
         $mform->updateAttributes(['id' => 'programcurriculum-mapping-form']);
         $mform->setRequiredNote('');
@@ -49,7 +52,7 @@ class mapping_form extends \moodleform {
         ]);
         $mform->setType('moodlecourseid', PARAM_INT);
         $mform->addRule('moodlecourseid', null, 'required', null, 'client');
-        if ($freezeCourse) {
+        if ($freezecourse) {
             $mform->freeze('moodlecourseid');
         }
 

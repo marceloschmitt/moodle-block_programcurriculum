@@ -26,6 +26,9 @@ namespace block_programcurriculum;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Repository for course mappings.
+ */
 class mapping_repository {
     /**
      * Handles get.

@@ -26,6 +26,9 @@ namespace block_programcurriculum;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Repository for curricula.
+ */
 class curriculum_repository {
     /**
      * Handles get_all.

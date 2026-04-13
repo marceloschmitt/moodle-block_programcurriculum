@@ -24,6 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Block implementation for Program Curriculum.
+ */
 class block_programcurriculum extends block_base {
     /**
      * Handles init.

@@ -42,6 +42,7 @@ function xmldb_block_programcurriculum_upgrade(int $oldversion): bool {
             try {
                 $dbman->drop_key($table, $oldkey);
             } catch (\ddl_exception $e) {
+                unset($e);
                 // Key already removed or never existed.
             }
         }
@@ -77,6 +78,7 @@ function xmldb_block_programcurriculum_upgrade(int $oldversion): bool {
             try {
                 $dbman->add_key($table, $key);
             } catch (\ddl_exception $e) {
+                unset($e);
                 // Key already exists or cannot be added.
             }
         }
@@ -121,6 +123,7 @@ function xmldb_block_programcurriculum_upgrade(int $oldversion): bool {
             try {
                 $dbman->add_index($table, $index);
             } catch (\ddl_exception $e) {
+                unset($e);
                 // Index may already exist or duplicate names prevent it.
             }
         }
