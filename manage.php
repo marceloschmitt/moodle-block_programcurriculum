@@ -178,8 +178,16 @@ foreach ($all as $index => $curriculum) {
         ]))->out(false),
         'deleteallcoursestitle' => get_string('deleteallcoursestitle', 'block_programcurriculum'),
         'deleteallcoursesconfirm' => get_string('deleteallcoursesconfirm', 'block_programcurriculum', $curriculum->name),
-        'deleteallcoursestitle_attr' => htmlspecialchars(get_string('deleteallcoursestitle', 'block_programcurriculum'), ENT_QUOTES, 'UTF-8'),
-        'deleteallcoursesconfirm_attr' => htmlspecialchars(get_string('deleteallcoursesconfirm', 'block_programcurriculum', $curriculum->name), ENT_QUOTES, 'UTF-8'),
+        'deleteallcoursestitle_attr' => htmlspecialchars(
+            get_string('deleteallcoursestitle', 'block_programcurriculum'),
+            ENT_QUOTES,
+            'UTF-8'
+        ),
+        'deleteallcoursesconfirm_attr' => htmlspecialchars(
+            get_string('deleteallcoursesconfirm', 'block_programcurriculum', $curriculum->name),
+            ENT_QUOTES,
+            'UTF-8'
+        ),
     ];
 }
 
@@ -198,6 +206,8 @@ echo $OUTPUT->render_from_template('block_programcurriculum/manage', [
         $mform->display();
         return (string) ob_get_clean();
     })(),
-    'modaltitle' => $id ? get_string('editcurriculum', 'block_programcurriculum') : get_string('addcurriculum', 'block_programcurriculum'),
+    'modaltitle' => $id
+        ? get_string('editcurriculum', 'block_programcurriculum')
+        : get_string('addcurriculum', 'block_programcurriculum'),
 ]);
 echo $OUTPUT->footer();

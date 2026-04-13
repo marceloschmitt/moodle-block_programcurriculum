@@ -92,7 +92,11 @@ foreach (get_courses() as $moodlecourse) {
     if ((int)$moodlecourse->id === SITEID) {
         continue;
     }
-    $courses[$moodlecourse->id] = format_string($moodlecourse->fullname, true, ['context' => context_course::instance($moodlecourse->id)]);
+    $courses[$moodlecourse->id] = format_string(
+        $moodlecourse->fullname,
+        true,
+        ['context' => context_course::instance($moodlecourse->id)]
+    );
 }
 
 $mform = new \block_programcurriculum\form\mapping_form(null, [
@@ -178,6 +182,8 @@ echo $OUTPUT->render_from_template('block_programcurriculum/mapping', [
         $mform->display();
         return (string)ob_get_clean();
     })(),
-    'modaltitle' => $id ? get_string('editmapping', 'block_programcurriculum') : get_string('addmapping', 'block_programcurriculum'),
+    'modaltitle' => $id
+        ? get_string('editmapping', 'block_programcurriculum')
+        : get_string('addmapping', 'block_programcurriculum'),
 ]);
 echo $OUTPUT->footer();
