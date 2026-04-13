@@ -24,8 +24,6 @@
 
 namespace block_programcurriculum;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Repository for external courses.
  */
@@ -39,7 +37,11 @@ class course_repository {
     public function get_by_curriculum(int $curriculumid): array {
         global $DB;
 
-        return $DB->get_records('block_programcurriculum_course', ['curriculumid' => $curriculumid], 'term ASC, sortorder ASC, name ASC');
+        return $DB->get_records(
+            'block_programcurriculum_course',
+            ['curriculumid' => $curriculumid],
+            'term ASC, sortorder ASC, name ASC'
+        );
     }
 
     /**

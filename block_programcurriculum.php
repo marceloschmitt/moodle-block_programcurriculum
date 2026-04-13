@@ -22,8 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Block implementation for Program Curriculum.
  */
@@ -120,7 +118,8 @@ class block_programcurriculum extends block_base {
                 $completed = $progress['completed'];
                 $enrolleddisciplines = $progress['enrolled'];
                 $this->page->requires->css('/blocks/programcurriculum/styles.css');
-                $wheelshtml = '<div class="programcurriculum-block-wheels programcurriculum-progress-wheels d-flex flex-wrap gap-2 mb-2">';
+                $wheelshtml = '<div class="programcurriculum-block-wheels programcurriculum-progress-wheels ' .
+                    'd-flex flex-wrap gap-2 mb-2">';
                 $wheelshtml .= '<div class="programcurriculum-progress-wheel" role="progressbar" aria-valuenow="' .
                     (int)$percent . '" aria-valuemin="0" aria-valuemax="100" title="' .
                     s(get_string('progressbycompletion', 'block_programcurriculum') . ': ' .
@@ -132,7 +131,8 @@ class block_programcurriculum extends block_base {
                 $wheelshtml .= '<div class="programcurriculum-progress-wheel-label small fw-bold mt-1">' .
                     s(get_string('progressbycompletion_header', 'block_programcurriculum')) .
                     '</div>';
-                $wheelshtml .= '<div class="programcurriculum-progress-wheel-detail small text-muted">' . (int)$completed . '/' . (int)$total . '</div></div>';
+                $wheelshtml .= '<div class="programcurriculum-progress-wheel-detail small text-muted">' .
+                    (int)$completed . '/' . (int)$total . '</div></div>';
                 $wheelshtml .= '<div class="programcurriculum-progress-wheel ' .
                     'programcurriculum-progress-wheel--enrollment" role="progressbar" aria-valuenow="' .
                     (int)$enrollmentpercent .
@@ -146,7 +146,8 @@ class block_programcurriculum extends block_base {
                 $wheelshtml .= '<div class="programcurriculum-progress-wheel-label small fw-bold mt-1">' .
                     s(get_string('progressbyenrollment_header', 'block_programcurriculum')) .
                     '</div>';
-                $wheelshtml .= '<div class="programcurriculum-progress-wheel-detail small text-muted">' . (int)$enrolleddisciplines . '/' . (int)$total . '</div></div>';
+                $wheelshtml .= '<div class="programcurriculum-progress-wheel-detail small text-muted">' .
+                    (int)$enrolleddisciplines . '/' . (int)$total . '</div></div>';
                 $wheelshtml .= '</div>';
             }
         }
