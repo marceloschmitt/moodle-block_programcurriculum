@@ -24,7 +24,7 @@ require_once($GLOBALS['CFG']->libdir . '/externallib.php');
  * External API for reordering curriculum courses.
  *
  * @package    block_programcurriculum
- * @copyright  2025
+ * @copyright  2026 Marcelo Augusto Rauh Schmitt <marcelo.schmitt@poa.ifrs.edu.br>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class reorder_courses extends \external_api {

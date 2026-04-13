@@ -24,7 +24,7 @@ require_once($GLOBALS['CFG']->libdir . '/externallib.php');
  * External API for toggling student self-declared completion of an external course.
  *
  * @package    block_programcurriculum
- * @copyright  2025
+ * @copyright  2026 Marcelo Augusto Rauh Schmitt <marcelo.schmitt@poa.ifrs.edu.br>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class toggle_user_completion extends \external_api {
