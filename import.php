@@ -70,7 +70,10 @@ if ($doimport && $preview !== null && !empty($preview['programs'])) {
     $importedcount = (int) ($result['imported_count'] ?? 0);
     $importedprograms = $result['imported_programs'] ?? [];
     if (empty($result['errors']) && $importedcount > 0) {
-        redirect(new moodle_url('/blocks/programcurriculum/manage.php'), get_string('import_success', 'block_programcurriculum', $importedcount));
+        redirect(
+            new moodle_url('/blocks/programcurriculum/manage.php'),
+            get_string('import_success', 'block_programcurriculum', $importedcount)
+        );
     }
 }
 
