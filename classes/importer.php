@@ -24,8 +24,6 @@
 
 namespace block_programcurriculum;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Import utilities for curriculum data.
  */

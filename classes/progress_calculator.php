@@ -24,8 +24,6 @@
 
 namespace block_programcurriculum;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Calculates curriculum progress metrics.
  */
@@ -88,7 +86,7 @@ class progress_calculator {
 
         $percent = $total > 0 ? (int)round(($completedcount / $total) * 100) : 0;
 
-        // details / details_by_course: per Moodle course (for UI list/modal).
+        // Details and details_by_course: per Moodle course (for UI list/modal).
         $details = [];
         foreach ($mappings as $mapping) {
             $moodlecourseid = (int)$mapping->moodlecourseid;

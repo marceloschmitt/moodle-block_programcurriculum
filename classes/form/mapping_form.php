@@ -46,10 +46,16 @@ class mapping_form extends \moodleform {
         $mform->updateAttributes(['id' => 'programcurriculum-mapping-form']);
         $mform->setRequiredNote('');
 
-        $mform->addElement('autocomplete', 'moodlecourseid', get_string('mappedmoodlecourse', 'block_programcurriculum'), $courses, [
-            'multiple' => false,
-            'placeholder' => get_string('courseplaceholder', 'block_programcurriculum'),
-        ]);
+        $mform->addElement(
+            'autocomplete',
+            'moodlecourseid',
+            get_string('mappedmoodlecourse', 'block_programcurriculum'),
+            $courses,
+            [
+                'multiple' => false,
+                'placeholder' => get_string('courseplaceholder', 'block_programcurriculum'),
+            ]
+        );
         $mform->setType('moodlecourseid', PARAM_INT);
         $mform->addRule('moodlecourseid', null, 'required', null, 'client');
         if ($freezecourse) {
