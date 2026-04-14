@@ -84,8 +84,7 @@ if ($action === 'deleteallcourses' && $deleteallcoursesid && confirm_sesskey()) 
 if ($action === 'delete' && $deleteid && confirm_sesskey()) {
     $todelete = $curriculumrepo->get($deleteid);
     if ($todelete) {
-        $coursesql = "SELECT COUNT(*) FROM {block_programcurriculum_course} WHERE curriculumid = :cid";
-        $coursecount = (int)$DB->get_field_sql($coursesql, ['cid' => $deleteid]);
+        $coursecount = $DB->count_records('block_programcurriculum_course', ['curriculumid' => $deleteid]);
         if ($coursecount === 0) {
             $curriculumrepo->delete($deleteid);
             redirect(

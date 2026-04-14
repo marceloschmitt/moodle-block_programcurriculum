@@ -70,8 +70,10 @@ class mapping_repository {
     public function delete_by_curriculum(int $curriculumid): void {
         global $DB;
 
-        $courseids = $DB->get_fieldset_sql(
-            "SELECT id FROM {block_programcurriculum_course} WHERE curriculumid = :cid",
+        $courseids = $DB->get_fieldset_select(
+            'block_programcurriculum_course',
+            'id',
+            'curriculumid = :cid',
             ['cid' => $curriculumid]
         );
         if (!empty($courseids)) {
@@ -175,10 +177,11 @@ class mapping_repository {
                   FROM {course} c
                  WHERE c.id <> :siteid
                    AND (" . implode(' OR ', $conditions) . ")
-                   AND c.id NOT IN (
-                       SELECT m.moodlecourseid
+                   AND NOT EXISTS (
+                       SELECT 1
                          FROM {block_programcurriculum_mapping} m
                         WHERE m.courseid = :courseid
+                          AND m.moodlecourseid = c.id
                    )
               ORDER BY c.fullname ASC";
         return array_values($DB->get_records_sql($sql, $params));
