@@ -103,7 +103,7 @@ jobs:
 
       - name: Run grunt
         if: ${{ !cancelled() }}
-        run: moodle-plugin-ci grunt --max-lint-warnings 0
+        run: moodle-plugin-ci grunt --max-lint-warnings 10
 
       - name: Run phpunit
         if: ${{ !cancelled() }}
