@@ -66,6 +66,9 @@ class mapping_repository {
 
     /**
      * Delete all mappings for courses belonging to a curriculum.
+     *
+     * @param int $curriculumid Curriculum id.
+     * @return void
      */
     public function delete_by_curriculum(int $curriculumid): void {
         global $DB;
