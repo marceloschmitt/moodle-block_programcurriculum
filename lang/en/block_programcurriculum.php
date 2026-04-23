@@ -88,9 +88,7 @@ $string['automaticmappingdone'] = 'Automatic mapping completed. {$a} mapping(s) 
 $string['automaticmappingnocode'] = 'External course has no code. Cannot run automatic mapping.';
 $string['automaticmappingdonecurriculum'] = 'Automatic mapping completed. {$a} mapping(s) created for the curriculum courses.';
 $string['assistedmapping'] = 'Assisted mapping';
-$string['assistedmapping_help'] = 'For each external course, Moodle courses whose name contains ' .
-    'the external course name or code are listed. Select the mappings you want to create and ' .
-    'click Confirm. Already mapped courses are not shown.';
+$string['assistedmapping_help'] = 'For each external course, Moodle courses whose name contains the external course name or code are listed. Select the mappings you want to create and click Confirm. Already mapped courses are not shown.';
 $string['assistedmapping_select'] = 'Select the Moodle courses to map:';
 $string['assistedmapping_nosuggestions'] = 'No Moodle courses found containing this name or code, or all matches are already mapped.';
 $string['assistedmapping_confirm'] = 'Confirm selected mappings';
@@ -110,18 +108,13 @@ $string['mappingformerror'] = 'Please fix the errors in the mapping form.';
 $string['duplicatemapping'] = 'This Moodle course is already mapped to this external course.';
 $string['courseplaceholder'] = 'Type to search for a course';
 $string['importtitle'] = 'Import curriculum CSV';
-$string['importhelp'] = 'CSV columns: curriculum_code, curriculum_name, course_code, course_name, ' .
-    'moodle_course_id, sortorder, curriculum_description. Optional: numterms, term, ' .
-    'equivalence_code';
+$string['importhelp'] = 'CSV columns: curriculum_code, curriculum_name, course_code, course_name, moodle_course_id, sortorder, curriculum_description. Optional: numterms, term, equivalence_code';
 $string['importsuccess'] = 'CSV import completed.';
 $string['importerrors'] = 'Import errors';
 $string['viewtitle'] = 'Curriculum progress';
 $string['progressview'] = 'Progress View';
 $string['progresspercent'] = 'Progress';
-$string['progress_intro'] = 'This page shows your progress in {$a}. The first indicator depends on ' .
-    'the courses you mark as completed; the second is automatic (courses you have taken). The ' .
-    'colors indicate: enrolled in active course, took in a previous term, or completed. Remember ' .
-    'to mark the courses you have completed to track your progress.';
+$string['progress_intro'] = 'This page shows your progress in {$a}. The first indicator depends on the courses you mark as completed; the second is automatic (courses you have taken). The colors indicate: enrolled in active course, took in a previous term, or completed. Remember to mark the courses you have completed to track your progress.';
 $string['progress_optional_notincluded'] = 'Optional courses and complementary activities are not included in the progress calculation.';
 $string['progresslegend'] = 'Legend:';
 $string['progresslegend_completed'] = 'Completed';
@@ -152,12 +145,8 @@ $string['csvfile'] = 'CSV file';
 $string['upload'] = 'Upload';
 $string['importtext_content'] = 'File content';
 $string['importtext_format'] = 'Import file format';
-$string['importtext_format_help'] = 'One line with the program name; then for each term: one line ' .
-    'with the semester (e.g. 1 or 1st Semester) and the following lines with each course name. ' .
-    'Repeat semester and courses for the next terms.';
-$string['importtext_format_short'] = 'Format: first line = program name; then for each term: one ' .
-    'line with the semester (e.g. 1 or 1st Semester) and the next lines with the courses for that ' .
-    'term.';
+$string['importtext_format_help'] = 'One line with the program name; then for each term: one line with the semester (e.g. 1 or 1st Semester) and the following lines with each course name. Repeat semester and courses for the next terms.';
+$string['importtext_format_short'] = 'Format: first line = program name; then for each term: one line with the semester (e.g. 1 or 1st Semester) and the next lines with the courses for that term.';
 $string['importtext_file'] = 'Or upload a file';
 $string['importtext_file_help'] = 'Upload a .txt (or .csv) file in the same format: program name, then semester and courses per term.';
 $string['importtext_preview'] = 'Preview';
