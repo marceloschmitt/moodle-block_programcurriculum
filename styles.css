@@ -97,22 +97,23 @@
 .programcurriculum-progress ul.list-unstyled li {
     background-color: transparent;
 }
-.programcurriculum-progress .programcurriculum-row-active {
-    background-color: #e6f2ff !important;
-    padding-left: 0.5rem !important;
+/* Chained to ul.list-unstyled so background beats the rule above (same elements, higher class count). */
+.programcurriculum-progress ul.list-unstyled li.programcurriculum-row-active {
+    background-color: #e6f2ff;
+    padding-left: 0.5rem;
     border-radius: 0.25rem;
 }
 
-.programcurriculum-progress .programcurriculum-row-ended {
-    background-color: #fff9e6 !important;
-    padding-left: 0.5rem !important;
+.programcurriculum-progress ul.list-unstyled li.programcurriculum-row-ended {
+    background-color: #fff9e6;
+    padding-left: 0.5rem;
     border-radius: 0.25rem;
 }
 
 /* Completed (by teacher or student) overrides active/ended. */
-.programcurriculum-progress .programcurriculum-row-completed {
-    background-color: #d4edda !important;
-    padding-left: 0.5rem !important;
+.programcurriculum-progress ul.list-unstyled li.programcurriculum-row-completed {
+    background-color: #d4edda;
+    padding-left: 0.5rem;
     border-radius: 0.25rem;
 }
 
@@ -154,22 +155,22 @@
 }
 
 /* Delete-all-courses confirmation modal: avoid title/body cut-off and text truncation. */
-.programcurriculum-confirm-modal .modal-header {
-    white-space: normal !important;
-    overflow: visible !important;
+.programcurriculum-confirm-modal.modal .modal-dialog .modal-content .modal-header {
+    white-space: normal;
+    overflow: visible;
     padding-top: 1rem;
     padding-bottom: 0.5rem;
 }
-.programcurriculum-confirm-modal .modal-body {
-    overflow: visible !important;
+.programcurriculum-confirm-modal.modal .modal-dialog .modal-content .modal-body {
+    overflow: visible;
     padding-top: 0.5rem;
 }
-.programcurriculum-modal-body-wrap {
-    white-space: normal !important;
-    word-wrap: break-word !important;
-    overflow-wrap: break-word !important;
-    overflow: visible !important;
-    text-overflow: clip !important;
+.programcurriculum-confirm-modal .modal-body .programcurriculum-modal-body-wrap {
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    overflow: visible;
+    text-overflow: clip;
 }
 
 /* Students list table: aligned columns and spacing. */
