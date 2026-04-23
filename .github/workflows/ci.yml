@@ -43,12 +43,6 @@ jobs:
         include:
           - php: "8.3"
             database: "pgsql"
-            moodle-branch: "MOODLE_500_STABLE"
-          - php: "8.3"
-            database: "pgsql"
-            moodle-branch: "MOODLE_501_STABLE"
-          - php: "8.3"
-            database: "pgsql"
             moodle-branch: "MOODLE_502_STABLE"
 
     steps:
