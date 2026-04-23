@@ -77,7 +77,6 @@ define(['core/notification', 'core/modal_save_cancel', 'core/modal_delete_cancel
             });
         });
 
-        var mappingModalButton = document.querySelector('[data-open-mapping-modal="1"]');
         var mappingModalTitle = document.getElementById('programcurriculum-mapping-modal-title');
         var mappingForm = document.getElementById('programcurriculum-mapping-form');
 
@@ -88,12 +87,6 @@ define(['core/notification', 'core/modal_save_cancel', 'core/modal_delete_cancel
             var element = mappingForm.elements.namedItem(name);
             if (element) {
                 element.value = value;
-            }
-        };
-
-        var openMappingModal = function() {
-            if (mappingModalButton) {
-                mappingModalButton.click();
             }
         };
 

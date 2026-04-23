@@ -58,6 +58,11 @@ define(['core/ajax', 'core/notification'], function(Ajax, Notification) {
         var completedStr = (container && container.getAttribute('data-completed-str')) || 'Completed';
         var notcompletedStr = (container && container.getAttribute('data-notcompleted-str')) || 'Not completed';
 
+        /**
+         * Opens the Moodle courses modal for one external course row.
+         *
+         * @param {HTMLElement} row Clicked row element.
+         */
         function openModal(row) {
                 var externalName = row.getAttribute('data-external-name') || '';
                 var moodlecoursesEncoded = row.getAttribute('data-moodlecourses') || '';
