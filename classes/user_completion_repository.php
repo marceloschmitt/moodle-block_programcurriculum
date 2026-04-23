@@ -28,7 +28,6 @@ namespace block_programcurriculum;
  * Repository for student self-declared completion of external courses.
  */
 class user_completion_repository {
-
     /**
      * Get the set of external course IDs that the user has marked as completed (within a curriculum).
      *

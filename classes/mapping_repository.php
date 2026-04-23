@@ -200,7 +200,7 @@ class mapping_repository {
             return [];
         }
 
-        list($insql, $params) = $DB->get_in_or_equal($courseids, SQL_PARAMS_NAMED);
+        [$insql, $params] = $DB->get_in_or_equal($courseids, SQL_PARAMS_NAMED);
         $sql = "SELECT courseid, COUNT(1) AS total
                   FROM {block_programcurriculum_mapping}
                  WHERE courseid {$insql}

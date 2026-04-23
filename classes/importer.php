@@ -28,7 +28,6 @@ namespace block_programcurriculum;
  * Import utilities for curriculum data.
  */
 class importer {
-
     /**
      * Parse text format: program name(s), then for each program alternating semester line + course lines.
      * Semester line: only digits (e.g. "1", "2") or contains "semestre" (e.g. "1º SEMESTRE - ... 330h").

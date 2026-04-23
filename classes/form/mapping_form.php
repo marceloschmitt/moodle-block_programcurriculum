@@ -68,7 +68,6 @@ class mapping_form extends \moodleform {
 
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
-
     }
 
     /**

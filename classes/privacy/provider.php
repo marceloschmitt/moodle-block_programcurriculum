@@ -24,8 +24,6 @@
 
 namespace block_programcurriculum\privacy;
 
-defined('MOODLE_INTERNAL') || die();
-
 use context;
 use context_system;
 use core_privacy\local\metadata\collection;
@@ -45,7 +43,6 @@ class provider implements
     \core_privacy\local\metadata\provider,
     pluginprovider,
     userlist_provider {
-
     /**
      * Returns metadata about this plugin's stored personal data.
      *
