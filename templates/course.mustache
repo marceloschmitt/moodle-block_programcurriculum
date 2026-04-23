@@ -19,6 +19,23 @@
     @copyright  2026 Marcelo Augusto Rauh Schmitt <marcelo.schmitt@poa.ifrs.edu.br>
     @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 }}
+{{!
+    @template block_programcurriculum/course
+
+    Example context (json):
+    {
+        "curriculumid": "1",
+        "sesskey": "sess",
+        "curriculumname": "Example curriculum",
+        "backurl": "https://example.org",
+        "hascourses": true,
+        "termsections": [],
+        "modaltitle": "Example course",
+        "formhtml": "<form id=\"programcurriculum-course-form\" method=\"post\" action=\"#\"><p></p></form>",
+        "automaticurl": "https://example.org",
+        "assistedmappingurl": "https://example.org"
+    }
+}}
 
 <div class="programcurriculum-course" data-curriculum-id="{{curriculumid}}" data-sesskey="{{sesskey}}">
     <div class="d-flex align-items-center justify-content-between mb-2">
@@ -112,7 +129,7 @@
                     <h5 class="modal-title" id="programcurriculum-course-modal-title"
                         data-add-title="{{#str}}addcourse, block_programcurriculum{{/str}}"
                         data-edit-title="{{#str}}editcourse, block_programcurriculum{{/str}}">
-                        {{modaltitle}}
+                        {{#modaltitle}}{{modaltitle}}{{/modaltitle}}{{^modaltitle}}&nbsp;{{/modaltitle}}
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{#str}}cancel, moodle{{/str}}"></button>
                 </div>

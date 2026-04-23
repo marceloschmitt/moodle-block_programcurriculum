@@ -19,6 +19,23 @@
     @copyright  2026 Marcelo Augusto Rauh Schmitt <marcelo.schmitt@poa.ifrs.edu.br>
     @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 }}
+{{!
+    @template block_programcurriculum/curriculumview
+
+    Example context (json):
+    {
+        "programname": "Example program",
+        "backurl": "https://example.org",
+        "termsections": [
+            {
+                "term": "1",
+                "courses": [
+                    { "externalcode": "M101", "name": "Discipline A" }
+                ]
+            }
+        ]
+    }
+}}
 
 <div class="programcurriculum-curriculumview">
     <div class="d-flex align-items-center justify-content-between mb-4">

@@ -19,6 +19,26 @@
     @copyright  2026 Marcelo Augusto Rauh Schmitt <marcelo.schmitt@poa.ifrs.edu.br>
     @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 }}
+{{!
+    @template block_programcurriculum/progress
+
+    Example context (json):
+    {
+        "courseid": "1",
+        "studentname": "Example student",
+        "hasprogramname": true,
+        "programname": "Example program",
+        "progress": {
+            "percent": 50,
+            "total": 4,
+            "completed": 2,
+            "enrollmentpercent": 25,
+            "enrolleddisciplines": 1,
+            "totaldisciplines": 4
+        },
+        "termsections": []
+    }
+}}
 
 <div class="programcurriculum-progress"
     data-course-id="{{courseid}}"
@@ -118,7 +138,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="programcurriculum-moodle-modal-title"></h5>
+                    <h5 class="modal-title" id="programcurriculum-moodle-modal-title"><span class="pe-none" aria-hidden="true">&nbsp;</span></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{#str}}close, block_programcurriculum{{/str}}"></button>
                 </div>
                 <div class="modal-body" id="programcurriculum-moodle-modal-body">
