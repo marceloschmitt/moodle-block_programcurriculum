@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'block_programcurriculum';
-$plugin->version = 2026042304;
+$plugin->version = 2026042305;
 $plugin->requires = 2025041400;
 $plugin->maturity = MATURITY_RC;
 $plugin->release = '1.0-rc1';
