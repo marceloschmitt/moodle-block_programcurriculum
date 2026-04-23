@@ -176,7 +176,6 @@ $PAGE->set_context($context);
 $PAGE->set_course($course);
 $PAGE->set_pagelayout('incourse');
 $PAGE->set_secondary_navigation(false);
-$PAGE->requires->css('/blocks/programcurriculum/styles.css');
 $PAGE->requires->js_call_amd('block_programcurriculum/progress_actions', 'init');
 $PAGE->set_url('/blocks/programcurriculum/progress.php', [
     'courseid' => $courseid,
