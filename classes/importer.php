@@ -289,13 +289,13 @@ class importer {
         $errors = [];
         $handle = fopen($filepath, 'r');
         if ($handle === false) {
-            return ['errors' => ['Unable to read CSV file.']];
+            return ['errors' => [get_string('importcsv_readerror', 'block_programcurriculum')]];
         }
 
         $header = fgetcsv($handle);
         if (!$this->is_valid_header($header)) {
             fclose($handle);
-            return ['errors' => ['Invalid CSV header.']];
+            return ['errors' => [get_string('importcsv_invalidheader', 'block_programcurriculum')]];
         }
 
         $curriculumrepo = new curriculum_repository();
@@ -307,7 +307,7 @@ class importer {
             $line++;
             $data = $this->map_row($row);
             if (empty($data['curriculum_code']) || empty($data['curriculum_name'])) {
-                $errors[] = "Line {$line}: Missing curriculum fields.";
+                $errors[] = get_string('importcsv_missingcurriculumfields', 'block_programcurriculum', $line);
                 continue;
             }
 
@@ -323,7 +323,7 @@ class importer {
             $curriculumid = $curriculumrepo->upsert($curriculumrecord);
 
             if (empty($data['course_code']) || empty($data['course_name'])) {
-                $errors[] = "Line {$line}: Missing course fields.";
+                $errors[] = get_string('importcsv_missingcoursefields', 'block_programcurriculum', $line);
                 continue;
             }
 
