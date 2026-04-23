@@ -51,6 +51,12 @@ jobs:
         with:
           path: plugin
 
+      # Pin to the same Node as local dev (Moodle 502 allows >=22.11.0 <23) so grunt amd output matches.
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.22.2'
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
