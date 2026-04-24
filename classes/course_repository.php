@@ -72,6 +72,10 @@ class course_repository {
 
     /**
      * Get course by external code within a curriculum. Used to detect if discipline is already in this program.
+     *
+     * @param string $externalcode External course code.
+     * @param int $curriculumid Curriculum id.
+     * @return ?\stdClass Course record or null if not found.
      */
     public function get_by_externalcode_and_curriculum(string $externalcode, int $curriculumid): ?\stdClass {
         global $DB;
@@ -147,6 +151,9 @@ class course_repository {
 
     /**
      * Delete all courses of a curriculum. Call mapping_repository::delete_by_curriculum first.
+     *
+     * @param int $curriculumid Curriculum id.
+     * @return void
      */
     public function delete_by_curriculum(int $curriculumid): void {
         global $DB;

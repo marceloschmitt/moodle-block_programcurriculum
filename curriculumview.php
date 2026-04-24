@@ -86,8 +86,6 @@ $PAGE->set_title(get_string('viewcurriculum', 'block_programcurriculum'));
 $PAGE->set_heading(get_string('pageheading', 'block_programcurriculum'));
 $PAGE->navbar->add($course->fullname, new moodle_url('/course/view.php', ['id' => $courseid]));
 $PAGE->navbar->add(get_string('viewcurriculum', 'block_programcurriculum'));
-$PAGE->requires->css('/blocks/programcurriculum/styles.css');
-
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('block_programcurriculum/curriculumview', [
     'courseid' => $courseid,

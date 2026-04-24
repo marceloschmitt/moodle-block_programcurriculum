@@ -41,8 +41,6 @@ $PAGE->set_context($context);
 $PAGE->set_url('/blocks/programcurriculum/assisted_mapping.php', ['curriculumid' => $curriculumid]);
 $PAGE->set_title(get_string('assistedmapping', 'block_programcurriculum'));
 $PAGE->set_heading(get_string('pageheading', 'block_programcurriculum'));
-$PAGE->requires->css('/blocks/programcurriculum/styles.css');
-
 $coursesrepo = new \block_programcurriculum\course_repository();
 $mappingrepo = new \block_programcurriculum\mapping_repository();
 

@@ -1,3 +1,24 @@
+/**
+ * This file is part of Moodle - http://moodle.org/
+ *
+ * Moodle is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Moodle is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package
+ * @copyright  2026 Marcelo Augusto Rauh Schmitt <marcelo.schmitt@poa.ifrs.edu.br>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 define(['core/notification', 'core/modal_delete_cancel', 'core/modal_events', 'core/str'], function(
     Notification,
     ModalDeleteCancel,
@@ -58,8 +79,6 @@ define(['core/notification', 'core/modal_delete_cancel', 'core/modal_events', 'c
         var container = document.querySelector('.programcurriculum-course[data-curriculum-id]');
         if (container && !container.dataset.moveBound) {
             container.dataset.moveBound = '1';
-            var curriculumId = parseInt(container.getAttribute('data-curriculum-id') || '0', 10);
-            var sesskey = container.getAttribute('data-sesskey') || '';
             var placeholders = [];
 
             var exitMoveMode = function() {
@@ -76,12 +95,13 @@ define(['core/notification', 'core/modal_delete_cancel', 'core/modal_events', 'c
                 }
             };
 
-            var enterMoveMode = function(courseId, moveBaseUrl, courseName) {
+            var enterMoveMode = function(courseId, moveBaseUrl) {
                 exitMoveMode();
                 container.classList.add('programcurriculum-move-mode');
 
                 var cancelBar = document.createElement('div');
-                cancelBar.className = 'alert alert-info programcurriculum-move-cancel d-flex align-items-center justify-content-between';
+                cancelBar.className = 'alert alert-info programcurriculum-move-cancel ' +
+                    'd-flex align-items-center justify-content-between';
                 var hintSpan = document.createElement('span');
                 var cancelBtn = document.createElement('button');
                 cancelBtn.type = 'button';
@@ -157,9 +177,8 @@ define(['core/notification', 'core/modal_delete_cancel', 'core/modal_events', 'c
                     e.stopPropagation();
                     var courseId = trigger.getAttribute('data-move-course-id');
                     var moveUrl = trigger.getAttribute('data-move-target') || trigger.getAttribute('data-move-url') || '';
-                    var courseName = trigger.getAttribute('data-move-name') || '';
                     if (courseId && moveUrl) {
-                        enterMoveMode(courseId, moveUrl, courseName);
+                        enterMoveMode(courseId, moveUrl);
                     }
                 }
             });

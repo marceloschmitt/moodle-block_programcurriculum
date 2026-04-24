@@ -140,8 +140,18 @@ if ($validationerror) {
 }
 
 $mappings = [];
-foreach ($mappingrepo->get_by_course($courseid) as $item) {
-    $moodlecourse = $DB->get_record('course', ['id' => $item->moodlecourseid], 'id, fullname');
+$mappingrecords = $mappingrepo->get_by_course($courseid);
+$moodlecourseids = array_values(array_unique(array_map(function ($item) {
+    return (int)$item->moodlecourseid;
+}, $mappingrecords)));
+$moodlecourses = [];
+if (!empty($moodlecourseids)) {
+    [$insql, $params] = $DB->get_in_or_equal($moodlecourseids, SQL_PARAMS_NAMED);
+    $moodlecourses = $DB->get_records_select('course', "id {$insql}", $params, '', 'id, fullname');
+}
+
+foreach ($mappingrecords as $item) {
+    $moodlecourse = $moodlecourses[(int)$item->moodlecourseid] ?? null;
     $coursename = $moodlecourse
         ? format_string($moodlecourse->fullname, true, ['context' => context_course::instance($moodlecourse->id)])
         : get_string('moodlecourse_deleted', 'block_programcurriculum', $item->moodlecourseid);

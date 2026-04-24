@@ -66,6 +66,9 @@ class mapping_repository {
 
     /**
      * Delete all mappings for courses belonging to a curriculum.
+     *
+     * @param int $curriculumid Curriculum id.
+     * @return void
      */
     public function delete_by_curriculum(int $curriculumid): void {
         global $DB;
@@ -200,7 +203,7 @@ class mapping_repository {
             return [];
         }
 
-        list($insql, $params) = $DB->get_in_or_equal($courseids, SQL_PARAMS_NAMED);
+        [$insql, $params] = $DB->get_in_or_equal($courseids, SQL_PARAMS_NAMED);
         $sql = "SELECT courseid, COUNT(1) AS total
                   FROM {block_programcurriculum_mapping}
                  WHERE courseid {$insql}

@@ -15,9 +15,7 @@ You can install the plugin in two common ways:
 
 1. Go to your Moodle root directory.
 2. Clone the repository into `blocks/programcurriculum`.
-   ```bash
-   git clone https://github.com/marceloschmitt/moodle-block_programcurriculum.git blocks/programcurriculum
-   ```
+git clone https://github.com/marceloschmitt/moodle-block_programcurriculum
 
 3. Open Moodle as admin and complete the upgrade process.
 

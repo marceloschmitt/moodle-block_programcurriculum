@@ -28,7 +28,6 @@ namespace block_programcurriculum;
  * Import utilities for curriculum data.
  */
 class importer {
-
     /**
      * Parse text format: program name(s), then for each program alternating semester line + course lines.
      * Semester line: only digits (e.g. "1", "2") or contains "semestre" (e.g. "1º SEMESTRE - ... 330h").
@@ -267,6 +266,9 @@ class importer {
 
     /**
      * Whether the line is a semester header (e.g. "1", "2", "1º SEMESTRE - ADMINISTRAÇÃO SUB 2020/1 330h").
+     *
+     * @param string $line Line to evaluate.
+     * @return bool True when the line is considered a semester header.
      */
     private function is_semester_line(string $line): bool {
         $line = trim($line);
@@ -289,13 +291,13 @@ class importer {
         $errors = [];
         $handle = fopen($filepath, 'r');
         if ($handle === false) {
-            return ['errors' => ['Unable to read CSV file.']];
+            return ['errors' => [get_string('importcsv_readerror', 'block_programcurriculum')]];
         }
 
         $header = fgetcsv($handle);
         if (!$this->is_valid_header($header)) {
             fclose($handle);
-            return ['errors' => ['Invalid CSV header.']];
+            return ['errors' => [get_string('importcsv_invalidheader', 'block_programcurriculum')]];
         }
 
         $curriculumrepo = new curriculum_repository();
@@ -307,7 +309,7 @@ class importer {
             $line++;
             $data = $this->map_row($row);
             if (empty($data['curriculum_code']) || empty($data['curriculum_name'])) {
-                $errors[] = "Line {$line}: Missing curriculum fields.";
+                $errors[] = get_string('importcsv_missingcurriculumfields', 'block_programcurriculum', $line);
                 continue;
             }
 
@@ -323,7 +325,7 @@ class importer {
             $curriculumid = $curriculumrepo->upsert($curriculumrecord);
 
             if (empty($data['course_code']) || empty($data['course_name'])) {
-                $errors[] = "Line {$line}: Missing course fields.";
+                $errors[] = get_string('importcsv_missingcoursefields', 'block_programcurriculum', $line);
                 continue;
             }
 

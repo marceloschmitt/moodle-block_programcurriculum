@@ -117,7 +117,6 @@ class block_programcurriculum extends block_base {
                 $total = $progress['total'];
                 $completed = $progress['completed'];
                 $enrolleddisciplines = $progress['enrolled'];
-                $this->page->requires->css('/blocks/programcurriculum/styles.css');
                 $wheelshtml = '<div class="programcurriculum-block-wheels programcurriculum-progress-wheels ' .
                     'd-flex flex-wrap gap-2 mb-2">';
                 $wheelshtml .= '<div class="programcurriculum-progress-wheel" role="progressbar" aria-valuenow="' .

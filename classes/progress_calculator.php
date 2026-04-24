@@ -52,6 +52,15 @@ class progress_calculator {
         $usercompletedids = $usercompletionrepo->get_completed_course_ids($userid, $curriculumid);
         $usercompletedset = array_flip($usercompletedids);
 
+        $moodlecourseids = array_values(array_unique(array_map(function ($mapping) {
+            return (int)$mapping->moodlecourseid;
+        }, $mappings)));
+        $courses = [];
+        if (!empty($moodlecourseids)) {
+            [$insql, $params] = $DB->get_in_or_equal($moodlecourseids, SQL_PARAMS_NAMED);
+            $courses = $DB->get_records_select('course', "id {$insql}", $params, '', 'id, fullname, enddate');
+        }
+
         // Progress by completion: only disciplines marked as completed by the user.
         // Enrolled: those where user is enrolled in at least one mapped Moodle course.
         // Enrolled active: same but only Moodle courses with enddate = 0 or enddate > now (as on progress screen).
@@ -59,10 +68,11 @@ class progress_calculator {
         $enrolledexternalids = [];
         $enrolledactiveexternalids = [];
         $now = time();
+        $details = [];
         foreach ($mappings as $mapping) {
             $moodlecourseid = (int)$mapping->moodlecourseid;
             $externalcourseid = (int)$mapping->courseid;
-            $course = $DB->get_record('course', ['id' => $moodlecourseid], 'id, enddate');
+            $course = $courses[$moodlecourseid] ?? null;
             if (!$course) {
                 continue;
             }
@@ -75,7 +85,17 @@ class progress_calculator {
             if ($enddate === 0 || $enddate > $now) {
                 $enrolledactiveexternalids[] = $externalcourseid;
             }
+            $moodlecompleted = $this->get_course_completion_state($userid, $moodlecourseid);
+            $usermarked = isset($usercompletedset[$externalcourseid]);
+            $iscompleted = $moodlecompleted || $usermarked;
+
+            $details[] = [
+                'courseid' => $course->id,
+                'coursename' => $course->fullname,
+                'completed' => $iscompleted,
+            ];
         }
+
         // Progress by enrolment: enrolled in Moodle course OR marked as completed.
         $enrolledexternalids = array_unique(array_merge(
             $enrolledexternalids,
@@ -87,28 +107,6 @@ class progress_calculator {
         $percent = $total > 0 ? (int)round(($completedcount / $total) * 100) : 0;
 
         // Details and details_by_course: per Moodle course (for UI list/modal).
-        $details = [];
-        foreach ($mappings as $mapping) {
-            $moodlecourseid = (int)$mapping->moodlecourseid;
-            $externalcourseid = (int)$mapping->courseid;
-            $course = $DB->get_record('course', ['id' => $moodlecourseid], 'id, fullname');
-            if (!$course) {
-                continue;
-            }
-            $ctx = \context_course::instance($moodlecourseid);
-            if (!is_enrolled($ctx, $userid)) {
-                continue;
-            }
-            $moodlecompleted = $this->get_course_completion_state($userid, $moodlecourseid);
-            $usermarked = isset($usercompletedset[$externalcourseid]);
-            $iscompleted = $moodlecompleted || $usermarked;
-
-            $details[] = [
-                'courseid' => $course->id,
-                'coursename' => $course->fullname,
-                'completed' => $iscompleted,
-            ];
-        }
         $detailsbycourse = [];
         foreach ($details as $d) {
             $detailsbycourse[$d['courseid']] = $d['completed'];
